@@ -1,19 +1,23 @@
 package com.naagame.editor;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
 public class MainController implements Initializable {
 
-    @FXML public Pane content;
+    @FXML public ScrollPane content;
     @FXML public TreeView<String> resourceTree;
 
     private TreeItem<String> textures;
@@ -49,6 +53,11 @@ public class MainController implements Initializable {
         }
 
         refreshTreeUI();
+
+        resourceTree.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getClickCount() == 2)
+                treeItemSelectionChanged(resourceTree.getSelectionModel().getSelectedItem());
+        });
     }
 
     private void refreshTreeUI() {
@@ -66,5 +75,18 @@ public class MainController implements Initializable {
         addAll.accept(Resource.sounds, sounds);
         addAll.accept(Resource.entities, entities);
         addAll.accept(Resource.scenes, scenes);
+    }
+
+    private void treeItemSelectionChanged(TreeItem<String> item) {
+        if ("Sprites".equalsIgnoreCase(item.getParent().getValue())) {
+            Pane spriteEditor = null;
+            try {
+                spriteEditor = FXMLLoader.load(Objects.requireNonNull(getClass()
+                        .getClassLoader().getResource("sprite.fxml")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            content.setContent(spriteEditor);
+        }
     }
 }
