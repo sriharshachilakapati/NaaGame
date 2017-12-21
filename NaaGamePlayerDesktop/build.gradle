@@ -1,0 +1,31 @@
+javadoc {
+    options.addStringOption("sourcepath", "")
+}
+
+sourceSets.main.resources {
+	srcDirs += project(":NaaGamePlayerCore").sourceSets.main.resources.srcDirs
+}
+
+dependencies {
+    compile files("../libs/silenceengine-resources.jar")
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+
+    from(configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+
+    manifest {
+        attributes 'Main-Class': 'com.naagame.player.desktop.NaaGamePlayerLauncher'
+    }
+}

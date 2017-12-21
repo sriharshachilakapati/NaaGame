@@ -1,0 +1,116 @@
+
+
+
+
+allprojects {
+    apply plugin: "eclipse"
+
+    // Define the versions of all the dependencies
+    project.ext {
+                gwtVersion          = "2.8.1"
+        webgl4jVersion      = "0.2.9-SNAPSHOT"
+        gwtAlVersion        = "0.2-SNAPSHOT"
+        gwtOpentypeVersion  = "0.1-SNAPSHOT"
+
+
+                lwjglVersion = "3.1.3-SNAPSHOT"
+
+        streamsVersion  = "1.0.3"
+        easyXmlVersion  = "0.1"
+        easyJsonVersion = "0.3"
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+                classpath "org.wisepersist:gwt-gradle-plugin:1.0.0"
+
+            }
+
+    }
+
+subprojects {
+    apply plugin: "maven"
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+
+            }
+}
+
+project(":NaaGameEditor") {
+	apply plugin: "java"
+}
+
+project(":NaaGamePlayerCore") {
+    apply plugin: "java"
+
+    dependencies {
+        compile files("../libs/silenceengine.jar")
+        compile "com.goharsha:easyxml:${easyXmlVersion}:@jar"
+        compile "com.goharsha:easyjson:${easyJsonVersion}:@jar"
+    }
+}
+
+project(":NaaGamePlayerHtml5") {
+    apply plugin: "java"
+
+    dependencies {
+        compile project(":NaaGamePlayerCore")
+        compile files("../libs/backend-gwt.jar")
+        compile files("../libs/silenceengine-sources.jar")
+
+        compile "com.goharsha:webgl4j:${webgl4jVersion}"
+        compile "com.goharsha:gwt-al:${gwtAlVersion}"
+        compile "com.goharsha:gwt-opentype:${gwtOpentypeVersion}"
+        compile "com.google.gwt:gwt-user:${gwtVersion}"
+        compile "com.goharsha:easyxml:${easyXmlVersion}:gwt"
+        compile "com.goharsha:easyjson:${easyJsonVersion}:gwt"
+    }
+}
+
+project(":NaaGamePlayerDesktop") {
+    apply plugin: "java"
+
+    dependencies {
+        compile project(":NaaGamePlayerCore")
+        compile files("../libs/backend-lwjgl.jar")
+
+        compile "org.lwjgl:lwjgl:${lwjglVersion}"
+        compile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
+        compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+        compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
+        compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
+        compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+        compile "org.lwjgl:lwjgl-tinyfd:${lwjglVersion}"
+
+        compile "org.lwjgl:lwjgl:${lwjglVersion}:natives-windows"
+        compile "org.lwjgl:lwjgl:${lwjglVersion}:natives-macos"
+        compile "org.lwjgl:lwjgl:${lwjglVersion}:natives-linux"
+        compile "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-windows"
+        compile "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-macos"
+        compile "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-linux"
+        compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-windows"
+        compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-macos"
+        compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-linux"
+        compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-windows"
+        compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-macos"
+        compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-linux"
+        compile "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-windows"
+        compile "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-macos"
+        compile "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-linux"
+        compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}:natives-windows"
+        compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}:natives-macos"
+        compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}:natives-linux"
+        compile "org.lwjgl:lwjgl-tinyfd:${lwjglVersion}:natives-windows"
+        compile "org.lwjgl:lwjgl-tinyfd:${lwjglVersion}:natives-macos"
+        compile "org.lwjgl:lwjgl-tinyfd:${lwjglVersion}:natives-linux"
+    }
+}

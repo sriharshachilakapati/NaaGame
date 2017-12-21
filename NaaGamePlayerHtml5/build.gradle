@@ -1,0 +1,67 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.akhikhl.gretty:gretty:1.4.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'gwt'
+apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+
+import org.wisepersist.gradle.plugins.gwt.GwtSuperDev
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileGwt {
+    jvmArgs '-Dgwt.jjs.permutationWorkerFactory=com.google.gwt.dev.ThreadedPermutationWorkerFactory'
+}
+
+gwt {
+    minHeapSize = "512M";
+    maxHeapSize = "1024M";
+
+    modules 'com.naagame.player.NaaGamePlayerGwt'
+    devModules 'com.naagame.player.NaaGamePlayerGwt'
+
+    src += files(project(':NaaGamePlayerCore').sourceSets.main.allJava.srcDirs)
+}
+
+gretty {
+    servletContainer = 'jetty9'
+}
+
+javadoc {
+    options.addStringOption("sourcepath", "")
+}
+
+dependencies {
+    providedCompile "com.google.gwt:gwt-user:${gwtVersion}"
+    providedCompile "com.google.gwt:gwt-dev:${gwtVersion}"
+    providedCompile "com.google.gwt:gwt-servlet:${gwtVersion}"
+}
+
+farm {
+    webapp war.archivePath
+}
+
+task superDev(type: GwtSuperDev) {
+    doFirst {
+        gwt.modules = gwt.devModules
+    }
+}
+
+war {
+    from sourceSets.main.resources
+    from files(project(":NaaGamePlayerCore").sourceSets.main.resources.srcDirs)
+    from zipTree("../libs/silenceengine-resources.jar")
+
+    rootSpec.exclude("**/*.class")
+    rootSpec.exclude("WEB-INF")
+}

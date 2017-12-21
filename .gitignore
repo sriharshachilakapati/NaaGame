@@ -1,0 +1,23 @@
+# Gradle
+captures/
+build/
+.gradle/
+
+# IDEA
+*.ipr
+*.iml
+*.iws
+.idea/
+out/
+
+# Eclipse
+.settings/
+.project
+.classpath
+bin/
+
+NaaGameEditor/build/
+NaaGamePlayerCore/build/
+NaaGamePlayerDesktop/build/
+NaaGamePlayerHtml5/build/
+NaaGamePlayerHtml5/war/
