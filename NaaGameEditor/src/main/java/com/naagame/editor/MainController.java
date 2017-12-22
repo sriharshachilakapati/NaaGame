@@ -27,6 +27,9 @@ public class MainController implements Initializable {
     private TreeItem<String> entities;
     private TreeItem<String> scenes;
 
+    private Pane spriteEditor;
+    private SpriteEditorController spriteEditorController;
+
     @Override
     @SuppressWarnings("unchecked")
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -58,6 +61,23 @@ public class MainController implements Initializable {
             if (mouseEvent.getClickCount() == 2)
                 treeItemSelectionChanged(resourceTree.getSelectionModel().getSelectedItem());
         });
+
+        this.<Pane, SpriteEditorController> createEditor("sprite.fxml", (editor, controller) -> {
+            spriteEditor = editor;
+            spriteEditorController = controller;
+        });
+    }
+
+    private <E, T> void createEditor(String name, BiConsumer<E, T> consumer) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass()
+                    .getClassLoader().getResource(name)));
+            E editor = loader.load();
+            T controller = loader.getController();
+            consumer.accept(editor, controller);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void refreshTreeUI() {
@@ -79,13 +99,8 @@ public class MainController implements Initializable {
 
     private void treeItemSelectionChanged(TreeItem<String> item) {
         if ("Sprites".equalsIgnoreCase(item.getParent().getValue())) {
-            Pane spriteEditor = null;
-            try {
-                spriteEditor = FXMLLoader.load(Objects.requireNonNull(getClass()
-                        .getClassLoader().getResource("sprite.fxml")));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            spriteEditorController.currentSprite = item.getValue();
+            spriteEditorController.init();
             content.setContent(spriteEditor);
         }
     }

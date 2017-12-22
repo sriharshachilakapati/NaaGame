@@ -13,19 +13,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="306.0" prefWidth="519.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.SpriteEditorController">
+<VBox prefHeight="349.0" prefWidth="519.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.SpriteEditorController">
    <children>
-      <Label onMouseClicked="#clickListener" text="Sprite Editor">
+      <Label text="Sprite Editor">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0" VBox.vgrow="ALWAYS">
+      <HBox prefHeight="341.0" prefWidth="479.0" spacing="15.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox prefHeight="221.0" prefWidth="244.0" spacing="10.0">
+            <VBox prefHeight="177.0" prefWidth="270.0" spacing="10.0">
                <children>
                   <Label text="Name" />
-                  <TextField prefHeight="26.0" prefWidth="83.0" />
+                  <TextField fx:id="nameField" prefHeight="26.0" prefWidth="83.0" />
                   <Label text="Frames" />
                   <HBox spacing="5.0" VBox.vgrow="ALWAYS">
                      <children>
@@ -51,14 +51,14 @@
                <children>
                   <TitledPane collapsible="false" text="Preview">
                      <content>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fitHeight="150.0" fitWidth="192.0" pickOnBounds="true" preserveRatio="true" />
                      </content>
                   </TitledPane>
                </children>
             </VBox>
          </children>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" text="Save" />

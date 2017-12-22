@@ -1,10 +1,14 @@
 package com.naagame.editor;
 
 import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.TextField;
 
 public class SpriteEditorController {
-    @FXML public void clickListener(MouseEvent e) {
-        System.out.println("Clicked");
+    String currentSprite;
+
+    @FXML TextField nameField;
+
+    public void init() {
+        nameField.setText(currentSprite);
     }
 }
