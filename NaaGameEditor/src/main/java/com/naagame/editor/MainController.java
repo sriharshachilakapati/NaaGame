@@ -27,7 +27,10 @@ public class MainController implements Initializable {
     private TreeItem<String> entities;
     private TreeItem<String> scenes;
 
+    private Pane textureEditor;
     private Pane spriteEditor;
+
+    private TextureEditorController textureEditorController;
     private SpriteEditorController spriteEditorController;
 
     @Override
@@ -66,6 +69,11 @@ public class MainController implements Initializable {
             spriteEditor = editor;
             spriteEditorController = controller;
         });
+
+        this.<Pane, TextureEditorController> createEditor("texture.fxml", (editor, controller) -> {
+            textureEditor = editor;
+            textureEditorController = controller;
+        });
     }
 
     private <E, T> void createEditor(String name, BiConsumer<E, T> consumer) {
@@ -98,7 +106,11 @@ public class MainController implements Initializable {
     }
 
     private void treeItemSelectionChanged(TreeItem<String> item) {
-        if ("Sprites".equalsIgnoreCase(item.getParent().getValue())) {
+        if ("Textures".equalsIgnoreCase(item.getParent().getValue())) {
+            textureEditorController.currentTexture = item.getValue();
+            textureEditorController.init();
+            content.setContent(textureEditor);
+        } else if ("Sprites".equalsIgnoreCase(item.getParent().getValue())) {
             spriteEditorController.currentSprite = item.getValue();
             spriteEditorController.init();
             content.setContent(spriteEditor);
