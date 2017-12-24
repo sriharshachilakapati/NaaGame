@@ -31,11 +31,13 @@ public class MainController implements Initializable {
     private Pane spriteEditor;
     private Pane backgroundEditor;
     private Pane soundEditor;
+    private Pane entityEditor;
 
     private TextureEditorController textureEditorController;
     private SpriteEditorController spriteEditorController;
     private BackgroundEditorController backgroundEditorController;
     private SoundEditorController soundEditorController;
+    private EntityEditorController entityEditorController;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -87,6 +89,11 @@ public class MainController implements Initializable {
         this.<Pane, SoundEditorController> createEditor("sound.fxml", (editor, controller) -> {
             soundEditor = editor;
             soundEditorController = controller;
+        });
+
+        this.<Pane, EntityEditorController> createEditor("entity.fxml", (editor, controller) -> {
+            entityEditor = editor;
+            entityEditorController = controller;
         });
     }
 
@@ -149,6 +156,9 @@ public class MainController implements Initializable {
                 break;
 
             case "entities":
+                entityEditorController.currentEntity = item.getValue();
+                entityEditorController.init();
+                content.setContent(entityEditor);
                 break;
 
             case "scenes":

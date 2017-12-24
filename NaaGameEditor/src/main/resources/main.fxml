@@ -58,7 +58,7 @@
                       <Button fx:id="playBtn" mnemonicParsing="false" text="Play" />
                     </items>
                   </ToolBar>
-              <ScrollPane fx:id="content" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
+              <ScrollPane fx:id="content" fitToHeight="true" fitToWidth="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
       </items>
