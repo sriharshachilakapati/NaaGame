@@ -71,37 +71,37 @@ public class MainController implements Initializable {
                 treeItemSelectionChanged(resourceTree.getSelectionModel().getSelectedItem());
         });
 
-        this.<Pane, SpriteEditorController> createEditor("sprite.fxml", (editor, controller) -> {
+        this.<SpriteEditorController> createEditor("sprite.fxml", (editor, controller) -> {
             spriteEditor = editor;
             spriteEditorController = controller;
         });
 
-        this.<Pane, TextureEditorController> createEditor("texture.fxml", (editor, controller) -> {
+        this.<TextureEditorController> createEditor("texture.fxml", (editor, controller) -> {
             textureEditor = editor;
             textureEditorController = controller;
         });
 
-        this.<Pane, BackgroundEditorController> createEditor("background.fxml", (editor, controller) -> {
+        this.<BackgroundEditorController> createEditor("background.fxml", (editor, controller) -> {
             backgroundEditor = editor;
             backgroundEditorController = controller;
         });
 
-        this.<Pane, SoundEditorController> createEditor("sound.fxml", (editor, controller) -> {
+        this.<SoundEditorController> createEditor("sound.fxml", (editor, controller) -> {
             soundEditor = editor;
             soundEditorController = controller;
         });
 
-        this.<Pane, EntityEditorController> createEditor("entity.fxml", (editor, controller) -> {
+        this.<EntityEditorController> createEditor("entity.fxml", (editor, controller) -> {
             entityEditor = editor;
             entityEditorController = controller;
         });
     }
 
-    private <E, T> void createEditor(String name, BiConsumer<E, T> consumer) {
+    private <T> void createEditor(String name, BiConsumer<Pane, T> consumer) {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass()
                     .getClassLoader().getResource(name)));
-            E editor = loader.load();
+            Pane editor = loader.load();
             T controller = loader.getController();
             consumer.accept(editor, controller);
         } catch (IOException e) {
