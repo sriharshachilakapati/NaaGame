@@ -120,22 +120,39 @@ public class MainController implements Initializable {
     }
 
     private void treeItemSelectionChanged(TreeItem<String> item) {
-        if ("Textures".equalsIgnoreCase(item.getParent().getValue())) {
-            textureEditorController.currentTexture = item.getValue();
-            textureEditorController.init();
-            content.setContent(textureEditor);
-        } else if ("Sprites".equalsIgnoreCase(item.getParent().getValue())) {
-            spriteEditorController.currentSprite = item.getValue();
-            spriteEditorController.init();
-            content.setContent(spriteEditor);
-        } else if ("Backgrounds".equalsIgnoreCase(item.getParent().getValue())) {
-            backgroundEditorController.currentBackground = item.getValue();
-            backgroundEditorController.init();
-            content.setContent(backgroundEditor);
-        } else if ("Sounds".equalsIgnoreCase(item.getParent().getValue())) {
-            soundEditorController.currentSound = item.getValue();
-            soundEditorController.init();
-            content.setContent(soundEditor);
+        if (item.getParent().getValue() == null)
+            return;
+
+        switch (item.getParent().getValue().toLowerCase()) {
+            case "textures":
+                textureEditorController.currentTexture = item.getValue();
+                textureEditorController.init();
+                content.setContent(textureEditor);
+                break;
+
+            case "sprites":
+                spriteEditorController.currentSprite = item.getValue();
+                spriteEditorController.init();
+                content.setContent(spriteEditor);
+                break;
+
+            case "backgrounds":
+                backgroundEditorController.currentBackground = item.getValue();
+                backgroundEditorController.init();
+                content.setContent(backgroundEditor);
+                break;
+
+            case "sounds":
+                soundEditorController.currentSound = item.getValue();
+                soundEditorController.init();
+                content.setContent(soundEditor);
+                break;
+
+            case "entities":
+                break;
+
+            case "scenes":
+                break;
         }
     }
 }
