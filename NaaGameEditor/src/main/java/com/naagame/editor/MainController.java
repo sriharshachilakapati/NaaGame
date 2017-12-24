@@ -29,9 +29,11 @@ public class MainController implements Initializable {
 
     private Pane textureEditor;
     private Pane spriteEditor;
+    private Pane backgroundEditor;
 
     private TextureEditorController textureEditorController;
     private SpriteEditorController spriteEditorController;
+    private BackgroundEditorController backgroundEditorController;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -74,6 +76,11 @@ public class MainController implements Initializable {
             textureEditor = editor;
             textureEditorController = controller;
         });
+
+        this.<Pane, BackgroundEditorController> createEditor("background.fxml", (editor, controller) -> {
+            backgroundEditor = editor;
+            backgroundEditorController = controller;
+        });
     }
 
     private <E, T> void createEditor(String name, BiConsumer<E, T> consumer) {
@@ -114,6 +121,10 @@ public class MainController implements Initializable {
             spriteEditorController.currentSprite = item.getValue();
             spriteEditorController.init();
             content.setContent(spriteEditor);
+        } else if ("Backgrounds".equalsIgnoreCase(item.getParent().getValue())) {
+            backgroundEditorController.currentBackground = item.getValue();
+            backgroundEditorController.init();
+            content.setContent(backgroundEditor);
         }
     }
 }
