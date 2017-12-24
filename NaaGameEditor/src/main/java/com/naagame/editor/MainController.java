@@ -30,10 +30,12 @@ public class MainController implements Initializable {
     private Pane textureEditor;
     private Pane spriteEditor;
     private Pane backgroundEditor;
+    private Pane soundEditor;
 
     private TextureEditorController textureEditorController;
     private SpriteEditorController spriteEditorController;
     private BackgroundEditorController backgroundEditorController;
+    private SoundEditorController soundEditorController;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -81,6 +83,11 @@ public class MainController implements Initializable {
             backgroundEditor = editor;
             backgroundEditorController = controller;
         });
+
+        this.<Pane, SoundEditorController> createEditor("sound.fxml", (editor, controller) -> {
+            soundEditor = editor;
+            soundEditorController = controller;
+        });
     }
 
     private <E, T> void createEditor(String name, BiConsumer<E, T> consumer) {
@@ -125,6 +132,10 @@ public class MainController implements Initializable {
             backgroundEditorController.currentBackground = item.getValue();
             backgroundEditorController.init();
             content.setContent(backgroundEditor);
+        } else if ("Sounds".equalsIgnoreCase(item.getParent().getValue())) {
+            soundEditorController.currentSound = item.getValue();
+            soundEditorController.init();
+            content.setContent(soundEditor);
         }
     }
 }
