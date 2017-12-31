@@ -23,8 +23,8 @@ public class Scene implements IResource {
 
     @Override
     public JSONValue toJSON() {
-        JSONArray instances = new JSONArray();
-        this.instances.stream().map(Instance::toJSON).collect(Collectors.toCollection(() -> instances));
+        JSONArray instances = this.instances.stream().map(Instance::toJSON)
+                .collect(Collectors.toCollection(JSONArray::new));
 
         JSONObject scene = new JSONObject();
         scene.put("name", new JSONValue(name));

@@ -25,8 +25,7 @@ public class Entity implements IResource {
 
     @Override
     public JSONValue toJSON() {
-        JSONArray events = new JSONArray();
-        this.events.stream().map(Event::toJSON).collect(Collectors.toCollection(() -> events));
+        JSONArray events = this.events.stream().map(Event::toJSON).collect(Collectors.toCollection(JSONArray::new));
 
         JSONObject entity = new JSONObject();
         entity.put("sprite", new JSONValue(sprite == null ? "" : sprite.name));
@@ -45,8 +44,8 @@ public class Entity implements IResource {
         }
 
         private JSONValue toJSON() {
-            JSONArray actions = new JSONArray();
-            this.actions.stream().map(Event.Action::toJSON).collect(Collectors.toCollection(() -> actions));
+            JSONArray actions = this.actions.stream().map(Event.Action::toJSON)
+                    .collect(Collectors.toCollection(JSONArray::new));
 
             JSONObject event = new JSONObject();
             event.put("type", new JSONValue(type.toString()));

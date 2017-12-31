@@ -23,8 +23,7 @@ public class Sprite implements IResource {
 
     @Override
     public JSONValue toJSON() {
-        JSONArray frames = new JSONArray();
-        this.frames.stream().map(Frame::toJSON).collect(Collectors.toCollection(() -> frames));
+        JSONArray frames = this.frames.stream().map(Frame::toJSON).collect(Collectors.toCollection(JSONArray::new));
 
         JSONObject sprite = new JSONObject();
         sprite.put("name", new JSONValue(name));

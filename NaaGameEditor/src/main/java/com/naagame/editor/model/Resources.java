@@ -7,7 +7,7 @@ import com.shc.easyjson.JSONValue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class Resources {
@@ -25,22 +25,15 @@ public final class Resources {
     public static JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
 
-        JSONArray textures = new JSONArray();
-        JSONArray sprites = new JSONArray();
-        JSONArray backgrounds = new JSONArray();
-        JSONArray sounds = new JSONArray();
-        JSONArray entities = new JSONArray();
-        JSONArray scenes = new JSONArray();
+        final Function<List<? extends IResource>, JSONArray> allToJSON = list ->
+                list.stream().map(IResource::toJSON).collect(Collectors.toCollection(JSONArray::new));
 
-        final BiConsumer<List<? extends IResource>, JSONArray> allToJSON = (list, array) ->
-                list.stream().map(IResource::toJSON).collect(Collectors.toCollection(() -> array));
-
-        allToJSON.accept(Resources.textures, textures);
-        allToJSON.accept(Resources.sprites, sprites);
-        allToJSON.accept(Resources.backgrounds, backgrounds);
-        allToJSON.accept(Resources.sounds, sounds);
-        allToJSON.accept(Resources.entities, entities);
-        allToJSON.accept(Resources.scenes, scenes);
+        JSONArray textures = allToJSON.apply(Resources.textures);
+        JSONArray sprites = allToJSON.apply(Resources.sprites);
+        JSONArray backgrounds = allToJSON.apply(Resources.backgrounds);
+        JSONArray sounds = allToJSON.apply(Resources.sounds);
+        JSONArray entities = allToJSON.apply(Resources.entities);
+        JSONArray scenes = allToJSON.apply(Resources.scenes);
 
         json.put("textures", new JSONValue(textures));
         json.put("sprites", new JSONValue(sprites));
