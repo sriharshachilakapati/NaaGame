@@ -3,7 +3,7 @@ package com.naagame.editor;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-public class SoundEditorController {
+public class SoundEditorController implements IController {
     String currentSound;
 
     @FXML TextField nameField;

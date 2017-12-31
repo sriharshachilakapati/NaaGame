@@ -15,8 +15,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader()
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader()
                 .getResource("main.fxml")));
+
+        Pane pane = loader.load();
+        MainController controller = loader.getController();
+        controller.stage = stage;
+
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.setResizable(true);

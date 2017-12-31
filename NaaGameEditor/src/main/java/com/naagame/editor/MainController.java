@@ -1,5 +1,7 @@
 package com.naagame.editor;
 
+import com.shc.easyjson.JSON;
+import com.shc.easyjson.JSONObject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -7,15 +9,19 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
-public class MainController implements Initializable {
+public class MainController implements Initializable, IController {
 
     @FXML public ScrollPane content;
     @FXML public TreeView<String> resourceTree;
@@ -38,6 +44,8 @@ public class MainController implements Initializable {
     private BackgroundEditorController backgroundEditorController;
     private SoundEditorController soundEditorController;
     private EntityEditorController entityEditorController;
+
+    Stage stage;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -163,6 +171,28 @@ public class MainController implements Initializable {
 
             case "scenes":
                 break;
+        }
+    }
+
+    @FXML
+    public void onSaveMenuItemClicked() {
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("NaaGame Projects", "*.ngm"));
+        chooser.setTitle("Save Project As");
+
+        File selected = chooser.showSaveDialog(stage);
+        if (!selected.getAbsolutePath().endsWith(".ngm")) {
+            selected = new File(selected.getAbsolutePath() + ".ngm");
+        }
+
+        JSONObject project = Resource.exportToJSON();
+
+        String jsonString = JSON.write(project);
+        try {
+            Files.write(selected.toPath(), jsonString.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
