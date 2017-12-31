@@ -47,6 +47,10 @@ subprojects {
 
 project(":NaaGameEditor") {
 	apply plugin: "java"
+
+    dependencies {
+        compile "com.goharsha:easyjson:${easyJsonVersion}:@jar"
+    }
 }
 
 project(":NaaGamePlayerCore") {
