@@ -1,19 +1,18 @@
 package com.naagame.editor.model.resources;
 
-import com.shc.easyjson.JSONArray;
-import com.shc.easyjson.JSONObject;
-import com.shc.easyjson.JSONValue;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Sprite implements IResource {
-    public final List<Frame> frames = new ArrayList<>();
-    public String name;
+    private final List<Frame> frames = new ArrayList<>();
+    private String name;
 
     public Sprite(String name) {
         this.name = name;
+    }
+
+    public List<Frame> getFrames() {
+        return frames;
     }
 
     @Override
@@ -21,28 +20,16 @@ public class Sprite implements IResource {
         return name;
     }
 
-    @Override
-    public JSONValue toJSON() {
-        JSONArray frames = this.frames.stream().map(Frame::toJSON).collect(Collectors.toCollection(JSONArray::new));
-
-        JSONObject sprite = new JSONObject();
-        sprite.put("name", new JSONValue(name));
-        sprite.put("frames", new JSONValue(frames));
-
-        return new JSONValue(sprite);
-    }
-
     public static class Frame {
-        public Texture texture;
-        public int duration;
+        private Texture texture;
+        private int duration;
 
-        private JSONValue toJSON() {
-            JSONObject frame = new JSONObject();
+        public Texture getTexture() {
+            return texture;
+        }
 
-            frame.put("texture", new JSONValue(texture.name));
-            frame.put("duration", new JSONValue(duration));
-
-            return new JSONValue(frame);
+        public int getDuration() {
+            return duration;
         }
     }
 }

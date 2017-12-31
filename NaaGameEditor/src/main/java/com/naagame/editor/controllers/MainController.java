@@ -1,9 +1,8 @@
 package com.naagame.editor.controllers;
 
+import com.naagame.editor.io.ProjectWriter;
 import com.naagame.editor.model.Resources;
 import com.naagame.editor.model.resources.*;
-import com.shc.easyjson.JSON;
-import com.shc.easyjson.JSONObject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,7 +16,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -188,11 +186,8 @@ public class MainController implements Initializable, IController {
             selected = new File(selected.getAbsolutePath() + ".ngm");
         }
 
-        JSONObject project = Resources.exportToJSON();
-
-        String jsonString = JSON.write(project);
         try {
-            Files.write(selected.toPath(), jsonString.getBytes());
+            ProjectWriter.writeToFile(selected.toPath());
         } catch (IOException e) {
             e.printStackTrace();
         }

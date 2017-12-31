@@ -1,18 +1,13 @@
 package com.naagame.editor.model.resources;
 
-import com.shc.easyjson.JSONArray;
-import com.shc.easyjson.JSONObject;
-import com.shc.easyjson.JSONValue;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Entity implements IResource {
-    public final List<Event> events = new ArrayList<>();
+    private final List<Event> events = new ArrayList<>();
 
-    public Sprite sprite;
-    public String name;
+    private Sprite sprite;
+    private String name;
 
     public Entity(String name) {
         this.name = name;
@@ -23,35 +18,35 @@ public class Entity implements IResource {
         return name;
     }
 
-    @Override
-    public JSONValue toJSON() {
-        JSONArray events = this.events.stream().map(Event::toJSON).collect(Collectors.toCollection(JSONArray::new));
+    public List<Event> getEvents() {
+        return events;
+    }
 
-        JSONObject entity = new JSONObject();
-        entity.put("sprite", new JSONValue(sprite == null ? "" : sprite.name));
-        entity.put("events", new JSONValue(events));
-
-        return new JSONValue(entity);
+    public Sprite getSprite() {
+        return sprite;
     }
 
     public static class Event {
-        public final Event.Type type;
-        public final List<Event.Action> actions = new ArrayList<>();
-        public String eventArgs;
+        private final Event.Type type;
+        private final List<Event.Action> actions = new ArrayList<>();
 
-        public Event(Event.Type type) {
+        private String args;
+
+        public Event(Event.Type type, String args) {
             this.type = type;
+            this.args = args;
         }
 
-        private JSONValue toJSON() {
-            JSONArray actions = this.actions.stream().map(Event.Action::toJSON)
-                    .collect(Collectors.toCollection(JSONArray::new));
+        public Type getType() {
+            return type;
+        }
 
-            JSONObject event = new JSONObject();
-            event.put("type", new JSONValue(type.toString()));
-            event.put("actions", new JSONValue(actions));
+        public List<Action> getActions() {
+            return actions;
+        }
 
-            return new JSONValue(event);
+        public String getArgs() {
+            return args;
         }
 
         public enum Type {
@@ -61,21 +56,20 @@ public class Entity implements IResource {
         }
 
         public final class Action {
-            public final int actionCode;
-            public String actionArgs;
+            private final int code;
+            private String args;
 
-            public Action(int actionCode, String actionArgs) {
-                this.actionCode = actionCode;
-                this.actionArgs = actionArgs;
+            public Action(int code, String args) {
+                this.code = code;
+                this.args = args;
             }
 
-            private JSONValue toJSON() {
-                JSONObject action = new JSONObject();
+            public int getCode() {
+                return code;
+            }
 
-                action.put("code", new JSONValue(actionCode));
-                action.put("args", new JSONValue(actionArgs));
-
-                return new JSONValue(action);
+            public String getArgs() {
+                return args;
             }
         }
     }
