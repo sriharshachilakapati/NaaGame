@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="349.0" prefWidth="519.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.BackgroundEditorController">
+<VBox prefHeight="349.0" prefWidth="519.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.controllers.BackgroundEditorController">
    <children>
       <Label text="Background Editor">
          <font>

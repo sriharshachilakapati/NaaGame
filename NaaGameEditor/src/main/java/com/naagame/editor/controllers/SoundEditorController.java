@@ -1,4 +1,4 @@
-package com.naagame.editor;
+package com.naagame.editor.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;

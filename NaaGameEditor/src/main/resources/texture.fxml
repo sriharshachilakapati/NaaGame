@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="349.0" prefWidth="519.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.TextureEditorController">
+<VBox prefHeight="349.0" prefWidth="519.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.controllers.TextureEditorController">
    <children>
       <Label text="Texture Editor">
          <font>

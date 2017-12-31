@@ -1,5 +1,7 @@
-package com.naagame.editor;
+package com.naagame.editor.controllers;
 
+import com.naagame.editor.model.Resources;
+import com.naagame.editor.model.resources.*;
 import com.shc.easyjson.JSON;
 import com.shc.easyjson.JSONObject;
 import javafx.fxml.FXML;
@@ -26,6 +28,8 @@ public class MainController implements Initializable, IController {
     @FXML public ScrollPane content;
     @FXML public TreeView<String> resourceTree;
 
+    public Stage stage;
+
     private TreeItem<String> textures;
     private TreeItem<String> sprites;
     private TreeItem<String> backgrounds;
@@ -45,8 +49,6 @@ public class MainController implements Initializable, IController {
     private SoundEditorController soundEditorController;
     private EntityEditorController entityEditorController;
 
-    Stage stage;
-
     @Override
     @SuppressWarnings("unchecked")
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,12 +66,12 @@ public class MainController implements Initializable, IController {
         resourceTree.setRoot(root);
 
         for (int i = 1; i < 11; i++) {
-            Resource.textures.add(new Resource.Texture("Texture" + i));
-            Resource.sprites.add(new Resource.Sprite("Sprite" + i));
-            Resource.backgrounds.add(new Resource.Background("Background" + i));
-            Resource.sounds.add(new Resource.Sound("Sound" + i));
-            Resource.entities.add(new Resource.Entity("Entity" + i));
-            Resource.scenes.add(new Resource.Scene("Scene" + i));
+            Resources.textures.add(new Texture("Texture" + i));
+            Resources.sprites.add(new Sprite("Sprite" + i));
+            Resources.backgrounds.add(new Background("Background" + i));
+            Resources.sounds.add(new Sound("Sound" + i));
+            Resources.entities.add(new Entity("Entity" + i));
+            Resources.scenes.add(new Scene("Scene" + i));
         }
 
         refreshTreeUI();
@@ -79,27 +81,27 @@ public class MainController implements Initializable, IController {
                 treeItemSelectionChanged(resourceTree.getSelectionModel().getSelectedItem());
         });
 
-        this.<SpriteEditorController> createEditor("sprite.fxml", (editor, controller) -> {
+        this.<SpriteEditorController>createEditor("sprite.fxml", (editor, controller) -> {
             spriteEditor = editor;
             spriteEditorController = controller;
         });
 
-        this.<TextureEditorController> createEditor("texture.fxml", (editor, controller) -> {
+        this.<TextureEditorController>createEditor("texture.fxml", (editor, controller) -> {
             textureEditor = editor;
             textureEditorController = controller;
         });
 
-        this.<BackgroundEditorController> createEditor("background.fxml", (editor, controller) -> {
+        this.<BackgroundEditorController>createEditor("background.fxml", (editor, controller) -> {
             backgroundEditor = editor;
             backgroundEditorController = controller;
         });
 
-        this.<SoundEditorController> createEditor("sound.fxml", (editor, controller) -> {
+        this.<SoundEditorController>createEditor("sound.fxml", (editor, controller) -> {
             soundEditor = editor;
             soundEditorController = controller;
         });
 
-        this.<EntityEditorController> createEditor("entity.fxml", (editor, controller) -> {
+        this.<EntityEditorController>createEditor("entity.fxml", (editor, controller) -> {
             entityEditor = editor;
             entityEditorController = controller;
         });
@@ -120,18 +122,18 @@ public class MainController implements Initializable, IController {
     private void refreshTreeUI() {
         resourceTree.getRoot().getChildren().forEach(c -> c.getChildren().clear());
 
-        final BiConsumer<List<? extends Resource>, TreeItem<String>> addAll = (l, r) ->
+        final BiConsumer<List<? extends IResource>, TreeItem<String>> addAll = (l, r) ->
                 l.forEach(v -> {
-                    TreeItem<String> item = new TreeItem<>(v.name);
+                    TreeItem<String> item = new TreeItem<>(v.getName());
                     r.getChildren().add(item);
                 });
 
-        addAll.accept(Resource.textures, textures);
-        addAll.accept(Resource.sprites, sprites);
-        addAll.accept(Resource.backgrounds, backgrounds);
-        addAll.accept(Resource.sounds, sounds);
-        addAll.accept(Resource.entities, entities);
-        addAll.accept(Resource.scenes, scenes);
+        addAll.accept(Resources.textures, textures);
+        addAll.accept(Resources.sprites, sprites);
+        addAll.accept(Resources.backgrounds, backgrounds);
+        addAll.accept(Resources.sounds, sounds);
+        addAll.accept(Resources.entities, entities);
+        addAll.accept(Resources.scenes, scenes);
     }
 
     private void treeItemSelectionChanged(TreeItem<String> item) {
@@ -186,7 +188,7 @@ public class MainController implements Initializable, IController {
             selected = new File(selected.getAbsolutePath() + ".ngm");
         }
 
-        JSONObject project = Resource.exportToJSON();
+        JSONObject project = Resources.exportToJSON();
 
         String jsonString = JSON.write(project);
         try {

@@ -1,7 +1,6 @@
-package com.naagame.editor;
+package com.naagame.editor.controllers;
 
 public interface IController {
-
     default boolean hasUnsavedEdits() {
         return false;
     }

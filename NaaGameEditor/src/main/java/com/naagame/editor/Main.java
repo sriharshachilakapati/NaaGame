@@ -1,5 +1,6 @@
 package com.naagame.editor;
 
+import com.naagame.editor.controllers.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
