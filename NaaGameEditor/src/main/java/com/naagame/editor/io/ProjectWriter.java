@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -98,19 +99,26 @@ public final class ProjectWriter {
     }
 
     private static JSONValue sceneToJSON(Scene scene) {
-        final Function<Scene.Instance, JSONValue> instanceToJSON = instance -> {
+        final BiFunction<Scene.Instance<? extends IResource>, String, JSONValue> instanceToJSON = (instance, type) -> {
             JSONObject json = new JSONObject();
 
-            json.put("entity", new JSONValue(instance.getEntity().getName()));
+            json.put(type, new JSONValue(instance.getObject().getName()));
             json.put("posX", new JSONValue(instance.getPosX()));
             json.put("posY", new JSONValue(instance.getPosY()));
 
             return new JSONValue(json);
         };
 
+        final Function<Scene.Instance<Entity>, JSONValue> entitiesToJSON = instance ->
+                instanceToJSON.apply(instance, "entity");
+        final Function<Scene.Instance<Background>, JSONValue> backgroundsToJSON = instance ->
+                instanceToJSON.apply(instance, "background");
+
         JSONObject json = new JSONObject();
+
         json.put("name", new JSONValue(scene.getName()));
-        json.put("instances", listToJSON(scene.getInstances(), instanceToJSON));
+        json.put("entities", listToJSON(scene.getEntities(), entitiesToJSON));
+        json.put("backgrounds", listToJSON(scene.getBackgrounds(), backgroundsToJSON));
 
         return new JSONValue(json);
     }
