@@ -28,7 +28,20 @@ public final class ProjectReader {
     }
 
     private static Sprite jsonToSprite(JSONObject json) {
-        return null;
+        final Function<JSONValue, Sprite.Frame> jsonToFrame = value -> {
+            JSONObject frame = value.getValue();
+
+            final String texture = frame.get("texture").getValue();
+            final int duration = frame.get("duration").<Number> getValue().intValue();
+
+            return new Sprite.Frame(texture, duration);
+        };
+
+        Sprite sprite = new Sprite(json.get("name").getValue());
+        JSONArray frames = json.get("frames").getValue();
+        sprite.setFrames(frames.stream().map(jsonToFrame).collect(Collectors.toList()));
+
+        return sprite;
     }
 
     private static Background jsonToBackground(JSONObject json) {

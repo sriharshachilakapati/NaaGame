@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sprite implements IResource {
-    private final List<Frame> frames = new ArrayList<>();
+    private List<Frame> frames = new ArrayList<>();
     private String name;
 
     public Sprite(String name) {
@@ -15,16 +15,25 @@ public class Sprite implements IResource {
         return frames;
     }
 
+    public void setFrames(List<Frame> frames) {
+        this.frames = frames;
+    }
+
     @Override
     public String getName() {
         return name;
     }
 
     public static class Frame {
-        private Texture texture;
+        private String texture;
         private int duration;
 
-        public Texture getTexture() {
+        public Frame(String texture, int duration) {
+            this.texture = texture;
+            this.duration = duration;
+        }
+
+        public String getTexture() {
             return texture;
         }
 

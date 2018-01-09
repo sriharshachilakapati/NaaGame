@@ -36,7 +36,7 @@ public final class ProjectWriter {
         final Function<Sprite.Frame, JSONValue> frameToJSON = frame -> {
             JSONObject json = new JSONObject();
 
-            json.put("texture", new JSONValue(frame.getTexture() == null ? "" : frame.getTexture().getName()));
+            json.put("texture", new JSONValue(frame.getTexture() == null ? "" : frame.getTexture()));
             json.put("duration", new JSONValue(frame.getDuration()));
 
             return new JSONValue(json);
