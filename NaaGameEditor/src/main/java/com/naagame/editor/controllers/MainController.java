@@ -1,8 +1,10 @@
 package com.naagame.editor.controllers;
 
+import com.naagame.editor.io.ProjectReader;
 import com.naagame.editor.io.ProjectWriter;
 import com.naagame.editor.model.Resources;
 import com.naagame.editor.model.resources.*;
+import com.shc.easyjson.ParseException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -189,6 +191,23 @@ public class MainController implements Initializable, IController {
         try {
             ProjectWriter.writeToFile(selected.toPath());
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onOpenMenuItemClicked() {
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("NaaGame Projects", "*.ngm"));
+        chooser.setTitle("Open Project");
+
+        File selected = chooser.showOpenDialog(stage);
+
+        try {
+            ProjectReader.loadFromFile(selected.toPath());
+            refreshTreeUI();
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }
