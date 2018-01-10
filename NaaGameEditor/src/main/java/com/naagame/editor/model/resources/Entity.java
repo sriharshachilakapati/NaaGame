@@ -26,6 +26,10 @@ public class Entity implements IResource {
         return sprite;
     }
 
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
     public static class Event {
         private final Event.Type type;
         private final List<Event.Action> actions = new ArrayList<>();
@@ -55,7 +59,7 @@ public class Entity implements IResource {
             COLLISION
         }
 
-        public final class Action {
+        public static class Action {
             private final int code;
             private String args;
 

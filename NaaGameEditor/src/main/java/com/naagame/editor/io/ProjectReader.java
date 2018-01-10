@@ -61,7 +61,28 @@ public final class ProjectReader {
     }
 
     private static Entity jsonToEntity(JSONObject json) {
-        return null;
+        final Function<JSONObject, Entity.Event.Action> jsonToAction = action -> {
+            final int code = action.get("code").<Number> getValue().intValue();
+            final String args = action.get("args").getValue();
+
+            return new Entity.Event.Action(code, args);
+        };
+
+        final Function<JSONObject, Entity.Event> jsonToEvent = eventJSON -> {
+            final Entity.Event.Type type = Entity.Event.Type.valueOf(eventJSON.get("type").getValue());
+            final String args = eventJSON.get("args").getValue();
+
+            Entity.Event event = new Entity.Event(type, args);
+            loadToList(event.getActions(), eventJSON.get("actions"), jsonToAction);
+
+            return event;
+        };
+
+        Entity entity = new Entity(json.get("name").getValue());
+        entity.setSprite(Resources.find(Resources.sprites, json.get("sprite").getValue()));
+        loadToList(entity.getEvents(), json.get("events"), jsonToEvent);
+
+        return entity;
     }
 
     private static Scene jsonToScene(JSONObject json) {
