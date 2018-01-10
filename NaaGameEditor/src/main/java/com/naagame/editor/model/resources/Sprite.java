@@ -25,15 +25,15 @@ public class Sprite implements IResource {
     }
 
     public static class Frame {
-        private String texture;
+        private Texture texture;
         private int duration;
 
-        public Frame(String texture, int duration) {
+        public Frame(Texture texture, int duration) {
             this.texture = texture;
             this.duration = duration;
         }
 
-        public String getTexture() {
+        public Texture getTexture() {
             return texture;
         }
 

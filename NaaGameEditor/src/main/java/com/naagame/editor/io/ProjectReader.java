@@ -34,7 +34,7 @@ public final class ProjectReader {
             final String texture = frame.get("texture").getValue();
             final int duration = frame.get("duration").<Number> getValue().intValue();
 
-            return new Sprite.Frame(texture, duration);
+            return new Sprite.Frame(Resources.find(Resources.textures, texture), duration);
         };
 
         Sprite sprite = new Sprite(json.get("name").getValue());

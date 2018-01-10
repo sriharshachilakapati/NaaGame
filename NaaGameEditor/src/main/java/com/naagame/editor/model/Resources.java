@@ -14,6 +14,10 @@ public final class Resources {
     public static final List<Entity> entities = new ArrayList<>();
     public static final List<Scene> scenes = new ArrayList<>();
 
+    public static <T extends IResource> T find(List<T> resourceList, String name) {
+        return resourceList.stream().filter(r -> name.equals(r.getName())).findFirst().orElse(null);
+    }
+
     private Resources() {
     }
 }
