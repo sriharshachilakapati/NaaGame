@@ -85,8 +85,29 @@ public final class ProjectReader {
         return entity;
     }
 
+    private static <T extends IResource> Scene.Instance<T> jsonToInstance(JSONObject json,
+                         Function<String, T> finder, String type) {
+        Scene.Instance<T> instance = new Scene.Instance<>();
+
+        instance.setObject(finder.apply(json.get(type).getValue()));
+        instance.setPosX(json.get("posX").<Number> getValue().floatValue());
+        instance.setPosY(json.get("posY").<Number> getValue().floatValue());
+
+        return instance;
+    }
+
     private static Scene jsonToScene(JSONObject json) {
-        return null;
+        final Function<JSONObject, Scene.Instance<Entity>> jsonToEntityInstance = entityJSON ->
+                jsonToInstance(entityJSON, name -> Resources.find(Resources.entities, name), "entity");
+
+        final Function<JSONObject, Scene.Instance<Background>> jsonToBackgroundInstance = backgroundJSON ->
+                jsonToInstance(backgroundJSON, name -> Resources.find(Resources.backgrounds, name), "background");
+
+        Scene scene = new Scene(json.get("name").getValue());
+        loadToList(scene.getEntities(), json.get("entities"), jsonToEntityInstance);
+        loadToList(scene.getBackgrounds(), json.get("backgrounds"), jsonToBackgroundInstance);
+
+        return scene;
     }
 
     private static void loadProjectFromJSON(JSONObject json) {
