@@ -16,4 +16,8 @@ public class Sound implements IResource {
     public String getFileName() {
         return fileName;
     }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 }

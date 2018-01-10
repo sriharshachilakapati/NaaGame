@@ -27,4 +27,16 @@ public class Background implements IResource {
     public float getVSpeed() {
         return vSpeed;
     }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
+    public void setHSpeed(float hSpeed) {
+        this.hSpeed = hSpeed;
+    }
+
+    public void setVSpeed(float vSpeed) {
+        this.vSpeed = vSpeed;
+    }
 }

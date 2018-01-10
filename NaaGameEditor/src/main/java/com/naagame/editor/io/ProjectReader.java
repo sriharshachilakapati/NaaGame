@@ -45,11 +45,19 @@ public final class ProjectReader {
     }
 
     private static Background jsonToBackground(JSONObject json) {
-        return null;
+        Background background = new Background(json.get("name").getValue());
+
+        background.setTexture(Resources.find(Resources.textures, json.get("texture").getValue()));
+        background.setHSpeed(json.get("hSpeed").<Number> getValue().floatValue());
+        background.setVSpeed(json.get("vSpeed").<Number> getValue().floatValue());
+
+        return background;
     }
 
     private static Sound jsonToSound(JSONObject json) {
-        return null;
+        Sound sound = new Sound(json.get("name").getValue());
+        sound.setFileName(json.get("file").getValue());
+        return sound;
     }
 
     private static Entity jsonToEntity(JSONObject json) {
