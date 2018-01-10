@@ -92,6 +92,7 @@ public final class ProjectWriter {
 
         JSONObject json = new JSONObject();
 
+        json.put("name", new JSONValue(entity.getName()));
         json.put("sprite", new JSONValue(entity.getSprite() == null ? "" : entity.getSprite().getName()));
         json.put("events", listToJSON(entity.getEvents(), eventToJSON));
 
