@@ -4,7 +4,9 @@ import com.naagame.editor.io.ProjectReader;
 import com.naagame.editor.io.ProjectWriter;
 import com.naagame.editor.model.Resources;
 import com.naagame.editor.model.resources.*;
+import com.naagame.editor.util.RetentionFileChooser;
 import com.shc.easyjson.ParseException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,23 +14,24 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.stage.Window;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
+
+import static com.naagame.editor.util.RetentionFileChooser.EXTENSION_FILTER_NAAGAME_PROJ;
 
 public class MainController implements Initializable, IController {
 
     @FXML public ScrollPane content;
     @FXML public TreeView<String> resourceTree;
 
-    public Stage stage;
+    private Window window;
 
     private TreeItem<String> textures;
     private TreeItem<String> sprites;
@@ -50,18 +53,17 @@ public class MainController implements Initializable, IController {
     private EntityEditorController entityEditorController;
 
     @Override
-    @SuppressWarnings("unchecked")
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Platform.runLater(() -> window = content.getScene().getWindow());
+
         TreeItem<String> root = new TreeItem<>();
 
-        textures = new TreeItem<>("Textures");
-        sprites = new TreeItem<>("Sprites");
-        backgrounds = new TreeItem<>("Backgrounds");
-        sounds = new TreeItem<>("Sounds");
-        entities = new TreeItem<>("Entities");
-        scenes = new TreeItem<>("Scenes");
-
-        root.getChildren().addAll(textures, sprites, backgrounds, sounds, entities, scenes);
+        root.getChildren().add(textures = new TreeItem<>("Textures"));
+        root.getChildren().add(sprites = new TreeItem<>("Sprites"));
+        root.getChildren().add(backgrounds = new TreeItem<>("Backgrounds"));
+        root.getChildren().add(sounds = new TreeItem<>("Sounds"));
+        root.getChildren().add(entities = new TreeItem<>("Entities"));
+        root.getChildren().add(scenes = new TreeItem<>("Scenes"));
 
         resourceTree.setRoot(root);
 
@@ -178,18 +180,14 @@ public class MainController implements Initializable, IController {
 
     @FXML
     public void onSaveMenuItemClicked() {
-        FileChooser chooser = new FileChooser();
-        chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("NaaGame Projects", "*.ngm"));
-        chooser.setTitle("Save Project As");
+        Path path = RetentionFileChooser.showSaveDialog(window);
 
-        File selected = chooser.showSaveDialog(stage);
-        if (!selected.getAbsolutePath().endsWith(".ngm")) {
-            selected = new File(selected.getAbsolutePath() + ".ngm");
+        if (path == null) {
+            return;
         }
 
         try {
-            ProjectWriter.writeToFile(selected.toPath());
+            ProjectWriter.writeToFile(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,15 +195,14 @@ public class MainController implements Initializable, IController {
 
     @FXML
     public void onOpenMenuItemClicked() {
-        FileChooser chooser = new FileChooser();
-        chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("NaaGame Projects", "*.ngm"));
-        chooser.setTitle("Open Project");
+        Path path = RetentionFileChooser.showOpenDialog(window, EXTENSION_FILTER_NAAGAME_PROJ);
 
-        File selected = chooser.showOpenDialog(stage);
+        if (path == null) {
+            return;
+        }
 
         try {
-            ProjectReader.loadFromFile(selected.toPath());
+            ProjectReader.loadFromFile(path);
             refreshTreeUI();
         } catch (IOException | ParseException e) {
             e.printStackTrace();

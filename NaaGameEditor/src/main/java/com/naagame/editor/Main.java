@@ -1,6 +1,5 @@
 package com.naagame.editor;
 
-import com.naagame.editor.controllers.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,12 +15,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader()
+        Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader()
                 .getResource("main.fxml")));
-
-        Pane pane = loader.load();
-        MainController controller = loader.getController();
-        controller.stage = stage;
 
         Scene scene = new Scene(pane);
         stage.setScene(scene);
