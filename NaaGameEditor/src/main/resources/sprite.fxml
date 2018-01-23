@@ -29,10 +29,10 @@
                   <Label text="Frames" />
                   <HBox spacing="5.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TableView editable="true" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                        <TableView fx:id="framesView" editable="true" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                           <columns>
-                            <TableColumn editable="false" prefWidth="75.0" text="Texture" />
-                            <TableColumn prefWidth="75.0" text="Duration" />
+                            <TableColumn fx:id="textureColumn" prefWidth="75.0" text="Texture" />
+                            <TableColumn fx:id="durationColumn" prefWidth="75.0" text="Duration" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -40,8 +40,8 @@
                         </TableView>
                         <VBox>
                            <children>
-                              <Button mnemonicParsing="false" text="+" />
-                              <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="29.0" text="-" />
+                              <Button mnemonicParsing="false" onAction="#onAddFrameButtonClicked" text="+" />
+                              <Button mnemonicParsing="false" onAction="#onRemoveFrameButtonClicked" prefHeight="26.0" prefWidth="29.0" text="-" />
                            </children>
                         </VBox>
                      </children>

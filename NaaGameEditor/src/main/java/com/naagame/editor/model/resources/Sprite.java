@@ -40,5 +40,13 @@ public class Sprite implements IResource {
         public int getDuration() {
             return duration;
         }
+
+        public void setTexture(Texture texture) {
+            this.texture = texture;
+        }
+
+        public void setDuration(int duration) {
+            this.duration = duration;
+        }
     }
 }
