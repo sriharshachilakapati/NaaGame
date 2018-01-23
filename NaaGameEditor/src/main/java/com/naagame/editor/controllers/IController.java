@@ -12,4 +12,8 @@ public interface IController {
     default void discardChanges() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
+    default void init(String resourceName) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }

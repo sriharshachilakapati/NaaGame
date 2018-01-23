@@ -4,11 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 public class EntityEditorController implements IController {
-    String currentEntity;
-
     @FXML TextField nameField;
 
-    public void init() {
+    @Override
+    public void init(String currentEntity) {
         nameField.setText(currentEntity);
     }
 }

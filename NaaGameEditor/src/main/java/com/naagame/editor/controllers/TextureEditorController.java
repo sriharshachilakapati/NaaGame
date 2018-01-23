@@ -6,9 +6,8 @@ import javafx.scene.control.TextField;
 public class TextureEditorController implements IController {
     @FXML public TextField nameField;
 
-    String currentTexture;
-
-    public void init() {
+    @Override
+    public void init(String currentTexture) {
         nameField.setText(currentTexture);
     }
 }

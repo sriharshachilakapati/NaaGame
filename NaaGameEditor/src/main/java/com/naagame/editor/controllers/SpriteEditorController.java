@@ -18,14 +18,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class SpriteEditorController implements IController {
-    String currentSprite;
-
     @FXML TextField nameField;
     @FXML TableView<Sprite.Frame> framesView;
     @FXML TableColumn<Sprite.Frame, String> textureColumn;
     @FXML TableColumn<Sprite.Frame, Integer> durationColumn;
 
-    public void init() {
+    @Override
+    public void init(String currentSprite) {
         nameField.setText(currentSprite);
 
         ObservableList<String> textures = FXCollections.observableList(Resources.textures

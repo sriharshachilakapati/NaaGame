@@ -46,11 +46,11 @@ public class MainController implements Initializable, IController {
     private Pane soundEditor;
     private Pane entityEditor;
 
-    private TextureEditorController textureEditorController;
-    private SpriteEditorController spriteEditorController;
-    private BackgroundEditorController backgroundEditorController;
-    private SoundEditorController soundEditorController;
-    private EntityEditorController entityEditorController;
+    private IController textureEditorController;
+    private IController spriteEditorController;
+    private IController backgroundEditorController;
+    private IController soundEditorController;
+    private IController entityEditorController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -83,38 +83,38 @@ public class MainController implements Initializable, IController {
                 treeItemSelectionChanged(resourceTree.getSelectionModel().getSelectedItem());
         });
 
-        this.<SpriteEditorController>createEditor("sprite.fxml", (editor, controller) -> {
+        createEditor("sprite.fxml", (editor, controller) -> {
             spriteEditor = editor;
             spriteEditorController = controller;
         });
 
-        this.<TextureEditorController>createEditor("texture.fxml", (editor, controller) -> {
+        createEditor("texture.fxml", (editor, controller) -> {
             textureEditor = editor;
             textureEditorController = controller;
         });
 
-        this.<BackgroundEditorController>createEditor("background.fxml", (editor, controller) -> {
+        createEditor("background.fxml", (editor, controller) -> {
             backgroundEditor = editor;
             backgroundEditorController = controller;
         });
 
-        this.<SoundEditorController>createEditor("sound.fxml", (editor, controller) -> {
+        createEditor("sound.fxml", (editor, controller) -> {
             soundEditor = editor;
             soundEditorController = controller;
         });
 
-        this.<EntityEditorController>createEditor("entity.fxml", (editor, controller) -> {
+        createEditor("entity.fxml", (editor, controller) -> {
             entityEditor = editor;
             entityEditorController = controller;
         });
     }
 
-    private <T> void createEditor(String name, BiConsumer<Pane, T> consumer) {
+    private void createEditor(String name, BiConsumer<Pane, IController> consumer) {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass()
                     .getClassLoader().getResource(name)));
             Pane editor = loader.load();
-            T controller = loader.getController();
+            IController controller = loader.getController();
             consumer.accept(editor, controller);
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,32 +144,27 @@ public class MainController implements Initializable, IController {
 
         switch (item.getParent().getValue().toLowerCase()) {
             case "textures":
-                textureEditorController.currentTexture = item.getValue();
-                textureEditorController.init();
+                textureEditorController.init(item.getValue());
                 content.setContent(textureEditor);
                 break;
 
             case "sprites":
-                spriteEditorController.currentSprite = item.getValue();
-                spriteEditorController.init();
+                spriteEditorController.init(item.getValue());
                 content.setContent(spriteEditor);
                 break;
 
             case "backgrounds":
-                backgroundEditorController.currentBackground = item.getValue();
-                backgroundEditorController.init();
+                backgroundEditorController.init(item.getValue());
                 content.setContent(backgroundEditor);
                 break;
 
             case "sounds":
-                soundEditorController.currentSound = item.getValue();
-                soundEditorController.init();
+                soundEditorController.init(item.getValue());
                 content.setContent(soundEditor);
                 break;
 
             case "entities":
-                entityEditorController.currentEntity = item.getValue();
-                entityEditorController.init();
+                entityEditorController.init(item.getValue());
                 content.setContent(entityEditor);
                 break;
 
