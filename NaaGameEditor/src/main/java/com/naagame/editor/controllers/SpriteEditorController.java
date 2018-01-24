@@ -3,10 +3,12 @@ package com.naagame.editor.controllers;
 import com.naagame.editor.model.Resources;
 import com.naagame.editor.model.resources.IResource;
 import com.naagame.editor.model.resources.Sprite;
+import com.naagame.editor.model.resources.Texture;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -14,25 +16,63 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class SpriteEditorController implements IController {
+public class SpriteEditorController implements IController, Initializable {
     @FXML TextField nameField;
+
     @FXML TableView<Sprite.Frame> framesView;
     @FXML TableColumn<Sprite.Frame, String> textureColumn;
     @FXML TableColumn<Sprite.Frame, Integer> durationColumn;
 
-    @Override
-    public void init(String currentSprite) {
-        nameField.setText(currentSprite);
+    private ObservableList<String> textures;
+    private ObservableList<Sprite.Frame> frames;
+    private Sprite currentSprite;
 
-        ObservableList<String> textures = FXCollections.observableList(Resources.textures
+    @Override
+    public void init(String name) {
+        currentSprite = Resources.find(Resources.sprites, name);
+        nameField.setText(name);
+
+        textures.clear();
+        textures.addAll(Resources.textures
                 .stream().map(IResource::getName).collect(Collectors.toList()));
+
+        frames.clear();
+        frames.addAll(currentSprite.getFrames());
+    }
+
+    @FXML
+    public void onAddFrameButtonClicked() {
+        if (Resources.textures.size() == 0) {
+            return;
+        }
+
+        frames.add(new Sprite.Frame(Resources.textures.get(0), 250));
+    }
+
+    @FXML
+    public void onRemoveFrameButtonClicked() {
+        Sprite.Frame selected = framesView.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            return;
+        }
+
+        frames.remove(selected);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        textures = FXCollections.observableArrayList();
+        frames = FXCollections.observableArrayList();
 
         textureColumn.setCellValueFactory(param -> {
             Sprite.Frame frame = param.getValue();
-            return new SimpleObjectProperty<>(frame.getTexture().getName());
+            Texture texture = frame.getTexture();
+            return new SimpleObjectProperty<>(texture == null ? "" : texture.getName());
         });
         textureColumn.setCellFactory(ComboBoxTableCell.forTableColumn(textures));
         textureColumn.setOnEditCommit(event -> event.getRowValue()
@@ -50,22 +90,9 @@ public class SpriteEditorController implements IController {
                 return Integer.valueOf(s);
             }
         }));
+
         durationColumn.setOnEditCommit(event -> event.getRowValue().setDuration(event.getNewValue()));
 
-        ObservableList<Sprite.Frame> frames = FXCollections.observableArrayList(
-                IntStream.range(0, 10).mapToObj(i -> new Sprite.Frame(Resources.textures.get(i), 250))
-                        .collect(Collectors.toList()));
-
         framesView.setItems(frames);
-    }
-
-    @FXML
-    public void onAddFrameButtonClicked() {
-        System.out.println("Add frame");
-    }
-
-    @FXML
-    public void onRemoveFrameButtonClicked() {
-        System.out.println("Remove frame");
     }
 }
