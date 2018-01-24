@@ -45,10 +45,19 @@ subprojects {
             }
 }
 
+project(":NaaGameCore") {
+    apply plugin: "java"
+    
+    dependencies {
+        compile "com.goharsha:easyjson:${easyJsonVersion}:@jar"
+    }
+}
+
 project(":NaaGameEditor") {
 	apply plugin: "java"
 
     dependencies {
+        compile project(":NaaGameCore")
         compile "com.goharsha:easyjson:${easyJsonVersion}:@jar"
     }
 }
@@ -57,6 +66,7 @@ project(":NaaGamePlayerCore") {
     apply plugin: "java"
 
     dependencies {
+        compile project(":NaaGameCore")
         compile files("../libs/silenceengine.jar")
         compile "com.goharsha:easyxml:${easyXmlVersion}:@jar"
         compile "com.goharsha:easyjson:${easyJsonVersion}:@jar"
@@ -67,6 +77,7 @@ project(":NaaGamePlayerHtml5") {
     apply plugin: "java"
 
     dependencies {
+        compile project(":NaaGameCore")
         compile project(":NaaGamePlayerCore")
         compile files("../libs/backend-gwt.jar")
         compile files("../libs/silenceengine-sources.jar")
@@ -84,6 +95,7 @@ project(":NaaGamePlayerDesktop") {
     apply plugin: "java"
 
     dependencies {
+        compile project(":NaaGameCore")
         compile project(":NaaGamePlayerCore")
         compile files("../libs/backend-lwjgl.jar")
 

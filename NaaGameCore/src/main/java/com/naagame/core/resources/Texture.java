@@ -1,4 +1,4 @@
-package com.naagame.editor.model.resources;
+package com.naagame.core.resources;
 
 public class Texture implements IResource {
     private String fileName = "";

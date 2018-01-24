@@ -30,6 +30,7 @@ gwt {
     modules 'com.naagame.player.NaaGamePlayerGwt'
     devModules 'com.naagame.player.NaaGamePlayerGwt'
 
+    src += files(project(':NaaGameCore').sourceSets.main.allJava.srcDirs)
     src += files(project(':NaaGamePlayerCore').sourceSets.main.allJava.srcDirs)
 }
 

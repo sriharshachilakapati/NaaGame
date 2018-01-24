@@ -2,8 +2,8 @@ package com.naagame.editor.controllers;
 
 import com.naagame.editor.io.ProjectReader;
 import com.naagame.editor.io.ProjectWriter;
-import com.naagame.editor.model.Resources;
-import com.naagame.editor.model.resources.*;
+import com.naagame.core.Resources;
+import com.naagame.core.resources.*;
 import com.naagame.editor.util.RetentionFileChooser;
 import com.shc.easyjson.ParseException;
 import javafx.application.Platform;

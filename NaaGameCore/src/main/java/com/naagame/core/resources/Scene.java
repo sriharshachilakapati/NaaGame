@@ -1,4 +1,4 @@
-package com.naagame.editor.model.resources;
+package com.naagame.core.resources;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,9 @@
 package com.naagame.editor.controllers;
 
-import com.naagame.editor.model.Resources;
-import com.naagame.editor.model.resources.IResource;
-import com.naagame.editor.model.resources.Sprite;
-import com.naagame.editor.model.resources.Texture;
+import com.naagame.core.Resources;
+import com.naagame.core.resources.IResource;
+import com.naagame.core.resources.Sprite;
+import com.naagame.core.resources.Texture;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

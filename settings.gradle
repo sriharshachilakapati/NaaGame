@@ -1,1 +1,1 @@
-include 'NaaGameEditor', 'NaaGamePlayerCore', 'NaaGamePlayerDesktop', 'NaaGamePlayerHtml5'
+include 'NaaGameCore', 'NaaGameEditor', 'NaaGamePlayerCore', 'NaaGamePlayerDesktop', 'NaaGamePlayerHtml5'

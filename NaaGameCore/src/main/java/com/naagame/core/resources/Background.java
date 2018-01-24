@@ -1,4 +1,4 @@
-package com.naagame.editor.model.resources;
+package com.naagame.core.resources;
 
 public class Background implements IResource {
     private Texture texture;

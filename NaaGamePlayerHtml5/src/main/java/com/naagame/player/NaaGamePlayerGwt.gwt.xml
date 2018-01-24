@@ -39,6 +39,7 @@
     <inherits name="com.shc.EasyXML"/>
     <inherits name="com.shc.EasyJSON"/>
 
+    <inherits name="com.naagame.NaaGameCore"/>
     <inherits name="com.naagame.NaaGamePlayer"/>
 
     <entry-point class='com.naagame.player.html.NaaGamePlayerLauncher'/>

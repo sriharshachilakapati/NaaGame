@@ -26,9 +26,6 @@
         "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
 <module>
 
-    <inherits name="com.shc.EasyJSON"/>
-    <inherits name="com.naagame.NaaGameCore"/>
-    
-    <source path='player'/>
+    <source path='core'/>
 
 </module>

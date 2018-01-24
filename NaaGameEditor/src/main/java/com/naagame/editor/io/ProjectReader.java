@@ -1,7 +1,7 @@
 package com.naagame.editor.io;
 
-import com.naagame.editor.model.Resources;
-import com.naagame.editor.model.resources.*;
+import com.naagame.core.Resources;
+import com.naagame.core.resources.*;
 import com.shc.easyjson.*;
 
 import java.io.IOException;

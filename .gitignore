@@ -16,6 +16,7 @@ out/
 .classpath
 bin/
 
+NaaGameCore/build/
 NaaGameEditor/build/
 NaaGamePlayerCore/build/
 NaaGamePlayerDesktop/build/

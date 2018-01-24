@@ -1,4 +1,4 @@
-package com.naagame.editor.model.resources;
+package com.naagame.core.resources;
 
 public class Sound implements IResource {
     private String fileName = "";
