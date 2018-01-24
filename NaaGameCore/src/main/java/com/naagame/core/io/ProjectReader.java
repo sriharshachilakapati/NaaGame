@@ -1,12 +1,9 @@
-package com.naagame.editor.io;
+package com.naagame.core.io;
 
 import com.naagame.core.Resources;
 import com.naagame.core.resources.*;
 import com.shc.easyjson.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -119,8 +116,7 @@ public final class ProjectReader {
         loadToList(Resources.scenes, json.get("scenes"), ProjectReader::jsonToScene);
     }
 
-    public static void loadFromFile(Path path) throws IOException, ParseException {
-        String json = new String(Files.readAllBytes(path));
+    public static void loadFromJSON(String json) throws ParseException {
         JSONObject jsonObject = JSON.parse(json);
         loadProjectFromJSON(jsonObject);
     }

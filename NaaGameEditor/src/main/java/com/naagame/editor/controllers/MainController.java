@@ -1,6 +1,6 @@
 package com.naagame.editor.controllers;
 
-import com.naagame.editor.io.ProjectReader;
+import com.naagame.core.io.ProjectReader;
 import com.naagame.editor.io.ProjectWriter;
 import com.naagame.core.Resources;
 import com.naagame.core.resources.*;
@@ -18,6 +18,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
@@ -197,7 +198,8 @@ public class MainController implements Initializable, IController {
         }
 
         try {
-            ProjectReader.loadFromFile(path);
+            String json = new String(Files.readAllBytes(path));
+            ProjectReader.loadFromJSON(json);
             refreshTreeUI();
         } catch (IOException | ParseException e) {
             e.printStackTrace();
