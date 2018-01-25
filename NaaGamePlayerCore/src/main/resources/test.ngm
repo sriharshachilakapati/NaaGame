@@ -1,0 +1,17 @@
+{
+  "textures": [
+    {
+      "name": "Tex1",
+      "file": "imgs/tex1.png"
+    },
+    {
+      "name": "Tex2",
+      "file": "imgs/tex2.png"
+    }
+  ],
+  "sprites": [],
+  "backgrounds": [],
+  "sounds": [],
+  "entities": [],
+  "scenes": []
+}
