@@ -24,6 +24,11 @@ public class NgmSprite implements IResource {
         return name;
     }
 
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public static class Frame {
         private NgmTexture texture;
         private int duration;

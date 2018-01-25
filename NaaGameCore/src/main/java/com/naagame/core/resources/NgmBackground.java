@@ -28,6 +28,11 @@ public class NgmBackground implements IResource {
         return vSpeed;
     }
 
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setTexture(NgmTexture texture) {
         this.texture = texture;
     }

@@ -10,11 +10,11 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.layout.Pane;
 import javafx.stage.Window;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -80,8 +80,16 @@ public class MainController implements Initializable, IController {
         refreshTreeUI();
 
         resourceTree.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getClickCount() == 2)
-                treeItemSelectionChanged(resourceTree.getSelectionModel().getSelectedItem());
+            switch (mouseEvent.getClickCount()) {
+                case 2:
+                    treeItemSelectionChanged(resourceTree.getSelectionModel().getSelectedItem());
+                    break;
+
+                case 3:
+                    resourceTree.setEditable(true);
+                    resourceTree.edit(resourceTree.getSelectionModel().getSelectedItem());
+                    break;
+            }
         });
 
         createEditor("sprite.fxml", (editor, controller) -> {
@@ -108,6 +116,45 @@ public class MainController implements Initializable, IController {
             entityEditor = editor;
             entityEditorController = controller;
         });
+
+        Callback<TreeView<String>, TreeCell<String>> cellFactory = TextFieldTreeCell.forTreeView();
+        resourceTree.setCellFactory(tv -> {
+            TreeCell<String> cell = cellFactory.call(tv);
+
+            cell.treeItemProperty().addListener((value, oldItem, newItem) -> {
+                if (newItem == null) {
+                    cell.setEditable(false);
+                } else if (newItem.getParent().getValue() != null) {
+                    cell.setEditable(true);
+                } else {
+                    cell.setEditable(false);
+                }
+            });
+
+            return cell;
+        });
+
+        resourceTree.setOnEditCommit(event -> {
+            List<? extends IResource> resources = null;
+
+            switch (event.getTreeItem().getParent().getValue().toLowerCase()) {
+                case "textures":    resources = NgmProject.textures;    break;
+                case "sprites":     resources = NgmProject.sprites;     break;
+                case "backgrounds": resources = NgmProject.backgrounds; break;
+                case "sounds":      resources = NgmProject.sounds;      break;
+                case "entities":    resources = NgmProject.entities;    break;
+                case "scenes":      resources = NgmProject.scenes;      break;
+            }
+
+            if (resources != null) {
+                IResource resource = NgmProject.find(resources, event.getOldValue());
+                resource.setName(event.getNewValue());
+            }
+
+            resourceTree.setEditable(false);
+        });
+
+        resourceTree.setOnEditCancel(event -> resourceTree.setEditable(false));
     }
 
     private void createEditor(String name, BiConsumer<Pane, IController> consumer) {

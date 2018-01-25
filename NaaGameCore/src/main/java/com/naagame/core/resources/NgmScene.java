@@ -26,6 +26,11 @@ public class NgmScene implements IResource {
         return backgrounds;
     }
 
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public static class Instance<E extends IResource> {
         private E object;
 

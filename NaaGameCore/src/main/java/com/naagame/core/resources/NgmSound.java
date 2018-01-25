@@ -17,6 +17,11 @@ public class NgmSound implements IResource {
         return fileName;
     }
 
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }

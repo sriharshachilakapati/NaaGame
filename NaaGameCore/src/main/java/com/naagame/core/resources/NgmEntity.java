@@ -26,6 +26,11 @@ public class NgmEntity implements IResource {
         return sprite;
     }
 
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setSprite(NgmSprite sprite) {
         this.sprite = sprite;
     }
