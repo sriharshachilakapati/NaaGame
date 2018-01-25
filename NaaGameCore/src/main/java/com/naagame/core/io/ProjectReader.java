@@ -1,6 +1,6 @@
 package com.naagame.core.io;
 
-import com.naagame.core.Resources;
+import com.naagame.core.NgmProject;
 import com.naagame.core.resources.*;
 import com.shc.easyjson.*;
 
@@ -31,7 +31,7 @@ public final class ProjectReader {
             final String texture = frame.get("texture").getValue();
             final int duration = frame.get("duration").<Number> getValue().intValue();
 
-            return new NgmSprite.Frame(Resources.find(Resources.textures, texture), duration);
+            return new NgmSprite.Frame(NgmProject.find(NgmProject.textures, texture), duration);
         };
 
         NgmSprite sprite = new NgmSprite(json.get("name").getValue());
@@ -44,7 +44,7 @@ public final class ProjectReader {
     private static NgmBackground jsonToBackground(JSONObject json) {
         NgmBackground background = new NgmBackground(json.get("name").getValue());
 
-        background.setTexture(Resources.find(Resources.textures, json.get("texture").getValue()));
+        background.setTexture(NgmProject.find(NgmProject.textures, json.get("texture").getValue()));
         background.setHSpeed(json.get("hSpeed").<Number> getValue().floatValue());
         background.setVSpeed(json.get("vSpeed").<Number> getValue().floatValue());
 
@@ -76,7 +76,7 @@ public final class ProjectReader {
         };
 
         NgmEntity entity = new NgmEntity(json.get("name").getValue());
-        entity.setSprite(Resources.find(Resources.sprites, json.get("sprite").getValue()));
+        entity.setSprite(NgmProject.find(NgmProject.sprites, json.get("sprite").getValue()));
         loadToList(entity.getEvents(), json.get("events"), jsonToEvent);
 
         return entity;
@@ -95,10 +95,10 @@ public final class ProjectReader {
 
     private static NgmScene jsonToScene(JSONObject json) {
         final Function<JSONObject, NgmScene.Instance<NgmEntity>> jsonToEntityInstance = entityJSON ->
-                jsonToInstance(entityJSON, name -> Resources.find(Resources.entities, name), "entity");
+                jsonToInstance(entityJSON, name -> NgmProject.find(NgmProject.entities, name), "entity");
 
         final Function<JSONObject, NgmScene.Instance<NgmBackground>> jsonToBackgroundInstance = backgroundJSON ->
-                jsonToInstance(backgroundJSON, name -> Resources.find(Resources.backgrounds, name), "background");
+                jsonToInstance(backgroundJSON, name -> NgmProject.find(NgmProject.backgrounds, name), "background");
 
         NgmScene scene = new NgmScene(json.get("name").getValue());
         loadToList(scene.getEntities(), json.get("entities"), jsonToEntityInstance);
@@ -108,12 +108,12 @@ public final class ProjectReader {
     }
 
     private static void loadProjectFromJSON(JSONObject json) {
-        loadToList(Resources.textures, json.get("textures"), ProjectReader::jsonToTexture);
-        loadToList(Resources.sprites, json.get("sprites"), ProjectReader::jsonToSprite);
-        loadToList(Resources.backgrounds, json.get("backgrounds"), ProjectReader::jsonToBackground);
-        loadToList(Resources.sounds, json.get("sounds"), ProjectReader::jsonToSound);
-        loadToList(Resources.entities, json.get("entities"), ProjectReader::jsonToEntity);
-        loadToList(Resources.scenes, json.get("scenes"), ProjectReader::jsonToScene);
+        loadToList(NgmProject.textures, json.get("textures"), ProjectReader::jsonToTexture);
+        loadToList(NgmProject.sprites, json.get("sprites"), ProjectReader::jsonToSprite);
+        loadToList(NgmProject.backgrounds, json.get("backgrounds"), ProjectReader::jsonToBackground);
+        loadToList(NgmProject.sounds, json.get("sounds"), ProjectReader::jsonToSound);
+        loadToList(NgmProject.entities, json.get("entities"), ProjectReader::jsonToEntity);
+        loadToList(NgmProject.scenes, json.get("scenes"), ProjectReader::jsonToScene);
     }
 
     public static void loadFromJSON(String json) throws ParseException {

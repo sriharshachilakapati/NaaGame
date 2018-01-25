@@ -5,7 +5,7 @@ import com.naagame.core.resources.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Resources {
+public final class NgmProject {
 
     public static final List<NgmTexture> textures = new ArrayList<>();
     public static final List<NgmSprite> sprites = new ArrayList<>();
@@ -18,6 +18,6 @@ public final class Resources {
         return resourceList.stream().filter(r -> name.equals(r.getName())).findFirst().orElse(null);
     }
 
-    private Resources() {
+    private NgmProject() {
     }
 }

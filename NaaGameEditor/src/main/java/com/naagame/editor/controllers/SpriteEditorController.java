@@ -1,6 +1,6 @@
 package com.naagame.editor.controllers;
 
-import com.naagame.core.Resources;
+import com.naagame.core.NgmProject;
 import com.naagame.core.resources.IResource;
 import com.naagame.core.resources.NgmSprite;
 import com.naagame.core.resources.NgmTexture;
@@ -33,11 +33,11 @@ public class SpriteEditorController implements IController, Initializable {
 
     @Override
     public void init(String name) {
-        currentSprite = Resources.find(Resources.sprites, name);
+        currentSprite = NgmProject.find(NgmProject.sprites, name);
         nameField.setText(name);
 
         textures.clear();
-        textures.addAll(Resources.textures
+        textures.addAll(NgmProject.textures
                 .stream().map(IResource::getName).collect(Collectors.toList()));
 
         frames.clear();
@@ -46,11 +46,11 @@ public class SpriteEditorController implements IController, Initializable {
 
     @FXML
     public void onAddFrameButtonClicked() {
-        if (Resources.textures.size() == 0) {
+        if (NgmProject.textures.size() == 0) {
             return;
         }
 
-        frames.add(new NgmSprite.Frame(Resources.textures.get(0), 250));
+        frames.add(new NgmSprite.Frame(NgmProject.textures.get(0), 250));
     }
 
     @FXML
@@ -76,7 +76,7 @@ public class SpriteEditorController implements IController, Initializable {
         });
         textureColumn.setCellFactory(ComboBoxTableCell.forTableColumn(textures));
         textureColumn.setOnEditCommit(event -> event.getRowValue()
-                .setTexture(Resources.find(Resources.textures, event.getNewValue())));
+                .setTexture(NgmProject.find(NgmProject.textures, event.getNewValue())));
 
         durationColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getDuration()));
         durationColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Integer>() {

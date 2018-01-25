@@ -1,6 +1,6 @@
 package com.naagame.editor.io;
 
-import com.naagame.core.Resources;
+import com.naagame.core.NgmProject;
 import com.naagame.core.resources.*;
 import com.shc.easyjson.JSON;
 import com.shc.easyjson.JSONArray;
@@ -127,12 +127,12 @@ public final class ProjectWriter {
     private static String jsonifyProject() {
         JSONObject json = new JSONObject();
 
-        json.put("textures", listToJSON(Resources.textures, ProjectWriter::textureToJSON));
-        json.put("sprites", listToJSON(Resources.sprites, ProjectWriter::spriteToJSON));
-        json.put("backgrounds", listToJSON(Resources.backgrounds, ProjectWriter::backgroundToJSON));
-        json.put("sounds", listToJSON(Resources.sounds, ProjectWriter::soundToJSON));
-        json.put("entities", listToJSON(Resources.entities, ProjectWriter::entityToJSON));
-        json.put("scenes", listToJSON(Resources.scenes, ProjectWriter::sceneToJSON));
+        json.put("textures", listToJSON(NgmProject.textures, ProjectWriter::textureToJSON));
+        json.put("sprites", listToJSON(NgmProject.sprites, ProjectWriter::spriteToJSON));
+        json.put("backgrounds", listToJSON(NgmProject.backgrounds, ProjectWriter::backgroundToJSON));
+        json.put("sounds", listToJSON(NgmProject.sounds, ProjectWriter::soundToJSON));
+        json.put("entities", listToJSON(NgmProject.entities, ProjectWriter::entityToJSON));
+        json.put("scenes", listToJSON(NgmProject.scenes, ProjectWriter::sceneToJSON));
 
         return JSON.write(json);
     }

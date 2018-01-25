@@ -2,7 +2,7 @@ package com.naagame.editor.controllers;
 
 import com.naagame.core.io.ProjectReader;
 import com.naagame.editor.io.ProjectWriter;
-import com.naagame.core.Resources;
+import com.naagame.core.NgmProject;
 import com.naagame.core.resources.*;
 import com.naagame.editor.util.RetentionFileChooser;
 import com.shc.easyjson.ParseException;
@@ -69,12 +69,12 @@ public class MainController implements Initializable, IController {
         resourceTree.setRoot(root);
 
         for (int i = 1; i < 11; i++) {
-            Resources.textures.add(new NgmTexture("Texture" + i));
-            Resources.sprites.add(new NgmSprite("Sprite" + i));
-            Resources.backgrounds.add(new NgmBackground("Background" + i));
-            Resources.sounds.add(new NgmSound("Sound" + i));
-            Resources.entities.add(new NgmEntity("Entity" + i));
-            Resources.scenes.add(new NgmScene("Scene" + i));
+            NgmProject.textures.add(new NgmTexture("Texture" + i));
+            NgmProject.sprites.add(new NgmSprite("Sprite" + i));
+            NgmProject.backgrounds.add(new NgmBackground("Background" + i));
+            NgmProject.sounds.add(new NgmSound("Sound" + i));
+            NgmProject.entities.add(new NgmEntity("Entity" + i));
+            NgmProject.scenes.add(new NgmScene("Scene" + i));
         }
 
         refreshTreeUI();
@@ -131,12 +131,12 @@ public class MainController implements Initializable, IController {
                     r.getChildren().add(item);
                 });
 
-        addAll.accept(Resources.textures, textures);
-        addAll.accept(Resources.sprites, sprites);
-        addAll.accept(Resources.backgrounds, backgrounds);
-        addAll.accept(Resources.sounds, sounds);
-        addAll.accept(Resources.entities, entities);
-        addAll.accept(Resources.scenes, scenes);
+        addAll.accept(NgmProject.textures, textures);
+        addAll.accept(NgmProject.sprites, sprites);
+        addAll.accept(NgmProject.backgrounds, backgrounds);
+        addAll.accept(NgmProject.sounds, sounds);
+        addAll.accept(NgmProject.entities, entities);
+        addAll.accept(NgmProject.scenes, scenes);
     }
 
     private void treeItemSelectionChanged(TreeItem<String> item) {
