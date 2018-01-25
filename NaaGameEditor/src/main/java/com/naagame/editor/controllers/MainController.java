@@ -53,6 +53,8 @@ public class MainController implements Initializable, IController {
     private IController soundEditorController;
     private IController entityEditorController;
 
+    private int resourceNum = 0;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(() -> window = content.getScene().getWindow());
@@ -117,17 +119,83 @@ public class MainController implements Initializable, IController {
             entityEditorController = controller;
         });
 
+        ContextMenu resourceMenu = new ContextMenu();
+        MenuItem renameMenuItem = new MenuItem("Rename");
+        MenuItem deleteMenuItem = new MenuItem("Delete");
+        resourceMenu.getItems().addAll(renameMenuItem, deleteMenuItem);
+
+        renameMenuItem.setOnAction(event -> {
+            resourceTree.setEditable(true);
+            resourceTree.edit(resourceTree.getSelectionModel().getSelectedItem());
+        });
+        deleteMenuItem.setOnAction(event -> {
+            TreeItem<String> item = resourceTree.getSelectionModel().getSelectedItem();
+            List<? extends IResource> resources = getResourceList(item);
+
+            if (resources != null) {
+                IResource resource = NgmProject.find(resources, item.getValue());
+                resources.remove(resource);
+                item.getParent().getChildren().remove(item);
+            }
+        });
+
+        ContextMenu groupMenu = new ContextMenu();
+        MenuItem createMenuItem = new MenuItem("Create");
+        groupMenu.getItems().add(createMenuItem);
+        createMenuItem.setOnAction(event -> {
+            TreeItem<String> item = resourceTree.getSelectionModel().getSelectedItem();
+            TreeItem<String> resourceItem = new TreeItem<>("");
+
+            switch (item.getValue().toLowerCase()) {
+                case "textures":
+                    NgmProject.textures.add(new NgmTexture("Texture" + (++resourceNum)));
+                    resourceItem.setValue("Texture" + resourceNum);
+                    break;
+                case "sprites":
+                    NgmProject.sprites.add(new NgmSprite("Sprite" + (++resourceNum)));
+                    resourceItem.setValue("Sprite" + resourceNum);
+                    break;
+                case "backgrounds":
+                    NgmProject.backgrounds.add(new NgmBackground("Background" + (++resourceNum)));
+                    resourceItem.setValue("Background" + resourceNum);
+                    break;
+                case "sounds":
+                    NgmProject.sounds.add(new NgmSound("Sound" + (++resourceNum)));
+                    resourceItem.setValue("Sound" + resourceNum);
+                    break;
+                case "entities":
+                    NgmProject.entities.add(new NgmEntity("Entity" + (++resourceNum)));
+                    resourceItem.setValue("Entity" + resourceNum);
+                    break;
+                case "scenes":
+                    NgmProject.scenes.add(new NgmScene("Scene" + (++resourceNum)));
+                    resourceItem.setValue("Scene" + resourceNum);
+                    break;
+            }
+
+            item.getChildren().add(resourceItem);
+            item.setExpanded(true);
+            resourceTree.setEditable(true);
+            resourceTree.layout();
+            resourceTree.getSelectionModel().select(resourceItem);
+            resourceTree.edit(resourceItem);
+        });
+
         Callback<TreeView<String>, TreeCell<String>> cellFactory = TextFieldTreeCell.forTreeView();
         resourceTree.setCellFactory(tv -> {
             TreeCell<String> cell = cellFactory.call(tv);
 
             cell.treeItemProperty().addListener((value, oldItem, newItem) -> {
-                if (newItem == null) {
-                    cell.setEditable(false);
-                } else if (newItem.getParent().getValue() != null) {
-                    cell.setEditable(true);
-                } else {
-                    cell.setEditable(false);
+                cell.setEditable(false);
+                cell.setContextMenu(null);
+
+                if (newItem != null) {
+                    cell.setContextMenu(groupMenu);
+
+                    if (newItem.getParent().getValue() != null) {
+                        cell.setEditable(true);
+                        cell.setContextMenu(resourceMenu);
+                    }
                 }
             });
 
@@ -135,26 +203,34 @@ public class MainController implements Initializable, IController {
         });
 
         resourceTree.setOnEditCommit(event -> {
-            List<? extends IResource> resources = null;
-
-            switch (event.getTreeItem().getParent().getValue().toLowerCase()) {
-                case "textures":    resources = NgmProject.textures;    break;
-                case "sprites":     resources = NgmProject.sprites;     break;
-                case "backgrounds": resources = NgmProject.backgrounds; break;
-                case "sounds":      resources = NgmProject.sounds;      break;
-                case "entities":    resources = NgmProject.entities;    break;
-                case "scenes":      resources = NgmProject.scenes;      break;
-            }
+            List<? extends IResource> resources = getResourceList(event.getTreeItem());
 
             if (resources != null) {
-                IResource resource = NgmProject.find(resources, event.getOldValue());
-                resource.setName(event.getNewValue());
+                if (!event.getNewValue().trim().equals("") && NgmProject.find(resources, event.getNewValue()) == null) {
+                    IResource resource = NgmProject.find(resources, event.getOldValue());
+                    resource.setName(event.getNewValue().trim());
+                } else {
+                    Platform.runLater(() -> event.getTreeItem().setValue(event.getOldValue()));
+                }
             }
 
             resourceTree.setEditable(false);
         });
 
         resourceTree.setOnEditCancel(event -> resourceTree.setEditable(false));
+    }
+
+    private List<? extends IResource> getResourceList(TreeItem<String> item) {
+        switch (item.getParent().getValue().toLowerCase()) {
+            case "textures":    return NgmProject.textures;
+            case "sprites":     return NgmProject.sprites;
+            case "backgrounds": return NgmProject.backgrounds;
+            case "sounds":      return NgmProject.sounds;
+            case "entities":    return NgmProject.entities;
+            case "scenes":      return NgmProject.scenes;
+        }
+
+        return null;
     }
 
     private void createEditor(String name, BiConsumer<Pane, IController> consumer) {
