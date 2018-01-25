@@ -1,13 +1,13 @@
 package com.naagame.core.resources;
 
-public class Background implements IResource {
-    private Texture texture;
+public class NgmBackground implements IResource {
+    private NgmTexture texture;
 
     private float hSpeed;
     private float vSpeed;
     private String name;
 
-    public Background(String name) {
+    public NgmBackground(String name) {
         this.name = name;
     }
 
@@ -16,7 +16,7 @@ public class Background implements IResource {
         return name;
     }
 
-    public Texture getTexture() {
+    public NgmTexture getTexture() {
         return texture;
     }
 
@@ -28,7 +28,7 @@ public class Background implements IResource {
         return vSpeed;
     }
 
-    public void setTexture(Texture texture) {
+    public void setTexture(NgmTexture texture) {
         this.texture = texture;
     }
 

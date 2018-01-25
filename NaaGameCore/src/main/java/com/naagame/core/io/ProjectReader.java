@@ -18,31 +18,31 @@ public final class ProjectReader {
         array.<JSONArray> getValue().stream().map(mapper).collect(Collectors.toCollection(() -> list));
     }
 
-    private static Texture jsonToTexture(JSONObject json) {
-        Texture texture = new Texture(json.get("name").getValue());
+    private static NgmTexture jsonToTexture(JSONObject json) {
+        NgmTexture texture = new NgmTexture(json.get("name").getValue());
         texture.setFileName(json.get("file").getValue());
         return texture;
     }
 
-    private static Sprite jsonToSprite(JSONObject json) {
-        final Function<JSONValue, Sprite.Frame> jsonToFrame = value -> {
+    private static NgmSprite jsonToSprite(JSONObject json) {
+        final Function<JSONValue, NgmSprite.Frame> jsonToFrame = value -> {
             JSONObject frame = value.getValue();
 
             final String texture = frame.get("texture").getValue();
             final int duration = frame.get("duration").<Number> getValue().intValue();
 
-            return new Sprite.Frame(Resources.find(Resources.textures, texture), duration);
+            return new NgmSprite.Frame(Resources.find(Resources.textures, texture), duration);
         };
 
-        Sprite sprite = new Sprite(json.get("name").getValue());
+        NgmSprite sprite = new NgmSprite(json.get("name").getValue());
         JSONArray frames = json.get("frames").getValue();
         sprite.setFrames(frames.stream().map(jsonToFrame).collect(Collectors.toList()));
 
         return sprite;
     }
 
-    private static Background jsonToBackground(JSONObject json) {
-        Background background = new Background(json.get("name").getValue());
+    private static NgmBackground jsonToBackground(JSONObject json) {
+        NgmBackground background = new NgmBackground(json.get("name").getValue());
 
         background.setTexture(Resources.find(Resources.textures, json.get("texture").getValue()));
         background.setHSpeed(json.get("hSpeed").<Number> getValue().floatValue());
@@ -51,40 +51,40 @@ public final class ProjectReader {
         return background;
     }
 
-    private static Sound jsonToSound(JSONObject json) {
-        Sound sound = new Sound(json.get("name").getValue());
+    private static NgmSound jsonToSound(JSONObject json) {
+        NgmSound sound = new NgmSound(json.get("name").getValue());
         sound.setFileName(json.get("file").getValue());
         return sound;
     }
 
-    private static Entity jsonToEntity(JSONObject json) {
-        final Function<JSONObject, Entity.Event.Action> jsonToAction = action -> {
+    private static NgmEntity jsonToEntity(JSONObject json) {
+        final Function<JSONObject, NgmEntity.Event.Action> jsonToAction = action -> {
             final int code = action.get("code").<Number> getValue().intValue();
             final String args = action.get("args").getValue();
 
-            return new Entity.Event.Action(code, args);
+            return new NgmEntity.Event.Action(code, args);
         };
 
-        final Function<JSONObject, Entity.Event> jsonToEvent = eventJSON -> {
-            final Entity.Event.Type type = Entity.Event.Type.valueOf(eventJSON.get("type").getValue());
+        final Function<JSONObject, NgmEntity.Event> jsonToEvent = eventJSON -> {
+            final NgmEntity.Event.Type type = NgmEntity.Event.Type.valueOf(eventJSON.get("type").getValue());
             final String args = eventJSON.get("args").getValue();
 
-            Entity.Event event = new Entity.Event(type, args);
+            NgmEntity.Event event = new NgmEntity.Event(type, args);
             loadToList(event.getActions(), eventJSON.get("actions"), jsonToAction);
 
             return event;
         };
 
-        Entity entity = new Entity(json.get("name").getValue());
+        NgmEntity entity = new NgmEntity(json.get("name").getValue());
         entity.setSprite(Resources.find(Resources.sprites, json.get("sprite").getValue()));
         loadToList(entity.getEvents(), json.get("events"), jsonToEvent);
 
         return entity;
     }
 
-    private static <T extends IResource> Scene.Instance<T> jsonToInstance(JSONObject json,
-                         Function<String, T> finder, String type) {
-        Scene.Instance<T> instance = new Scene.Instance<>();
+    private static <T extends IResource> NgmScene.Instance<T> jsonToInstance(JSONObject json,
+                                                                             Function<String, T> finder, String type) {
+        NgmScene.Instance<T> instance = new NgmScene.Instance<>();
 
         instance.setObject(finder.apply(json.get(type).getValue()));
         instance.setPosX(json.get("posX").<Number> getValue().floatValue());
@@ -93,14 +93,14 @@ public final class ProjectReader {
         return instance;
     }
 
-    private static Scene jsonToScene(JSONObject json) {
-        final Function<JSONObject, Scene.Instance<Entity>> jsonToEntityInstance = entityJSON ->
+    private static NgmScene jsonToScene(JSONObject json) {
+        final Function<JSONObject, NgmScene.Instance<NgmEntity>> jsonToEntityInstance = entityJSON ->
                 jsonToInstance(entityJSON, name -> Resources.find(Resources.entities, name), "entity");
 
-        final Function<JSONObject, Scene.Instance<Background>> jsonToBackgroundInstance = backgroundJSON ->
+        final Function<JSONObject, NgmScene.Instance<NgmBackground>> jsonToBackgroundInstance = backgroundJSON ->
                 jsonToInstance(backgroundJSON, name -> Resources.find(Resources.backgrounds, name), "background");
 
-        Scene scene = new Scene(json.get("name").getValue());
+        NgmScene scene = new NgmScene(json.get("name").getValue());
         loadToList(scene.getEntities(), json.get("entities"), jsonToEntityInstance);
         loadToList(scene.getBackgrounds(), json.get("backgrounds"), jsonToBackgroundInstance);
 

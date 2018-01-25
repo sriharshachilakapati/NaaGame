@@ -3,13 +3,13 @@ package com.naagame.core.resources;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Entity implements IResource {
+public class NgmEntity implements IResource {
     private final List<Event> events = new ArrayList<>();
 
-    private Sprite sprite;
+    private NgmSprite sprite;
     private String name;
 
-    public Entity(String name) {
+    public NgmEntity(String name) {
         this.name = name;
     }
 
@@ -22,11 +22,11 @@ public class Entity implements IResource {
         return events;
     }
 
-    public Sprite getSprite() {
+    public NgmSprite getSprite() {
         return sprite;
     }
 
-    public void setSprite(Sprite sprite) {
+    public void setSprite(NgmSprite sprite) {
         this.sprite = sprite;
     }
 

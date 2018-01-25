@@ -3,11 +3,11 @@ package com.naagame.core.resources;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sprite implements IResource {
+public class NgmSprite implements IResource {
     private List<Frame> frames = new ArrayList<>();
     private String name;
 
-    public Sprite(String name) {
+    public NgmSprite(String name) {
         this.name = name;
     }
 
@@ -25,15 +25,15 @@ public class Sprite implements IResource {
     }
 
     public static class Frame {
-        private Texture texture;
+        private NgmTexture texture;
         private int duration;
 
-        public Frame(Texture texture, int duration) {
+        public Frame(NgmTexture texture, int duration) {
             this.texture = texture;
             this.duration = duration;
         }
 
-        public Texture getTexture() {
+        public NgmTexture getTexture() {
             return texture;
         }
 
@@ -41,7 +41,7 @@ public class Sprite implements IResource {
             return duration;
         }
 
-        public void setTexture(Texture texture) {
+        public void setTexture(NgmTexture texture) {
             this.texture = texture;
         }
 

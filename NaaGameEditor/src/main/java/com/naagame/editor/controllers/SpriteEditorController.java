@@ -2,8 +2,8 @@ package com.naagame.editor.controllers;
 
 import com.naagame.core.Resources;
 import com.naagame.core.resources.IResource;
-import com.naagame.core.resources.Sprite;
-import com.naagame.core.resources.Texture;
+import com.naagame.core.resources.NgmSprite;
+import com.naagame.core.resources.NgmTexture;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,13 +23,13 @@ import java.util.stream.Collectors;
 public class SpriteEditorController implements IController, Initializable {
     @FXML TextField nameField;
 
-    @FXML TableView<Sprite.Frame> framesView;
-    @FXML TableColumn<Sprite.Frame, String> textureColumn;
-    @FXML TableColumn<Sprite.Frame, Integer> durationColumn;
+    @FXML TableView<NgmSprite.Frame> framesView;
+    @FXML TableColumn<NgmSprite.Frame, String> textureColumn;
+    @FXML TableColumn<NgmSprite.Frame, Integer> durationColumn;
 
     private ObservableList<String> textures;
-    private ObservableList<Sprite.Frame> frames;
-    private Sprite currentSprite;
+    private ObservableList<NgmSprite.Frame> frames;
+    private NgmSprite currentSprite;
 
     @Override
     public void init(String name) {
@@ -50,12 +50,12 @@ public class SpriteEditorController implements IController, Initializable {
             return;
         }
 
-        frames.add(new Sprite.Frame(Resources.textures.get(0), 250));
+        frames.add(new NgmSprite.Frame(Resources.textures.get(0), 250));
     }
 
     @FXML
     public void onRemoveFrameButtonClicked() {
-        Sprite.Frame selected = framesView.getSelectionModel().getSelectedItem();
+        NgmSprite.Frame selected = framesView.getSelectionModel().getSelectedItem();
 
         if (selected == null) {
             return;
@@ -70,8 +70,8 @@ public class SpriteEditorController implements IController, Initializable {
         frames = FXCollections.observableArrayList();
 
         textureColumn.setCellValueFactory(param -> {
-            Sprite.Frame frame = param.getValue();
-            Texture texture = frame.getTexture();
+            NgmSprite.Frame frame = param.getValue();
+            NgmTexture texture = frame.getTexture();
             return new SimpleObjectProperty<>(texture == null ? "" : texture.getName());
         });
         textureColumn.setCellFactory(ComboBoxTableCell.forTableColumn(textures));

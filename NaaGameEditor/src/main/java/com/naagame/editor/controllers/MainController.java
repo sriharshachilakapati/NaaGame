@@ -69,12 +69,12 @@ public class MainController implements Initializable, IController {
         resourceTree.setRoot(root);
 
         for (int i = 1; i < 11; i++) {
-            Resources.textures.add(new Texture("Texture" + i));
-            Resources.sprites.add(new Sprite("Sprite" + i));
-            Resources.backgrounds.add(new Background("Background" + i));
-            Resources.sounds.add(new Sound("Sound" + i));
-            Resources.entities.add(new Entity("Entity" + i));
-            Resources.scenes.add(new Scene("Scene" + i));
+            Resources.textures.add(new NgmTexture("Texture" + i));
+            Resources.sprites.add(new NgmSprite("Sprite" + i));
+            Resources.backgrounds.add(new NgmBackground("Background" + i));
+            Resources.sounds.add(new NgmSound("Sound" + i));
+            Resources.entities.add(new NgmEntity("Entity" + i));
+            Resources.scenes.add(new NgmScene("Scene" + i));
         }
 
         refreshTreeUI();

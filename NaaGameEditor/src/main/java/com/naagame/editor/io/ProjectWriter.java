@@ -23,7 +23,7 @@ public final class ProjectWriter {
         return new JSONValue(list.stream().map(func).collect(Collectors.toCollection(JSONArray::new)));
     }
 
-    private static JSONValue textureToJSON(Texture texture) {
+    private static JSONValue textureToJSON(NgmTexture texture) {
         JSONObject json = new JSONObject();
 
         json.put("name", new JSONValue(texture.getName()));
@@ -32,8 +32,8 @@ public final class ProjectWriter {
         return new JSONValue(json);
     }
 
-    private static JSONValue spriteToJSON(Sprite sprite) {
-        final Function<Sprite.Frame, JSONValue> frameToJSON = frame -> {
+    private static JSONValue spriteToJSON(NgmSprite sprite) {
+        final Function<NgmSprite.Frame, JSONValue> frameToJSON = frame -> {
             JSONObject json = new JSONObject();
 
             json.put("texture", new JSONValue(frame.getTexture() == null ? "" : frame.getTexture().getName()));
@@ -50,7 +50,7 @@ public final class ProjectWriter {
         return new JSONValue(json);
     }
 
-    private static JSONValue backgroundToJSON(Background background) {
+    private static JSONValue backgroundToJSON(NgmBackground background) {
         JSONObject json = new JSONObject();
 
         json.put("name", new JSONValue(background.getName()));
@@ -61,7 +61,7 @@ public final class ProjectWriter {
         return new JSONValue(json);
     }
 
-    private static JSONValue soundToJSON(Sound sound) {
+    private static JSONValue soundToJSON(NgmSound sound) {
         JSONObject json = new JSONObject();
 
         json.put("name", new JSONValue(sound.getName()));
@@ -70,8 +70,8 @@ public final class ProjectWriter {
         return new JSONValue(json);
     }
 
-    private static JSONValue entityToJSON(Entity entity) {
-        final Function<Entity.Event.Action, JSONValue> actionToJSON = action -> {
+    private static JSONValue entityToJSON(NgmEntity entity) {
+        final Function<NgmEntity.Event.Action, JSONValue> actionToJSON = action -> {
             JSONObject json = new JSONObject();
 
             json.put("code", new JSONValue(action.getCode()));
@@ -80,7 +80,7 @@ public final class ProjectWriter {
             return new JSONValue(json);
         };
 
-        final Function<Entity.Event, JSONValue> eventToJSON = event -> {
+        final Function<NgmEntity.Event, JSONValue> eventToJSON = event -> {
             JSONObject json = new JSONObject();
 
             json.put("type", new JSONValue(event.getType().toString()));
@@ -99,8 +99,8 @@ public final class ProjectWriter {
         return new JSONValue(json);
     }
 
-    private static JSONValue sceneToJSON(Scene scene) {
-        final BiFunction<Scene.Instance<? extends IResource>, String, JSONValue> instanceToJSON = (instance, type) -> {
+    private static JSONValue sceneToJSON(NgmScene scene) {
+        final BiFunction<NgmScene.Instance<? extends IResource>, String, JSONValue> instanceToJSON = (instance, type) -> {
             JSONObject json = new JSONObject();
 
             json.put(type, new JSONValue(instance.getObject().getName()));
@@ -110,9 +110,9 @@ public final class ProjectWriter {
             return new JSONValue(json);
         };
 
-        final Function<Scene.Instance<Entity>, JSONValue> entitiesToJSON = instance ->
+        final Function<NgmScene.Instance<NgmEntity>, JSONValue> entitiesToJSON = instance ->
                 instanceToJSON.apply(instance, "entity");
-        final Function<Scene.Instance<Background>, JSONValue> backgroundsToJSON = instance ->
+        final Function<NgmScene.Instance<NgmBackground>, JSONValue> backgroundsToJSON = instance ->
                 instanceToJSON.apply(instance, "background");
 
         JSONObject json = new JSONObject();

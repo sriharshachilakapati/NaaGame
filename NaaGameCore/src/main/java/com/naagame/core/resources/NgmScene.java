@@ -3,13 +3,13 @@ package com.naagame.core.resources;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scene implements IResource {
-    private final List<Instance<Entity>> entities = new ArrayList<>();
-    private final List<Instance<Background>> backgrounds = new ArrayList<>();
+public class NgmScene implements IResource {
+    private final List<Instance<NgmEntity>> entities = new ArrayList<>();
+    private final List<Instance<NgmBackground>> backgrounds = new ArrayList<>();
 
     private String name;
 
-    public Scene(String name) {
+    public NgmScene(String name) {
         this.name = name;
     }
 
@@ -18,11 +18,11 @@ public class Scene implements IResource {
         return name;
     }
 
-    public List<Instance<Entity>> getEntities() {
+    public List<Instance<NgmEntity>> getEntities() {
         return entities;
     }
 
-    public List<Instance<Background>> getBackgrounds() {
+    public List<Instance<NgmBackground>> getBackgrounds() {
         return backgrounds;
     }
 

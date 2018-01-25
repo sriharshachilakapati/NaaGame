@@ -1,10 +1,10 @@
 package com.naagame.core.resources;
 
-public class Texture implements IResource {
+public class NgmSound implements IResource {
     private String fileName = "";
     private String name;
 
-    public Texture(String name) {
+    public NgmSound(String name) {
         this.name = name;
     }
 
