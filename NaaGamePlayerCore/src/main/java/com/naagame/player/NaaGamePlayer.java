@@ -11,9 +11,11 @@ import com.shc.silenceengine.logging.Logger;
 
 public class NaaGamePlayer extends Game {
     public static Logger logger;
+    public static Game instance;
 
     @Override
     public void init() {
+        instance = this;
         logger = SilenceEngine.log.getLogger("NaaGamePlayer");
 
         SilenceEngine.display.setTitle("NaaGamePlayer: SilenceEngine " + SilenceEngine.getVersionString());
@@ -27,10 +29,8 @@ public class NaaGamePlayer extends Game {
     private void projectLoaded(String json) {
         try {
             ProjectReader.loadFromJSON(json);
-            NgmProject.textures.forEach(texture -> {
-                logger.info("Texture: " + texture.getName());
-                logger.info("file: " + texture.getFileName());
-            });
+            logger.info("Fetched the project file, loading project resources");
+            setGameState(LoadingState.create());
         } catch (ParseException e) {
             e.printStackTrace();
         }
