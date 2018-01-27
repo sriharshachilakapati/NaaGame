@@ -13,7 +13,21 @@
       "file": ""
     }
   ],
-  "sprites": [],
+  "sprites": [
+    {
+      "name": "Spr1",
+      "frames": [
+        {
+          "texture": "Tex1",
+          "duration": 250
+        },
+        {
+          "texture": "Tex2",
+          "duration": 250
+        }
+      ]
+    }
+  ],
   "backgrounds": [],
   "sounds": [
     {
@@ -21,6 +35,35 @@
       "file": ""
     }
   ],
-  "entities": [],
-  "scenes": []
+  "entities": [
+    {
+      "name": "Bush",
+      "sprite": "Spr1",
+      "events": [
+        {
+          "type": "create",
+          "args": "",
+          "actions": [
+            {
+              "code": 0,
+              "args": "In create action"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "name": "Main",
+      "backgrounds": [],
+      "entities": [
+        {
+          "entity": "Bush",
+          "posX": 100,
+          "posY": 100
+        }
+      ]
+    }
+  ]
 }
