@@ -7,11 +7,20 @@
     {
       "name": "Tex2",
       "file": "imgs/tex2.png"
+    },
+    {
+      "name": "Tex3",
+      "file": ""
     }
   ],
   "sprites": [],
   "backgrounds": [],
-  "sounds": [],
+  "sounds": [
+    {
+      "name": "Snd1",
+      "file": ""
+    }
+  ],
   "entities": [],
   "scenes": []
 }

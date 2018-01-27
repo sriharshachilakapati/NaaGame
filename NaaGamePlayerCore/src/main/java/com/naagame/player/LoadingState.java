@@ -6,6 +6,7 @@ import com.naagame.core.resources.NgmSound;
 import com.naagame.core.resources.NgmSprite;
 import com.naagame.core.resources.NgmTexture;
 import com.shc.silenceengine.audio.Sound;
+import com.shc.silenceengine.audio.openal.ALBuffer;
 import com.shc.silenceengine.collision.CollisionTag;
 import com.shc.silenceengine.core.ResourceLoader;
 import com.shc.silenceengine.graphics.Animation;
@@ -30,26 +31,40 @@ public class LoadingState extends ResourceLoadingState {
         Map<String, Long> soundIds = new HashMap<>();
 
         NgmProject.textures.forEach(texture -> {
-            long id = loader.define(Texture.class, FilePath.getResourceFile(texture.getFileName()));
-            textureIds.put(texture.getName(), id);
+            if (!texture.getFileName().equals("")) {
+                long id = loader.define(Texture.class, FilePath.getResourceFile(texture.getFileName()));
+                textureIds.put(texture.getName(), id);
+            }
         });
 
         NgmProject.sounds.forEach(sound -> {
-            long id = loader.define(Sound.class, FilePath.getResourceFile(sound.getFileName()));
-            soundIds.put(sound.getName(), id);
+            if (!sound.getFileName().equals("")) {
+                long id = loader.define(Sound.class, FilePath.getResourceFile(sound.getFileName()));
+                soundIds.put(sound.getName(), id);
+            }
         });
 
         return new LoadingState(loader, () -> {
             NaaGamePlayer.logger.info("Fetching all the loaded textures");
             for (NgmTexture ngmTexture : NgmProject.textures) {
-                long id = textureIds.get(ngmTexture.getName());
-                Resources.textures.put(ngmTexture.getName(), loader.get(id));
+                if (!ngmTexture.getFileName().equals("")) {
+                    long id = textureIds.get(ngmTexture.getName());
+                    Resources.textures.put(ngmTexture.getName(), loader.get(id));
+                } else {
+                    NaaGamePlayer.logger.warn("Texture " + ngmTexture.getName() + " has no source. Ignoring it.");
+                    Resources.textures.put(ngmTexture.getName(), Texture.EMPTY);
+                }
             }
 
             NaaGamePlayer.logger.info("Fetching all the loaded sounds");
             for (NgmSound ngmSound : NgmProject.sounds) {
-                long id = soundIds.get(ngmSound.getName());
-                Resources.sounds.put(ngmSound.getName(), loader.get(id));
+                if (!ngmSound.getFileName().equals("")) {
+                    long id = soundIds.get(ngmSound.getName());
+                    Resources.sounds.put(ngmSound.getName(), loader.get(id));
+                } else {
+                    NaaGamePlayer.logger.warn("Sound " + ngmSound.getName() + " has no source. Ignoring it.");
+                    Resources.sounds.put(ngmSound.getName(), new Sound(new ALBuffer()));
+                }
             }
 
             NaaGamePlayer.logger.info("Creating animations for sprites");
