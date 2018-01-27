@@ -66,7 +66,7 @@ public final class ProjectReader {
         };
 
         final Function<JSONObject, NgmEntity.Event> jsonToEvent = eventJSON -> {
-            final NgmEntity.Event.Type type = NgmEntity.Event.Type.valueOf(eventJSON.get("type").getValue());
+            final NgmEntity.Event.Type type = NgmEntity.Event.Type.valueOf(eventJSON.get("type").<String> getValue().toUpperCase());
             final String args = eventJSON.get("args").getValue();
 
             NgmEntity.Event event = new NgmEntity.Event(type, args);

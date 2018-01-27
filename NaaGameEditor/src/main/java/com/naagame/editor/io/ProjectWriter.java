@@ -83,7 +83,7 @@ public final class ProjectWriter {
         final Function<NgmEntity.Event, JSONValue> eventToJSON = event -> {
             JSONObject json = new JSONObject();
 
-            json.put("type", new JSONValue(event.getType().toString()));
+            json.put("type", new JSONValue(event.getType().toString().toLowerCase()));
             json.put("actions", listToJSON(event.getActions(), actionToJSON));
             json.put("args", new JSONValue(event.getArgs()));
 
