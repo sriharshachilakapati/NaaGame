@@ -26,7 +26,15 @@
           "type": "create",
           "args": "",
           "actions": [
-            { "code": 0, "args": "In create action" }
+            { "code": 0, "args": "In create action" },
+            { "code": 1, "args": "self"             }
+          ]
+        },
+        {
+          "type": "update",
+          "args": "",
+          "actions": [
+            { "code": 100, "args": "self;4;4" }
           ]
         }
       ]
