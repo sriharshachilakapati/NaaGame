@@ -1,39 +1,21 @@
 {
   "textures": [
-    {
-      "name": "Tex1",
-      "file": "imgs/tex1.png"
-    },
-    {
-      "name": "Tex2",
-      "file": "imgs/tex2.png"
-    },
-    {
-      "name": "Tex3",
-      "file": ""
-    }
+    { "name": "Tex1", "file": "imgs/tex1.png" },
+    { "name": "Tex2", "file": "imgs/tex2.png" },
+    { "name": "Tex3", "file": ""              }
   ],
   "sprites": [
     {
       "name": "Spr1",
       "frames": [
-        {
-          "texture": "Tex1",
-          "duration": 250
-        },
-        {
-          "texture": "Tex2",
-          "duration": 250
-        }
+        { "texture": "Tex1", "duration": 250 },
+        { "texture": "Tex2", "duration": 250 }
       ]
     }
   ],
   "backgrounds": [],
   "sounds": [
-    {
-      "name": "Snd1",
-      "file": ""
-    }
+    { "name": "Snd1", "file": "" }
   ],
   "entities": [
     {
@@ -44,10 +26,7 @@
           "type": "create",
           "args": "",
           "actions": [
-            {
-              "code": 0,
-              "args": "In create action"
-            }
+            { "code": 0, "args": "In create action" }
           ]
         }
       ]
@@ -58,11 +37,8 @@
       "name": "Main",
       "backgrounds": [],
       "entities": [
-        {
-          "entity": "Bush",
-          "posX": 100,
-          "posY": 100
-        }
+        { "entity": "Bush", "posX": 100, "posY": 100 },
+        { "entity": "Bush", "posX": 200, "posY": 200 }
       ]
     }
   ]
