@@ -61,7 +61,15 @@ public class NgmEntity implements IResource {
         public enum Type {
             CREATE,
             UPDATE,
-            COLLISION
+            KEY_DOWN,
+            KEY_UP,
+            KEY_TAP,
+            MOUSE_DOWN,
+            MOUSE_UP,
+            MOUSE_TAP,
+            TIMER,
+            COLLISION,
+            DESTROY
         }
 
         public static class Action {

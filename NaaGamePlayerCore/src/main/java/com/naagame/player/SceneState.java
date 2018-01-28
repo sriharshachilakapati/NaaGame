@@ -11,8 +11,22 @@ import com.shc.silenceengine.graphics.opengl.GLContext;
 import com.shc.silenceengine.scene.Scene;
 
 public class SceneState extends GameState {
+    private final NgmScene ngmScene;
     private Scene scene;
     private OrthoCam camera;
+
+    SceneState() {
+        this("Main");
+    }
+
+    private SceneState(String scene) {
+        ngmScene = NgmProject.find(NgmProject.scenes, scene);
+
+        if (ngmScene == null) {
+            NaaGamePlayer.logger.error("Scene " + scene + " is not present in project file");
+            SilenceEngine.display.close();
+        }
+    }
 
     @Override
     public void onEnter() {
@@ -24,20 +38,11 @@ public class SceneState extends GameState {
         CollisionSystem2D collider = new CollisionSystem2D();
         scene.registerUpdateSystem(collider);
 
-        loadScene("Main");
-
+        loadScene();
         resized();
     }
 
-    private void loadScene(String name) {
-        NgmScene ngmScene = NgmProject.find(NgmProject.scenes, name);
-
-        if (ngmScene == null) {
-            NaaGamePlayer.logger.error("Scene " + name + " is not present in project file");
-            SilenceEngine.display.close();
-            return;
-        }
-
+    private void loadScene() {
         ngmScene.getEntities().forEach(instance -> {
             EntityInstance entity = new EntityInstance(instance.getPosX(), instance.getPosY(),
                     instance.getObject().getName());
