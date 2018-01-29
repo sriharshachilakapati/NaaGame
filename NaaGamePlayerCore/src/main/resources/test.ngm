@@ -34,7 +34,35 @@
           "type": "update",
           "args": "",
           "actions": [
-            { "code": 100, "args": "self;4;4" }
+            { "code": 100, "args": "self;0;0" }
+          ]
+        },
+        {
+          "type": "key_down",
+          "args": "75",
+          "actions": [
+            { "code": 101, "args": "self;-4" }
+          ]
+        },
+        {
+          "type": "key_down",
+          "args": "76",
+          "actions": [
+            { "code": 101, "args": "self;4" }
+          ]
+        },
+        {
+          "type": "key_down",
+          "args": "73",
+          "actions": [
+            { "code": 102, "args": "self;-4" }
+          ]
+        },
+        {
+          "type": "key_down",
+          "args": "74",
+          "actions": [
+            { "code": 102, "args": "self;4" }
           ]
         }
       ]

@@ -8,12 +8,18 @@ import com.naagame.lib.Movement;
 import com.shc.silenceengine.core.SilenceEngine;
 import com.shc.silenceengine.graphics.Animation;
 import com.shc.silenceengine.graphics.Sprite;
+import com.shc.silenceengine.input.Keyboard;
+import com.shc.silenceengine.input.Mouse;
 import com.shc.silenceengine.math.Quaternion;
 import com.shc.silenceengine.math.Vector2;
 import com.shc.silenceengine.scene.Component;
 import com.shc.silenceengine.scene.Entity;
 import com.shc.silenceengine.scene.components.SpriteComponent;
 import com.shc.silenceengine.utils.MathUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 class EntityInstance extends Entity {
 
@@ -48,21 +54,61 @@ class EntityInstance extends Entity {
 
     private static class Behaviour extends Component {
 
-        private NgmEntity ngmEntity;
         private EntityInstance self;
 
+        private NgmEntity.Event createEvent;
+        private NgmEntity.Event updateEvent;
+        private NgmEntity.Event destroyEvent;
+
+        private List<NgmEntity.Event> inputEvents;
+
         private Behaviour(NgmEntity ngmEntity) {
-            this.ngmEntity = ngmEntity;
+            inputEvents = new ArrayList<>();
+
+            ngmEntity.getEvents().forEach(event -> {
+                switch (event.getType()) {
+                    case CREATE:
+                        if (createEvent != null) {
+                            NaaGamePlayer.logger.warn("Found more than one create events in " + ngmEntity.getName());
+                        }
+                        createEvent = event;
+                        break;
+
+                    case UPDATE:
+                        if (updateEvent != null) {
+                            NaaGamePlayer.logger.warn("Found more than one update events in " + ngmEntity.getName());
+                        }
+                        updateEvent = event;
+                        break;
+
+                    case KEY_DOWN:
+                    case KEY_UP:
+                    case KEY_TAP:
+                    case MOUSE_DOWN:
+                    case MOUSE_UP:
+                    case MOUSE_TAP:
+                        inputEvents.add(event);
+                        break;
+
+                    case DESTROY:
+                        if (destroyEvent != null) {
+                            NaaGamePlayer.logger.warn("Found more than one destroy events in " + ngmEntity.getName());
+                        }
+                        destroyEvent = event;
+                        break;
+
+                    default:
+                        NaaGamePlayer.logger.warn("Event " + event.getType() + " is not implemented yet");
+                }
+            });
         }
 
         @Override
         protected void onCreate() {
             self = (EntityInstance) entity;
 
-            for (NgmEntity.Event event : ngmEntity.getEvents()) {
-                if (event.getType() == NgmEntity.Event.Type.CREATE) {
-                    interpret(event);
-                }
+            if (createEvent != null) {
+                interpret(createEvent);
             }
         }
 
@@ -70,13 +116,42 @@ class EntityInstance extends Entity {
         protected void onUpdate(float elapsedTime) {
             self.other = null;
 
-            for (NgmEntity.Event event : ngmEntity.getEvents()) {
-                if (event.getType() == NgmEntity.Event.Type.UPDATE) {
-                    interpret(event);
-                }
+            if (updateEvent != null) {
+                interpret(updateEvent);
             }
 
+            inputEvents.forEach(event -> {
+                Function<Integer, Boolean> condition = null;
+
+                switch (event.getType()) {
+                    case KEY_DOWN:   condition = Keyboard::isKeyDown;   break;
+                    case KEY_UP:     condition = Keyboard::isKeyUp;     break;
+                    case KEY_TAP:    condition = Keyboard::isKeyTapped; break;
+                    case MOUSE_DOWN: condition = Mouse::isButtonDown;   break;
+                    case MOUSE_UP:   condition = Mouse::isButtonUp;     break;
+                    case MOUSE_TAP:  condition = Mouse::isButtonTapped; break;
+
+                    default:
+                        NaaGamePlayer.logger.warn("Input event " + event.getType() + " is not yet implemented");
+                }
+
+                if (condition != null) {
+                    int argument = Integer.parseInt(event.getArgs());
+
+                    if (condition.apply(argument)) {
+                        interpret(event);
+                    }
+                }
+            });
+
             transformComponent.translate(self.speed);
+        }
+
+        @Override
+        protected void onDestroyed() {
+            if (destroyEvent != null) {
+                interpret(destroyEvent);
+            }
         }
 
         private void interpret(NgmEntity.Event event) {
