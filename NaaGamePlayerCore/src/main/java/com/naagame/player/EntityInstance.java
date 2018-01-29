@@ -41,14 +41,18 @@ class EntityInstance extends Entity {
         }
 
         ngmSprite = ngmEntity.getSprite();
-        Animation animation = Resources.animations.get(ngmSprite.getName());
 
-        Sprite sprite = new Sprite(animation);
-        sprite.setEndCallback(sprite::start);
-        sprite.start();
+        if (ngmSprite != null) {
+            Animation animation = Resources.animations.get(ngmSprite.getName());
 
-        SpriteComponent spriteComponent = new SpriteComponent(sprite);
-        addComponent(spriteComponent);
+            Sprite sprite = new Sprite(animation);
+            sprite.setEndCallback(sprite::start);
+            sprite.start();
+
+            SpriteComponent spriteComponent = new SpriteComponent(sprite);
+            addComponent(spriteComponent);
+        }
+
         addComponent(new Behaviour(ngmEntity));
     }
 
