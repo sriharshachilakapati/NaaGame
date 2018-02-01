@@ -1,10 +1,10 @@
 package com.naagame.player;
 
+import com.naagame.core.action.debug.LibDebug;
+import com.naagame.core.action.movement.LibMovement;
 import com.naagame.core.NgmProject;
 import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmSprite;
-import com.naagame.actions.LibDebug;
-import com.naagame.actions.LibMovement;
 import com.shc.silenceengine.core.SilenceEngine;
 import com.shc.silenceengine.graphics.Animation;
 import com.shc.silenceengine.graphics.Sprite;
@@ -67,18 +67,18 @@ class EntityInstance extends Entity {
 
         private List<NgmEntity.Event> inputEvents;
 
-        private Map<Integer, BiCallback<NgmEntity.Event.Action, EntityInstance>> actionExecutors;
+        private Map<String, BiCallback<NgmEntity.Event.Action, EntityInstance>> actionExecutors;
 
         private Behaviour(NgmEntity ngmEntity) {
             inputEvents = new ArrayList<>();
             actionExecutors = new HashMap<>();
 
-            actionExecutors.put(LibDebug.ACTION_LOG, LibDebugImpl::log);
-            actionExecutors.put(LibDebug.ACTION_LOG_PROPS, LibDebugImpl::logProps);
+            actionExecutors.put(LibDebug.ACTION_LOG.getCode(), LibDebugImpl::log);
+            actionExecutors.put(LibDebug.ACTION_LOG_PROPS.getCode(), LibDebugImpl::logProps);
 
-            actionExecutors.put(LibMovement.ACTION_SET_SPEED, LibMovementImpl::setSpeed);
-            actionExecutors.put(LibMovement.ACTION_SET_XSPEED, LibMovementImpl::setXSpeed);
-            actionExecutors.put(LibMovement.ACTION_SET_YSPEED, LibMovementImpl::setYSpeed);
+            actionExecutors.put(LibMovement.ACTION_SET_SPEED.getCode(), LibMovementImpl::setSpeed);
+            actionExecutors.put(LibMovement.ACTION_SET_HSPEED.getCode(), LibMovementImpl::setHSpeed);
+            actionExecutors.put(LibMovement.ACTION_SET_VSPEED.getCode(), LibMovementImpl::setVSpeed);
 
             createEvent = ngmEntity.getEvents().stream()
                     .filter(event -> event.getType() == NgmEntity.Event.Type.CREATE)

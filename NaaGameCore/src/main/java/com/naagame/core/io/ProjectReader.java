@@ -59,7 +59,7 @@ public final class ProjectReader {
 
     private static NgmEntity jsonToEntity(JSONObject json) {
         final Function<JSONObject, NgmEntity.Event.Action> jsonToAction = action -> {
-            final int code = action.get("code").<Number> getValue().intValue();
+            final String code = action.get("code").getValue();
             final String args = action.get("args").getValue();
 
             return new NgmEntity.Event.Action(code, args);

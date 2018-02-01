@@ -73,15 +73,15 @@ public class NgmEntity implements IResource {
         }
 
         public static class Action {
-            private final int code;
+            private final String code;
             private String args;
 
-            public Action(int code, String args) {
+            public Action(String code, String args) {
                 this.code = code;
                 this.args = args;
             }
 
-            public int getCode() {
+            public String getCode() {
                 return code;
             }
 

@@ -1,47 +1,68 @@
 package com.naagame.player;
 
+import com.naagame.core.action.movement.LibMovement;
+import com.naagame.core.action.movement.MovementSetHSpeed;
+import com.naagame.core.action.movement.MovementSetSpeed;
+import com.naagame.core.action.movement.MovementSetVSpeed;
 import com.naagame.core.resources.NgmEntity;
 
 class LibMovementImpl {
-    private static void setSpeed(NgmEntity.Event.Action action, EntityInstance self, boolean setX, boolean setY) {
-        String[] parts = action.getArgs().split(";");
-
-        EntityInstance instance;
-
-        switch (parts[0]) {
-            case "self":  instance = self;       break;
-            case "other": instance = self.other; break;
-
-            default:
-                NaaGamePlayer.logger.warn("Unknown entity argument " + parts[0]);
-                return;
-        }
-
-        if (setX && setY) {
-            float speedX = Float.parseFloat(parts[1]);
-            float speedY = Float.parseFloat(parts[2]);
-
-            instance.speed.set(speedX, speedY);
-        } else {
-            float speed = Float.parseFloat(parts[1]);
-
-            if (setX) {
-                instance.speed.x = speed;
-            } else if (setY) {
-                instance.speed.y = speed;
-            }
-        }
-    }
+    private static MovementSetSpeed movementSetSpeed = new MovementSetSpeed();
+    private static MovementSetHSpeed movementSetHSpeed = new MovementSetHSpeed();
+    private static MovementSetVSpeed movementSetVSpeed = new MovementSetVSpeed();
 
     static void setSpeed(NgmEntity.Event.Action action, EntityInstance self) {
-        setSpeed(action, self, true, true);
+        LibMovement.ACTION_SET_SPEED.decode(action.getArgs(), movementSetSpeed);
+
+        EntityInstance instance = null;
+
+        switch (movementSetSpeed.getTarget()) {
+            case SELF:  instance = self;       break;
+            case OTHER: instance = self.other; break;
+        }
+
+        float hSpeed = movementSetSpeed.getHSpeed();
+        float vSpeed = movementSetSpeed.getVSpeed();
+
+        if (movementSetSpeed.isRelative()) {
+            hSpeed += instance.speed.x;
+            vSpeed += instance.speed.y;
+        }
+
+        instance.speed.set(hSpeed, vSpeed);
     }
 
-    static void setXSpeed(NgmEntity.Event.Action action, EntityInstance self) {
-        setSpeed(action, self, true, false);
+    static void setHSpeed(NgmEntity.Event.Action action, EntityInstance self) {
+        LibMovement.ACTION_SET_HSPEED.decode(action.getArgs(), movementSetHSpeed);
+
+        EntityInstance instance = null;
+
+        switch (movementSetHSpeed.getTarget()) {
+            case SELF:  instance = self;       break;
+            case OTHER: instance = self.other; break;
+        }
+
+        if (movementSetHSpeed.isRelative()) {
+            instance.speed.x += movementSetHSpeed.getHSpeed();
+        } else {
+            instance.speed.x = movementSetHSpeed.getHSpeed();
+        }
     }
 
-    static void setYSpeed(NgmEntity.Event.Action action, EntityInstance self) {
-        setSpeed(action, self, false, true);
+    static void setVSpeed(NgmEntity.Event.Action action, EntityInstance self) {
+        LibMovement.ACTION_SET_VSPEED.decode(action.getArgs(), movementSetVSpeed);
+
+        EntityInstance instance = null;
+
+        switch (movementSetVSpeed.getTarget()) {
+            case SELF:  instance = self;       break;
+            case OTHER: instance = self.other; break;
+        }
+
+        if (movementSetVSpeed.isRelative()) {
+            instance.speed.y += movementSetVSpeed.getVSpeed();
+        } else {
+            instance.speed.y = movementSetVSpeed.getVSpeed();
+        }
     }
 }

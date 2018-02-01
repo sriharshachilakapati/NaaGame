@@ -1,25 +1,30 @@
 package com.naagame.player;
 
+import com.naagame.core.action.debug.DebugLog;
+import com.naagame.core.action.debug.DebugLogProps;
+import com.naagame.core.action.debug.LibDebug;
 import com.naagame.core.resources.NgmEntity;
 import com.shc.silenceengine.math.Quaternion;
 import com.shc.silenceengine.math.Vector2;
 import com.shc.silenceengine.utils.MathUtils;
 
 class LibDebugImpl {
+    private static DebugLog debugLog = new DebugLog();
+    private static DebugLogProps debugLogProps = new DebugLogProps();
+
     static void log(NgmEntity.Event.Action action, EntityInstance self) {
-        NaaGamePlayer.logger.info(action.getArgs());
+        LibDebug.ACTION_LOG.decode(action.getArgs(), debugLog);
+        NaaGamePlayer.logger.info(debugLog.getMessage());
     }
 
     static void logProps(NgmEntity.Event.Action action, EntityInstance self) {
-        EntityInstance instance;
+        LibDebug.ACTION_LOG_PROPS.decode(action.getArgs(), debugLogProps);
 
-        switch (action.getArgs()) {
-            case "self":  instance = self;       break;
-            case "other": instance = self.other; break;
+        EntityInstance instance = null;
 
-            default:
-                NaaGamePlayer.logger.warn("Unknown argument " + action.getArgs());
-                return;
+        switch (debugLogProps.getTarget()) {
+            case SELF:  instance = self;       break;
+            case OTHER: instance = self.other; break;
         }
 
         Quaternion q = instance.transformComponent.getRotation();

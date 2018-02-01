@@ -26,43 +26,43 @@
           "type": "create",
           "args": "",
           "actions": [
-            { "code": 0, "args": "In create action" },
-            { "code": 1, "args": "self"             }
+            { "code": "debug_log",       "args": "In create action;" },
+            { "code": "debug_log_props", "args": "self;"             }
           ]
         },
         {
           "type": "update",
           "args": "",
           "actions": [
-            { "code": 100, "args": "self;0;0" }
+            { "code": "movement_set_speed", "args": "self;0;0;false;" }
           ]
         },
         {
           "type": "key_down",
           "args": "75",
           "actions": [
-            { "code": 101, "args": "self;-4" }
+            { "code": "movement_set_hspeed", "args": "self;-4;false;" }
           ]
         },
         {
           "type": "key_down",
           "args": "76",
           "actions": [
-            { "code": 101, "args": "self;4" }
+            { "code": "movement_set_hspeed", "args": "self;4;false;" }
           ]
         },
         {
           "type": "key_down",
           "args": "73",
           "actions": [
-            { "code": 102, "args": "self;-4" }
+            { "code": "movement_set_vspeed", "args": "self;-4;false;" }
           ]
         },
         {
           "type": "key_down",
           "args": "74",
           "actions": [
-            { "code": 102, "args": "self;4" }
+            { "code": "movement_set_vspeed", "args": "self;4;false;" }
           ]
         }
       ]
