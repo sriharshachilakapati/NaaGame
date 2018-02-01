@@ -1,6 +1,6 @@
 package com.naagame.editor.controllers;
 
-public class SoundEditorController implements IController {
+public class SceneEditorController implements IController {
     @Override
     public void init(String resourceName) {
     }

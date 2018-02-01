@@ -5,68 +5,59 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="349.0" prefWidth="519.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.controllers.SpriteEditorController">
-   <children>
-      <Label text="Sprite Editor">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Label>
-      <HBox prefHeight="341.0" prefWidth="479.0" spacing="15.0" VBox.vgrow="ALWAYS">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="323.0" prefWidth="554.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.controllers.SpriteEditorController">
+   <top>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+            <Button mnemonicParsing="false" text="Cancel" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" text="Save" />
+        </items>
+      </ToolBar>
+   </top>
+   <center>
+      <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="71.0" text="Preview" BorderPane.alignment="CENTER">
+         <content>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+         </content>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+      </TitledPane>
+   </center>
+   <left>
+      <HBox spacing="10.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
+         </BorderPane.margin>
          <children>
-            <VBox prefHeight="177.0" prefWidth="270.0" spacing="10.0">
+            <TableView fx:id="framesView" editable="true" prefHeight="360.0" prefWidth="341.0">
+                <placeholder>
+                    <Label text="Click the '+' button to add frames" />
+                </placeholder>
+              <columns>
+                <TableColumn fx:id="textureColumn" prefWidth="196.0" text="Texture" />
+                <TableColumn fx:id="durationColumn" prefWidth="143.0" text="Duration (ms)" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <VBox spacing="5.0">
                <children>
-                  <Label text="Name" />
-                  <TextField fx:id="nameField" prefHeight="26.0" prefWidth="83.0" />
-                  <Label text="Frames" />
-                  <HBox spacing="5.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <TableView fx:id="framesView" editable="true" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                          <columns>
-                            <TableColumn fx:id="textureColumn" prefWidth="75.0" text="Texture" />
-                            <TableColumn fx:id="durationColumn" prefWidth="75.0" text="Duration" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                        <VBox>
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#onAddFrameButtonClicked" text="+" />
-                              <Button mnemonicParsing="false" onAction="#onRemoveFrameButtonClicked" prefHeight="26.0" prefWidth="29.0" text="-" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-               </children></VBox>
-            <VBox prefHeight="221.0" prefWidth="92.0" spacing="15.0">
-               <children>
-                  <TitledPane collapsible="false" text="Preview">
-                     <content>
-                        <ImageView fitHeight="150.0" fitWidth="192.0" pickOnBounds="true" preserveRatio="true" />
-                     </content>
-                  </TitledPane>
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAddFrameButtonClicked" text="+" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRemoveFrameButtonClicked" text="-" />
                </children>
             </VBox>
          </children>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
-         <children>
-            <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" text="Save" />
-            <Button mnemonicParsing="false" text="Cancel" />
-         </children>
-      </HBox>
-   </children>
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
-</VBox>
+   </left>
+</BorderPane>

@@ -20,19 +20,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import static com.naagame.editor.util.RetentionFileChooser.EXTENSION_FILTER_NAAGAME_PROJ;
 
 public class MainController implements Initializable, IController {
 
-    @FXML public ScrollPane content;
+    @FXML public TabPane tabPane;
     @FXML public TreeView<String> resourceTree;
 
-    private Window window;
+    private Window window = null;
 
     private TreeItem<String> textures;
     private TreeItem<String> sprites;
@@ -41,23 +39,13 @@ public class MainController implements Initializable, IController {
     private TreeItem<String> entities;
     private TreeItem<String> scenes;
 
-    private Pane textureEditor;
-    private Pane spriteEditor;
-    private Pane backgroundEditor;
-    private Pane soundEditor;
-    private Pane entityEditor;
-
-    private IController textureEditorController;
-    private IController spriteEditorController;
-    private IController backgroundEditorController;
-    private IController soundEditorController;
-    private IController entityEditorController;
+    private Map<String, Tab> tabMap;
 
     private int resourceNum = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Platform.runLater(() -> window = content.getScene().getWindow());
+        tabMap = new HashMap<>();
 
         TreeItem<String> root = new TreeItem<>();
 
@@ -84,7 +72,7 @@ public class MainController implements Initializable, IController {
         resourceTree.setOnMouseClicked(mouseEvent -> {
             switch (mouseEvent.getClickCount()) {
                 case 2:
-                    treeItemSelectionChanged(resourceTree.getSelectionModel().getSelectedItem());
+                    openResource(resourceTree.getSelectionModel().getSelectedItem());
                     break;
 
                 case 3:
@@ -92,31 +80,6 @@ public class MainController implements Initializable, IController {
                     resourceTree.edit(resourceTree.getSelectionModel().getSelectedItem());
                     break;
             }
-        });
-
-        createEditor("sprite.fxml", (editor, controller) -> {
-            spriteEditor = editor;
-            spriteEditorController = controller;
-        });
-
-        createEditor("texture.fxml", (editor, controller) -> {
-            textureEditor = editor;
-            textureEditorController = controller;
-        });
-
-        createEditor("background.fxml", (editor, controller) -> {
-            backgroundEditor = editor;
-            backgroundEditorController = controller;
-        });
-
-        createEditor("sound.fxml", (editor, controller) -> {
-            soundEditor = editor;
-            soundEditorController = controller;
-        });
-
-        createEditor("entity.fxml", (editor, controller) -> {
-            entityEditor = editor;
-            entityEditorController = controller;
         });
 
         ContextMenu resourceMenu = new ContextMenu();
@@ -209,6 +172,20 @@ public class MainController implements Initializable, IController {
                 if (!event.getNewValue().trim().equals("") && NgmProject.find(resources, event.getNewValue()) == null) {
                     IResource resource = NgmProject.find(resources, event.getOldValue());
                     resource.setName(event.getNewValue().trim());
+
+                    TreeItem<String> item = event.getTreeItem();
+                    String tabKey = item.getParent().getValue() + "@" + event.getOldValue();
+
+                    Tab tab = tabMap.get(tabKey);
+
+                    if (tab != null) {
+                        tabMap.remove(tabKey);
+
+                        tabKey = item.getParent().getValue() + "@" + event.getNewValue();
+                        tabMap.put(tabKey, tab);
+
+                        Platform.runLater(() -> tab.setText(event.getNewValue()));
+                    }
                 } else {
                     Platform.runLater(() -> event.getTreeItem().setValue(event.getOldValue()));
                 }
@@ -233,16 +210,70 @@ public class MainController implements Initializable, IController {
         return null;
     }
 
-    private void createEditor(String name, BiConsumer<Pane, IController> consumer) {
+    private Tab createEditor(TreeItem<String> item) {
         try {
+            String name;
+
+            switch (item.getParent().getValue().toLowerCase()) {
+                case "textures":    name = "texture.fxml";    break;
+                case "sprites":     name = "sprite.fxml";     break;
+                case "backgrounds": name = "background.fxml"; break;
+                case "sounds":      name = "sound.fxml";      break;
+                case "entities":    name = "entity.fxml";     break;
+                case "scenes":      name = "scene.fxml";      break;
+
+                default: return null;
+            }
+
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass()
                     .getClassLoader().getResource(name)));
+
             Pane editor = loader.load();
             IController controller = loader.getController();
-            consumer.accept(editor, controller);
+
+            Tab tab = new Tab();
+            tab.setContent(editor);
+
+            if (controller != null) {
+                controller.init(item.getValue());
+
+                tab.setOnCloseRequest(event -> {
+                    if (!controller.hasUnsavedEdits()) {
+                        return;
+                    }
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("NaaGame");
+                    alert.setHeaderText("You have some unsaved changes!");
+                    alert.setContentText("Do you want to save your changes to " + tab.getText() + "?");
+
+                    ButtonType yesBtn = new ButtonType("Yes");
+                    ButtonType noBtn = new ButtonType("No");
+                    ButtonType cancelBtn = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+                    alert.getButtonTypes().clear();
+                    alert.getButtonTypes().addAll(yesBtn, noBtn, cancelBtn);
+
+                    Optional<ButtonType> result = alert.showAndWait();
+
+                    ButtonType selected = result.orElse(cancelBtn);
+
+                    if (selected == yesBtn) {
+                        controller.commitChanges();
+                    } else if (selected == noBtn) {
+                        controller.discardChanges();
+                    } else {
+                        event.consume();
+                    }
+                });
+            }
+
+            return tab;
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     private void refreshTreeUI() {
@@ -262,39 +293,24 @@ public class MainController implements Initializable, IController {
         addAll.accept(NgmProject.scenes, scenes);
     }
 
-    private void treeItemSelectionChanged(TreeItem<String> item) {
+    private void openResource(TreeItem<String> item) {
         if (item.getParent().getValue() == null)
             return;
 
-        switch (item.getParent().getValue().toLowerCase()) {
-            case "textures":
-                textureEditorController.init(item.getValue());
-                content.setContent(textureEditor);
-                break;
+        String tabKey = item.getParent().getValue() + "@" + item.getValue();
+        Tab tab = tabMap.get(tabKey);
 
-            case "sprites":
-                spriteEditorController.init(item.getValue());
-                content.setContent(spriteEditor);
-                break;
+        if (tab == null) {
+            Objects.requireNonNull(tab = createEditor(item));
 
-            case "backgrounds":
-                backgroundEditorController.init(item.getValue());
-                content.setContent(backgroundEditor);
-                break;
+            tab.setOnClosed(e -> tabMap.remove(tabKey));
+            tab.setText(item.getValue());
 
-            case "sounds":
-                soundEditorController.init(item.getValue());
-                content.setContent(soundEditor);
-                break;
-
-            case "entities":
-                entityEditorController.init(item.getValue());
-                content.setContent(entityEditor);
-                break;
-
-            case "scenes":
-                break;
+            tabMap.put(tabKey, tab);
+            tabPane.getTabs().add(tab);
         }
+
+        tabPane.getSelectionModel().select(tab);
     }
 
     @FXML

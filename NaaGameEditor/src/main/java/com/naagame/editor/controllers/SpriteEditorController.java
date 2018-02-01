@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
@@ -21,8 +20,6 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class SpriteEditorController implements IController, Initializable {
-    @FXML TextField nameField;
-
     @FXML TableView<NgmSprite.Frame> framesView;
     @FXML TableColumn<NgmSprite.Frame, String> textureColumn;
     @FXML TableColumn<NgmSprite.Frame, Integer> durationColumn;
@@ -34,7 +31,6 @@ public class SpriteEditorController implements IController, Initializable {
     @Override
     public void init(String name) {
         currentSprite = NgmProject.find(NgmProject.sprites, name);
-        nameField.setText(name);
 
         textures.clear();
         textures.addAll(NgmProject.textures

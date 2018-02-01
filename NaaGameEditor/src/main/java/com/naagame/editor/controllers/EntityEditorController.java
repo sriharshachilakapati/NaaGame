@@ -1,13 +1,7 @@
 package com.naagame.editor.controllers;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-
 public class EntityEditorController implements IController {
-    @FXML TextField nameField;
-
     @Override
-    public void init(String currentEntity) {
-        nameField.setText(currentEntity);
+    public void init(String resourceName) {
     }
 }
