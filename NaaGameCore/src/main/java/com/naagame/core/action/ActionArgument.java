@@ -1,36 +1,29 @@
 package com.naagame.core.action;
 
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class ActionArgument<T> {
+    private ArgumentType<Object> type;
+    private Function<T, Object> getter;
+    private BiConsumer<T, Object> setter;
 
-    public static final ActionArgument<String> STRING = new ActionArgument<>(
-            x -> x.replaceAll(";", "\\;"),
-            x -> x.replaceAll("\\\\;", ";")
-    );
-
-    public static final ActionArgument<ActionTarget> TARGET = new ActionArgument<>(
-            x -> x.toString().toLowerCase(),
-            x -> ActionTarget.valueOf(x.toUpperCase())
-    );
-
-    public static final ActionArgument<Float> FLOAT = new ActionArgument<>(String::valueOf, Float::parseFloat);
-    public static final ActionArgument<Integer> INTEGER = new ActionArgument<>(String::valueOf, Integer::parseInt);
-    public static final ActionArgument<Boolean> BOOLEAN = new ActionArgument<>(String::valueOf, Boolean::parseBoolean);
-
-    private Function<T, String> encoder;
-    private Function<String, T> decoder;
-
-    private ActionArgument(Function<T, String> encoder, Function<String, T> decoder) {
-        this.encoder = encoder;
-        this.decoder = decoder;
+    @SuppressWarnings("unchecked")
+    ActionArgument(ArgumentType<?> type, Function<T, Object> getter, BiConsumer<T, Object> setter) {
+        this.type = (ArgumentType<Object>) type;
+        this.getter = getter;
+        this.setter = setter;
     }
 
-    public Function<String, T> getDecoder() {
-        return decoder;
+    public ArgumentType<Object> getType() {
+        return type;
     }
 
-    public Function<T, String> getEncoder() {
-        return encoder;
+    public Function<T, Object> getGetter() {
+        return getter;
+    }
+
+    public BiConsumer<T, Object> getSetter() {
+        return setter;
     }
 }

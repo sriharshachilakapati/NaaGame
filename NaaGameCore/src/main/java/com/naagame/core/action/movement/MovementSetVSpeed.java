@@ -1,6 +1,6 @@
 package com.naagame.core.action.movement;
 
-import com.naagame.core.action.ActionArgument;
+import com.naagame.core.action.ArgumentType;
 import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 
@@ -39,15 +39,15 @@ public class MovementSetVSpeed {
         Definition() {
             super("movement_set_vspeed", "Sets the vertical speed of the entity");
 
-            addArgument(ActionArgument.TARGET,
+            addArgument(ArgumentType.TARGET,
                     MovementSetVSpeed::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
 
-            addArgument(ActionArgument.FLOAT,
+            addArgument(ArgumentType.FLOAT,
                     MovementSetVSpeed::getVSpeed,
                     (o, v) -> o.setVSpeed((Float) v));
 
-            addArgument(ActionArgument.BOOLEAN,
+            addArgument(ArgumentType.BOOLEAN,
                     MovementSetVSpeed::isRelative,
                     (o, v) -> o.setRelative((Boolean) v));
         }

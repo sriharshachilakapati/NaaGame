@@ -1,6 +1,6 @@
 package com.naagame.core.action.movement;
 
-import com.naagame.core.action.ActionArgument;
+import com.naagame.core.action.ArgumentType;
 import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 
@@ -39,15 +39,15 @@ public class MovementSetHSpeed {
         Definition() {
             super("movement_set_hspeed", "Sets the horizontal speed of the entity");
 
-            addArgument(ActionArgument.TARGET,
+            addArgument(ArgumentType.TARGET,
                     MovementSetHSpeed::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
 
-            addArgument(ActionArgument.FLOAT,
+            addArgument(ArgumentType.FLOAT,
                     MovementSetHSpeed::getHSpeed,
                     (o, v) -> o.setHSpeed((Float) v));
 
-            addArgument(ActionArgument.BOOLEAN,
+            addArgument(ArgumentType.BOOLEAN,
                     MovementSetHSpeed::isRelative,
                     (o, v) -> o.setRelative((Boolean) v));
         }

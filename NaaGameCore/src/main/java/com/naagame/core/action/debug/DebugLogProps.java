@@ -1,6 +1,6 @@
 package com.naagame.core.action.debug;
 
-import com.naagame.core.action.ActionArgument;
+import com.naagame.core.action.ArgumentType;
 import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 
@@ -19,7 +19,7 @@ public class DebugLogProps {
         Definition() {
             super("debug_log_props", "Logs the properties of an entity instance");
 
-            addArgument(ActionArgument.TARGET,
+            addArgument(ArgumentType.TARGET,
                     DebugLogProps::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
         }

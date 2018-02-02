@@ -1,6 +1,6 @@
 package com.naagame.core.action.debug;
 
-import com.naagame.core.action.ActionArgument;
+import com.naagame.core.action.ArgumentType;
 import com.naagame.core.action.ActionDefinition;
 
 public class DebugLog {
@@ -17,7 +17,7 @@ public class DebugLog {
     static final class Definition extends ActionDefinition<DebugLog> {
         Definition() {
             super("debug_log", "Logs a message to the debug console");
-            addArgument(ActionArgument.STRING, DebugLog::getMessage, (o, s) -> o.setMessage(String.valueOf(s)));
+            addArgument(ArgumentType.STRING, DebugLog::getMessage, (o, s) -> o.setMessage(String.valueOf(s)));
         }
     }
 }
