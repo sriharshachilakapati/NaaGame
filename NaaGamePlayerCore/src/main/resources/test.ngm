@@ -1,8 +1,8 @@
 {
   "textures": [
-    { "name": "Tex1", "file": "imgs/tex1.png" },
-    { "name": "Tex2", "file": "imgs/tex2.png" },
-    { "name": "Tex3", "file": ""              }
+    { "name": "Tex1", "source": "imgs/tex1.png" },
+    { "name": "Tex2", "source": "imgs/tex2.png" },
+    { "name": "Tex3", "source": ""              }
   ],
   "sprites": [
     {

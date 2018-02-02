@@ -10,6 +10,7 @@ import com.shc.silenceengine.audio.openal.ALBuffer;
 import com.shc.silenceengine.collision.CollisionTag;
 import com.shc.silenceengine.core.ResourceLoader;
 import com.shc.silenceengine.graphics.Animation;
+import com.shc.silenceengine.graphics.Color;
 import com.shc.silenceengine.graphics.opengl.Texture;
 import com.shc.silenceengine.io.FilePath;
 import com.shc.silenceengine.utils.ResourceLoadingState;
@@ -31,15 +32,17 @@ public class LoadingState extends ResourceLoadingState {
         Map<String, Long> soundIds = new HashMap<>();
 
         NgmProject.textures.forEach(texture -> {
-            if (!texture.getFileName().equals("")) {
-                long id = loader.define(Texture.class, FilePath.getResourceFile(texture.getFileName()));
+            final String source = texture.getSource();
+
+            if (!source.equals("") && !source.startsWith("colour:")) {
+                long id = loader.define(Texture.class, FilePath.getResourceFile(source));
                 textureIds.put(texture.getName(), id);
             }
         });
 
         NgmProject.sounds.forEach(sound -> {
-            if (!sound.getFileName().equals("")) {
-                long id = loader.define(Sound.class, FilePath.getResourceFile(sound.getFileName()));
+            if (!sound.getSource().equals("")) {
+                long id = loader.define(Sound.class, FilePath.getResourceFile(sound.getSource()));
                 soundIds.put(sound.getName(), id);
             }
         });
@@ -47,9 +50,25 @@ public class LoadingState extends ResourceLoadingState {
         return new LoadingState(loader, () -> {
             NaaGamePlayer.logger.info("Fetching all the loaded textures");
             for (NgmTexture ngmTexture : NgmProject.textures) {
-                if (!ngmTexture.getFileName().equals("")) {
-                    long id = textureIds.get(ngmTexture.getName());
-                    Resources.textures.put(ngmTexture.getName(), loader.get(id));
+                final String source = ngmTexture.getSource();
+
+                if (!source.equals("")) {
+                    if (source.startsWith("colour:")) {
+                        String[] parts = source.replaceAll("colour:", "").split(";");
+
+                        float r = Float.parseFloat(parts[0]);
+                        float g = Float.parseFloat(parts[1]);
+                        float b = Float.parseFloat(parts[2]);
+                        float a = Float.parseFloat(parts[3]);
+
+                        int w = Integer.parseInt(parts[4]);
+                        int h = Integer.parseInt(parts[5]);
+
+                        Resources.textures.put(ngmTexture.getName(), Texture.fromColor(new Color(r, g, b, a), w, h));
+                    } else {
+                        long id = textureIds.get(ngmTexture.getName());
+                        Resources.textures.put(ngmTexture.getName(), loader.get(id));
+                    }
                 } else {
                     NaaGamePlayer.logger.warn("Texture " + ngmTexture.getName() + " has no source. Ignoring it.");
                     Resources.textures.put(ngmTexture.getName(), Texture.EMPTY);
@@ -58,7 +77,7 @@ public class LoadingState extends ResourceLoadingState {
 
             NaaGamePlayer.logger.info("Fetching all the loaded sounds");
             for (NgmSound ngmSound : NgmProject.sounds) {
-                if (!ngmSound.getFileName().equals("")) {
+                if (!ngmSound.getSource().equals("")) {
                     long id = soundIds.get(ngmSound.getName());
                     Resources.sounds.put(ngmSound.getName(), loader.get(id));
                 } else {

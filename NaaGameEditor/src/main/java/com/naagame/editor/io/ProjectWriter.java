@@ -27,7 +27,7 @@ public final class ProjectWriter {
         JSONObject json = new JSONObject();
 
         json.put("name", new JSONValue(texture.getName()));
-        json.put("file", new JSONValue(texture.getFileName()));
+        json.put("source", new JSONValue(texture.getSource()));
 
         return new JSONValue(json);
     }
@@ -65,7 +65,7 @@ public final class ProjectWriter {
         JSONObject json = new JSONObject();
 
         json.put("name", new JSONValue(sound.getName()));
-        json.put("file", new JSONValue(sound.getFileName()));
+        json.put("source", new JSONValue(sound.getSource()));
 
         return new JSONValue(json);
     }

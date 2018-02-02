@@ -1,7 +1,7 @@
 package com.naagame.core.resources;
 
 public class NgmTexture implements IResource {
-    private String fileName = "";
+    private String source = "";
     private String name;
 
     public NgmTexture(String name) {
@@ -13,8 +13,8 @@ public class NgmTexture implements IResource {
         return name;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getSource() {
+        return source;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class NgmTexture implements IResource {
         this.name = name;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setSource(String source) {
+        this.source = source;
     }
 }

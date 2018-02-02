@@ -20,7 +20,7 @@ public final class ProjectReader {
 
     private static NgmTexture jsonToTexture(JSONObject json) {
         NgmTexture texture = new NgmTexture(json.get("name").getValue());
-        texture.setFileName(json.get("file").getValue());
+        texture.setSource(json.get("source").getValue());
         return texture;
     }
 
@@ -53,7 +53,7 @@ public final class ProjectReader {
 
     private static NgmSound jsonToSound(JSONObject json) {
         NgmSound sound = new NgmSound(json.get("name").getValue());
-        sound.setFileName(json.get("file").getValue());
+        sound.setSource(json.get("source").getValue());
         return sound;
     }
 
