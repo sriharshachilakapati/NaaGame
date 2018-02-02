@@ -8,9 +8,9 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
@@ -52,9 +52,9 @@
                         <Label text="Grid Y" />
                         <Slider blockIncrement="2.0" majorTickUnit="16.0" max="64.0" minorTickCount="1" showTickMarks="true" value="16.0" />
                         <Label text="Width" />
-                        <TextField text="800" />
+                        <Spinner editable="true" maxWidth="1.7976931348623157E308" />
                         <Label text="Height" />
-                        <TextField text="600" />
+                        <Spinner editable="true" maxWidth="1.7976931348623157E308" />
                         <Label text="Entity Painter" />
                         <ChoiceBox maxWidth="1.7976931348623157E308" />
                      </children>
