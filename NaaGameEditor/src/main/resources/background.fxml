@@ -7,31 +7,27 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="382.0" prefWidth="596.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.controllers.BackgroundEditorController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="336.0" prefWidth="525.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.controllers.BackgroundEditorController">
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-          <Button mnemonicParsing="false" text="Cancel" />
+          <Button mnemonicParsing="false" onAction="#discardChanges" text="Cancel" />
             <Pane HBox.hgrow="ALWAYS" />
             <Pane HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" text="Save" />
+            <Button mnemonicParsing="false" onAction="#commitChanges" text="Save" />
         </items>
       </ToolBar>
    </top>
    <center>
-      <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Preview" BorderPane.alignment="CENTER">
+      <TitledPane fx:id="previewPane" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Preview" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
          </BorderPane.margin>
-         <content>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-         </content>
       </TitledPane>
    </center>
    <left>
@@ -41,11 +37,11 @@
          </BorderPane.margin>
          <children>
             <Label text="Texture" />
-            <ChoiceBox prefHeight="26.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="textureSelector" prefHeight="26.0" prefWidth="150.0" />
             <Label text="Horizontal Speed" />
-            <Slider blockIncrement="1.0" majorTickUnit="20.0" max="20.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+            <Slider fx:id="hSpeedSlider" blockIncrement="1.0" majorTickUnit="20.0" max="20.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
             <Label text="Vertical Speed" />
-            <Slider blockIncrement="1.0" layoutX="10.0" layoutY="36.0" majorTickUnit="20.0" max="20.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+            <Slider fx:id="vSpeedSlider" blockIncrement="1.0" layoutX="10.0" layoutY="36.0" majorTickUnit="20.0" max="20.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
          </children>
       </VBox>
    </left>
