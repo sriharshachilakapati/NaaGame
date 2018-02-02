@@ -1,9 +1,10 @@
 package com.naagame.editor.controllers;
 
-import com.naagame.core.io.ProjectReader;
-import com.naagame.editor.io.ProjectWriter;
 import com.naagame.core.NgmProject;
+import com.naagame.core.io.ProjectReader;
 import com.naagame.core.resources.*;
+import com.naagame.editor.Main;
+import com.naagame.editor.io.ProjectWriter;
 import com.naagame.editor.util.RetentionFileChooser;
 import com.shc.easyjson.ParseException;
 import javafx.application.Platform;
@@ -13,8 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.layout.Pane;
-import javafx.stage.Window;
 import javafx.util.Callback;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,10 +28,8 @@ import static com.naagame.editor.util.RetentionFileChooser.EXTENSION_FILTER_NAAG
 
 public class MainController implements Initializable, IController {
 
-    @FXML public TabPane tabPane;
-    @FXML public TreeView<String> resourceTree;
-
-    private Window window = null;
+    @FXML private TabPane tabPane;
+    @FXML private TreeView<String> resourceTree;
 
     private TreeItem<String> textures;
     private TreeItem<String> sprites;
@@ -39,7 +38,7 @@ public class MainController implements Initializable, IController {
     private TreeItem<String> entities;
     private TreeItem<String> scenes;
 
-    private Map<String, Tab> tabMap;
+    private Map<String, Pair<Tab, IController>> tabMap;
 
     private int resourceNum = 0;
 
@@ -65,6 +64,8 @@ public class MainController implements Initializable, IController {
             NgmProject.sounds.add(new NgmSound("Sound" + i));
             NgmProject.entities.add(new NgmEntity("Entity" + i));
             NgmProject.scenes.add(new NgmScene("Scene" + i));
+
+            resourceNum += 6;
         }
 
         refreshTreeUI();
@@ -91,15 +92,28 @@ public class MainController implements Initializable, IController {
             resourceTree.setEditable(true);
             resourceTree.edit(resourceTree.getSelectionModel().getSelectedItem());
         });
+
         deleteMenuItem.setOnAction(event -> {
             TreeItem<String> item = resourceTree.getSelectionModel().getSelectedItem();
             List<? extends IResource> resources = getResourceList(item);
 
             if (resources != null) {
                 IResource resource = NgmProject.find(resources, item.getValue());
+
+                String tabKey = item.getParent().getValue() + "@" + item.getValue();
+
+                Pair<Tab, IController> pair = tabMap.get(tabKey);
+
+                if (pair != null) {
+                    pair.getValue().discardChanges();
+                    tabPane.getTabs().remove(pair.getKey());
+                }
+
                 resources.remove(resource);
                 item.getParent().getChildren().remove(item);
             }
+
+            Platform.runLater(() -> tabMap.values().forEach(p -> p.getValue().resourcesChanged()));
         });
 
         ContextMenu groupMenu = new ContextMenu();
@@ -142,6 +156,8 @@ public class MainController implements Initializable, IController {
             resourceTree.layout();
             resourceTree.getSelectionModel().select(resourceItem);
             resourceTree.edit(resourceItem);
+
+            Platform.runLater(() -> tabMap.values().forEach(p -> p.getValue().resourcesChanged()));
         });
 
         Callback<TreeView<String>, TreeCell<String>> cellFactory = TextFieldTreeCell.forTreeView();
@@ -176,16 +192,21 @@ public class MainController implements Initializable, IController {
                     TreeItem<String> item = event.getTreeItem();
                     String tabKey = item.getParent().getValue() + "@" + event.getOldValue();
 
-                    Tab tab = tabMap.get(tabKey);
+                    Pair<Tab, IController> pair = tabMap.get(tabKey);
 
-                    if (tab != null) {
+                    if (pair != null) {
                         tabMap.remove(tabKey);
 
                         tabKey = item.getParent().getValue() + "@" + event.getNewValue();
-                        tabMap.put(tabKey, tab);
+                        tabMap.put(tabKey, pair);
 
-                        Platform.runLater(() -> tab.setText(event.getNewValue()));
+                        Platform.runLater(() -> {
+                            pair.getKey().setText(event.getNewValue());
+                            resourceTree.getSelectionModel().select(null);
+                        });
                     }
+
+                    Platform.runLater(() -> tabMap.values().forEach(p -> p.getValue().resourcesChanged()));
                 } else {
                     Platform.runLater(() -> event.getTreeItem().setValue(event.getOldValue()));
                 }
@@ -210,7 +231,7 @@ public class MainController implements Initializable, IController {
         return null;
     }
 
-    private Tab createEditor(TreeItem<String> item) {
+    private Pair<Tab, IController> createEditor(TreeItem<String> item) {
         try {
             String name;
 
@@ -243,6 +264,7 @@ public class MainController implements Initializable, IController {
                     }
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.initOwner(Main.window);
                     alert.setTitle("NaaGame");
                     alert.setHeaderText("You have some unsaved changes!");
                     alert.setContentText("Do you want to save your changes to " + tab.getText() + "?");
@@ -268,7 +290,7 @@ public class MainController implements Initializable, IController {
                 });
             }
 
-            return tab;
+            return new Pair<>(tab, controller);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -298,24 +320,26 @@ public class MainController implements Initializable, IController {
             return;
 
         String tabKey = item.getParent().getValue() + "@" + item.getValue();
-        Tab tab = tabMap.get(tabKey);
+        Pair<Tab, IController> pair = tabMap.get(tabKey);
 
-        if (tab == null) {
-            Objects.requireNonNull(tab = createEditor(item));
+        if (pair == null) {
+            Objects.requireNonNull(pair = createEditor(item));
+
+            Tab tab = pair.getKey();
 
             tab.setOnClosed(e -> tabMap.remove(tabKey));
             tab.setText(item.getValue());
 
-            tabMap.put(tabKey, tab);
-            tabPane.getTabs().add(tab);
+            tabMap.put(tabKey, pair);
+            tabPane.getTabs().add(pair.getKey());
         }
 
-        tabPane.getSelectionModel().select(tab);
+        tabPane.getSelectionModel().select(pair.getKey());
     }
 
     @FXML
     public void onSaveMenuItemClicked() {
-        Path path = RetentionFileChooser.showSaveDialog(window);
+        Path path = RetentionFileChooser.showSaveDialog();
 
         if (path == null) {
             return;
@@ -330,7 +354,7 @@ public class MainController implements Initializable, IController {
 
     @FXML
     public void onOpenMenuItemClicked() {
-        Path path = RetentionFileChooser.showOpenDialog(window, EXTENSION_FILTER_NAAGAME_PROJ);
+        Path path = RetentionFileChooser.showOpenDialog(EXTENSION_FILTER_NAAGAME_PROJ);
 
         if (path == null) {
             return;

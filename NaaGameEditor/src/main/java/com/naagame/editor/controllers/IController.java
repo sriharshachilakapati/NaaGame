@@ -16,4 +16,7 @@ public interface IController {
     default void init(String resourceName) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
+    default void resourcesChanged() {
+    }
 }

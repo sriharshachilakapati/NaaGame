@@ -2,6 +2,7 @@ package com.naagame.editor.controllers;
 
 import com.naagame.core.NgmProject;
 import com.naagame.core.resources.NgmTexture;
+import com.naagame.editor.Main;
 import com.naagame.editor.util.ImageViewer;
 import com.naagame.editor.util.RetentionFileChooser;
 import javafx.fxml.FXML;
@@ -81,7 +82,7 @@ public class TextureEditorController implements IController {
 
     @FXML
     public void onFromFileButtonClicked() {
-        Path path = RetentionFileChooser.showOpenDialog(null, EXTENSION_FILTER_IMAGES);
+        Path path = RetentionFileChooser.showOpenDialog(EXTENSION_FILTER_IMAGES);
 
         if (path != null) {
             changed = true;
@@ -103,6 +104,7 @@ public class TextureEditorController implements IController {
             ColourTextureController controller = loader.getController();
 
             Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.initOwner(Main.window);
 
             dialog.setTitle("NaaGame");
             dialog.setHeaderText("Create Texture");

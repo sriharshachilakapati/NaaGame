@@ -1,5 +1,6 @@
 package com.naagame.editor.util;
 
+import com.naagame.editor.Main;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -31,13 +32,13 @@ public final class RetentionFileChooser {
         return instance;
     }
 
-    public static Path showOpenDialog(Window window, FileChooser.ExtensionFilter ... filters) {
+    public static Path showOpenDialog(FileChooser.ExtensionFilter ... filters) {
         FileChooser fc = getInstance();
         fc.setTitle("Open file");
         fc.getExtensionFilters().clear();
         fc.getExtensionFilters().addAll(filters);
 
-        File selected = fc.showOpenDialog(window);
+        File selected = fc.showOpenDialog(Main.window);
 
         if (selected == null) {
             return null;
@@ -47,13 +48,13 @@ public final class RetentionFileChooser {
         return selected.toPath();
     }
 
-    public static Path showSaveDialog(Window window) {
+    public static Path showSaveDialog() {
         FileChooser fc = getInstance();
         fc.setTitle("Save As");
         fc.getExtensionFilters().clear();
         fc.getExtensionFilters().add(EXTENSION_FILTER_NAAGAME_PROJ);
 
-        File selected = fc.showSaveDialog(window);
+        File selected = fc.showSaveDialog(Main.window);
 
         if (selected == null) {
             return null;
