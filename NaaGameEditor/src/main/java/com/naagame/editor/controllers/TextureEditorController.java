@@ -2,15 +2,12 @@ package com.naagame.editor.controllers;
 
 import com.naagame.core.NgmProject;
 import com.naagame.core.resources.NgmTexture;
+import com.naagame.editor.util.ImageViewer;
 import com.naagame.editor.util.RetentionFileChooser;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
@@ -23,9 +20,10 @@ import java.nio.file.Paths;
 import static com.naagame.editor.util.RetentionFileChooser.EXTENSION_FILTER_IMAGES;
 
 public class TextureEditorController implements IController {
-    @FXML public ImageView texturePreview;
+    @FXML private TitledPane previewPane;
 
     private NgmTexture texture;
+    private ImageViewer imageViewer;
 
     private boolean changed;
     private String source;
@@ -36,13 +34,18 @@ public class TextureEditorController implements IController {
         changed = false;
         source = texture.getSource();
 
+        imageViewer = new ImageViewer();
+        previewPane.setContent(imageViewer);
+
         updateImagePreview();
     }
 
     private void updateImagePreview() {
-        texturePreview.setImage(null);
+        imageViewer.setImage(null);
 
         if (!"".equals(source)) {
+            imageViewer.setZoom(100);
+
             if (source.startsWith("colour:")) {
                 String[] parts = source.replaceAll("colour:", "").split(";");
 
@@ -65,10 +68,10 @@ public class TextureEditorController implements IController {
                     }
                 }
 
-                texturePreview.setImage(image);
+                imageViewer.setImage(image);
             } else {
                 try {
-                    texturePreview.setImage(new Image(Files.newInputStream(Paths.get(source))));
+                    imageViewer.setImage(new Image(Files.newInputStream(Paths.get(source))));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -85,7 +88,7 @@ public class TextureEditorController implements IController {
 
             try {
                 source = path.toAbsolutePath().toString();
-                texturePreview.setImage(new Image(Files.newInputStream(path)));
+                imageViewer.setImage(new Image(Files.newInputStream(path)));
             } catch (IOException e) {
                 e.printStackTrace();
             }

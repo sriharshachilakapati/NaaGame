@@ -1,0 +1,5 @@
+.background {
+    -fx-background-color: rgba(255, 255, 255, 1.0),
+            linear-gradient(from 0.5px 0.5px to 0.5px 16.5px, repeat, rgba(100, 100, 100, 0.5) 50%, rgba(150, 150, 150, 0.5) 50%),
+            linear-gradient(from 0.5px 0.5px to 16.5px 0.5px, repeat, rgba(150, 150, 150, 0.5) 50%, rgba(100, 100, 100, 0.5) 50%);
+}
