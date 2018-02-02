@@ -64,6 +64,13 @@
           "actions": [
             { "code": "movement_set_vspeed", "args": "self;4;false;" }
           ]
+        },
+        {
+          "type": "mouse_down",
+          "args": "1",
+          "actions": [
+            { "code": "movement_set_position", "args": "self;500;500;" }
+          ]
         }
       ]
     }

@@ -79,6 +79,7 @@ class EntityInstance extends Entity {
             actionExecutors.put(LibMovement.ACTION_SET_SPEED.getCode(), LibMovementImpl::setSpeed);
             actionExecutors.put(LibMovement.ACTION_SET_HSPEED.getCode(), LibMovementImpl::setHSpeed);
             actionExecutors.put(LibMovement.ACTION_SET_VSPEED.getCode(), LibMovementImpl::setVSpeed);
+            actionExecutors.put(LibMovement.ACTION_SET_POSITION.getCode(), LibMovementImpl::setPosition);
 
             createEvent = ngmEntity.getEvents().stream()
                     .filter(event -> event.getType() == NgmEntity.Event.Type.CREATE)

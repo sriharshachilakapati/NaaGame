@@ -1,15 +1,13 @@
 package com.naagame.player;
 
-import com.naagame.core.action.movement.LibMovement;
-import com.naagame.core.action.movement.MovementSetHSpeed;
-import com.naagame.core.action.movement.MovementSetSpeed;
-import com.naagame.core.action.movement.MovementSetVSpeed;
+import com.naagame.core.action.movement.*;
 import com.naagame.core.resources.NgmEntity;
 
 class LibMovementImpl {
     private static MovementSetSpeed movementSetSpeed = new MovementSetSpeed();
     private static MovementSetHSpeed movementSetHSpeed = new MovementSetHSpeed();
     private static MovementSetVSpeed movementSetVSpeed = new MovementSetVSpeed();
+    private static MovementSetPosition movementSetPosition = new MovementSetPosition();
 
     static void setSpeed(NgmEntity.Event.Action action, EntityInstance self) {
         LibMovement.ACTION_SET_SPEED.decode(action.getArgs(), movementSetSpeed);
@@ -64,5 +62,21 @@ class LibMovementImpl {
         } else {
             instance.speed.y = movementSetVSpeed.getVSpeed();
         }
+    }
+
+    static void setPosition(NgmEntity.Event.Action action, EntityInstance self) {
+        LibMovement.ACTION_SET_POSITION.decode(action.getArgs(), movementSetPosition);
+
+        EntityInstance instance = null;
+
+        switch (movementSetPosition.getTarget()) {
+            case SELF:  instance = self;       break;
+            case OTHER: instance = self.other; break;
+        }
+
+        float posX = movementSetPosition.getPosX();
+        float posY = movementSetPosition.getPosY();
+
+        instance.transformComponent.setPosition(posX, posY);
     }
 }
