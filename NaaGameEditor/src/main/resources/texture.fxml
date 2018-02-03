@@ -12,12 +12,12 @@
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#discardChanges" text="Cancel" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#commitChanges" text="Save" />
             <Pane HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" onAction="#onFromColourButtonClicked" text="From Colour" />
             <Button mnemonicParsing="false" onAction="#onFromFileButtonClicked" text="From Image" />
             <Pane HBox.hgrow="ALWAYS" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#commitChanges" text="Save" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#discardChanges" text="Cancel" />
          </items>
       </ToolBar>
    </top>

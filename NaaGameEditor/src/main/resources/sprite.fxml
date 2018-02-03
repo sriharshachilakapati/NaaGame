@@ -16,9 +16,9 @@
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-            <Button mnemonicParsing="false" text="Cancel" />
-            <Pane HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" text="Save" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" text="Cancel" />
         </items>
       </ToolBar>
    </top>
