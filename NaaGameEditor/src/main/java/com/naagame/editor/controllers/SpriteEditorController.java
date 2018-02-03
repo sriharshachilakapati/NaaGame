@@ -78,12 +78,17 @@ public class SpriteEditorController extends Controller implements Initializable 
     private void updateAnimation() {
         timeline.stop();
 
-        AtomicInteger frame = new AtomicInteger(0);
+        if (frames.size() == 0) {
+            imageViewer.setImage(null);
+            return;
+        }
+
+        AtomicInteger frameTime = new AtomicInteger(frames.get(frames.size() - 1).getDuration());
         timeline.getKeyFrames().clear();
 
         timeline.getKeyFrames().addAll(frames.stream().map(f -> {
             Image image = ImageCache.getImage(f.getTexture().getSource());
-            Duration duration = Duration.millis(f.getDuration() * frame.addAndGet(1));
+            Duration duration = Duration.millis(frameTime.getAndAdd(f.getDuration()));
 
             return new KeyFrame(duration, e -> imageViewer.setImage(image));
         }).collect(Collectors.toList()));
