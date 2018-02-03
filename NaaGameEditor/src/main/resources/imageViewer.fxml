@@ -6,15 +6,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 
-<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="251.0" prefWidth="315.0" stylesheets="@imageViewer.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="10.0" minWidth="10.0" prefHeight="448.0" prefWidth="575.0" stylesheets="@imageViewer.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
-      <HBox prefHeight="57.0" prefWidth="458.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="57.0" prefWidth="458.0" BorderPane.alignment="CENTER">
          <children>
-            <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-            <Slider fx:id="zoomSlider" majorTickUnit="100.0" max="200.0" prefHeight="16.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="100.0" HBox.hgrow="NEVER" />
-            <Pane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+            <Slider fx:id="zoomSlider" majorTickUnit="100.0" max="500.0" prefHeight="38.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="100.0" HBox.hgrow="NEVER" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
