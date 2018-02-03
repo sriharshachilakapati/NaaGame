@@ -31,5 +31,8 @@ public class ColourTextureController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 512, 16));
         heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 512, 16));
+
+        widthSpinner.focusedProperty().addListener((v, o, n) -> widthSpinner.increment(0));
+        heightSpinner.focusedProperty().addListener((v, o, n) -> heightSpinner.increment(0));
     }
 }
