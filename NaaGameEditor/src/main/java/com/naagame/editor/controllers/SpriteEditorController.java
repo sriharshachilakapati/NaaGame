@@ -4,7 +4,7 @@ import com.naagame.core.NgmProject;
 import com.naagame.core.resources.IResource;
 import com.naagame.core.resources.NgmSprite;
 import com.naagame.core.resources.NgmTexture;
-import com.naagame.editor.util.ImageUtil;
+import com.naagame.editor.util.ImageCache;
 import com.naagame.editor.util.ImageViewer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -82,7 +82,7 @@ public class SpriteEditorController implements IController, Initializable {
         timeline.getKeyFrames().clear();
 
         timeline.getKeyFrames().addAll(frames.stream().map(f -> {
-            Image image = ImageUtil.loadImage(f.getTexture().getSource());
+            Image image = ImageCache.getImage(f.getTexture().getSource());
             Duration duration = Duration.millis(f.getDuration() * frame.addAndGet(1));
 
             return new KeyFrame(duration, e -> imageViewer.setImage(image));

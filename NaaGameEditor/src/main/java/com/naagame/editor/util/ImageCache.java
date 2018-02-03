@@ -8,9 +8,13 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ImageUtil {
-    public static Image loadImage(String source) {
+public class ImageCache {
+    private static Map<String, Image> imageCache = new HashMap<>();
+
+    public static Image updateCache(String source) {
         if (!"".equals(source)) {
             if (source.startsWith("colour:")) {
                 String[] parts = source.replaceAll("colour:", "").split(";");
@@ -34,10 +38,14 @@ public class ImageUtil {
                     }
                 }
 
+                imageCache.put(source, image);
                 return image;
             } else {
                 try {
-                    return new Image(Files.newInputStream(Paths.get(source)));
+                    Image image = new Image(Files.newInputStream(Paths.get(source)));
+                    imageCache.put(source, image);
+
+                    return image;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -45,5 +53,13 @@ public class ImageUtil {
         }
 
         return null;
+    }
+
+    public static Image getImage(String source) {
+        if (imageCache.containsKey(source)) {
+            return imageCache.get(source);
+        }
+
+        return updateCache(source);
     }
 }

@@ -3,17 +3,15 @@ package com.naagame.editor.controllers;
 import com.naagame.core.NgmProject;
 import com.naagame.core.resources.NgmTexture;
 import com.naagame.editor.Main;
-import com.naagame.editor.util.ImageUtil;
+import com.naagame.editor.util.ImageCache;
 import com.naagame.editor.util.ImageViewer;
 import com.naagame.editor.util.RetentionFileChooser;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static com.naagame.editor.util.RetentionFileChooser.EXTENSION_FILTER_IMAGES;
@@ -43,7 +41,7 @@ public class TextureEditorController implements IController {
 
     private void updateImagePreview() {
         imageViewer.setZoom(100);
-        imageViewer.setImage(ImageUtil.loadImage(source));
+        imageViewer.setImage(ImageCache.getImage(source));
     }
 
     @FXML
@@ -53,12 +51,9 @@ public class TextureEditorController implements IController {
         if (path != null) {
             changed = true;
 
-            try {
-                source = path.toAbsolutePath().toString();
-                imageViewer.setImage(new Image(Files.newInputStream(path)));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            source = path.toAbsolutePath().toString();
+            ImageCache.updateCache(source);
+            updateImagePreview();
         }
     }
 

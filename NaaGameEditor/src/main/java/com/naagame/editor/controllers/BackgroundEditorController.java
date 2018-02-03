@@ -3,7 +3,7 @@ package com.naagame.editor.controllers;
 import com.naagame.core.NgmProject;
 import com.naagame.core.resources.NgmBackground;
 import com.naagame.core.resources.NgmTexture;
-import com.naagame.editor.util.ImageUtil;
+import com.naagame.editor.util.ImageCache;
 import com.naagame.editor.util.ImageViewer;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -35,7 +35,7 @@ public class BackgroundEditorController implements IController {
 
             textureSelector.getSelectionModel().selectedItemProperty().addListener((v, o, n) -> {
                 texture = NgmProject.find(NgmProject.textures, n);
-                imageViewer.setImage(ImageUtil.loadImage(texture.getSource()));
+                imageViewer.setImage(ImageCache.getImage(texture.getSource()));
                 changed = true;
             });
 
@@ -91,7 +91,7 @@ public class BackgroundEditorController implements IController {
     @Override
     public void resourcesChanged() {
         if (texture != null) {
-            imageViewer.setImage(ImageUtil.loadImage(texture.getSource()));
+            imageViewer.setImage(ImageCache.getImage(texture.getSource()));
         }
 
         textureSelector.getItems().clear();
