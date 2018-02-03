@@ -26,7 +26,7 @@ import java.util.function.BiConsumer;
 
 import static com.naagame.editor.util.RetentionFileChooser.EXTENSION_FILTER_NAAGAME_PROJ;
 
-public class MainController implements Initializable, IController {
+public class MainController extends Controller implements Initializable {
 
     @FXML private TabPane tabPane;
     @FXML private TreeView<String> resourceTree;
@@ -38,7 +38,7 @@ public class MainController implements Initializable, IController {
     private TreeItem<String> entities;
     private TreeItem<String> scenes;
 
-    private Map<String, Pair<Tab, IController>> tabMap;
+    private Map<String, Pair<Tab, Controller>> tabMap;
 
     private int resourceNum = 0;
 
@@ -102,7 +102,7 @@ public class MainController implements Initializable, IController {
 
                 String tabKey = item.getParent().getValue() + "@" + item.getValue();
 
-                Pair<Tab, IController> pair = tabMap.get(tabKey);
+                Pair<Tab, Controller> pair = tabMap.get(tabKey);
 
                 if (pair != null) {
                     pair.getValue().discardChanges();
@@ -113,7 +113,7 @@ public class MainController implements Initializable, IController {
                 item.getParent().getChildren().remove(item);
             }
 
-            Platform.runLater(() -> tabMap.values().forEach(p -> p.getValue().resourcesChanged()));
+            resourcesChanged();
         });
 
         ContextMenu groupMenu = new ContextMenu();
@@ -157,7 +157,7 @@ public class MainController implements Initializable, IController {
             resourceTree.getSelectionModel().select(resourceItem);
             resourceTree.edit(resourceItem);
 
-            Platform.runLater(() -> tabMap.values().forEach(p -> p.getValue().resourcesChanged()));
+            resourcesChanged();
         });
 
         Callback<TreeView<String>, TreeCell<String>> cellFactory = TextFieldTreeCell.forTreeView();
@@ -192,7 +192,7 @@ public class MainController implements Initializable, IController {
                     TreeItem<String> item = event.getTreeItem();
                     String tabKey = item.getParent().getValue() + "@" + event.getOldValue();
 
-                    Pair<Tab, IController> pair = tabMap.get(tabKey);
+                    Pair<Tab, Controller> pair = tabMap.get(tabKey);
 
                     if (pair != null) {
                         tabMap.remove(tabKey);
@@ -206,7 +206,7 @@ public class MainController implements Initializable, IController {
                         });
                     }
 
-                    Platform.runLater(() -> tabMap.values().forEach(p -> p.getValue().resourcesChanged()));
+                    resourcesChanged();
                 } else {
                     Platform.runLater(() -> event.getTreeItem().setValue(event.getOldValue()));
                 }
@@ -231,7 +231,7 @@ public class MainController implements Initializable, IController {
         return null;
     }
 
-    private Pair<Tab, IController> createEditor(TreeItem<String> item) {
+    private Pair<Tab, Controller> createEditor(TreeItem<String> item) {
         try {
             String name;
 
@@ -250,12 +250,13 @@ public class MainController implements Initializable, IController {
                     .getClassLoader().getResource(name)));
 
             Pane editor = loader.load();
-            IController controller = loader.getController();
+            Controller controller = loader.getController();
 
             Tab tab = new Tab();
             tab.setContent(editor);
 
             if (controller != null) {
+                controller.setMainController(this);
                 controller.init(item.getValue());
 
                 tab.setOnCloseRequest(event -> {
@@ -320,7 +321,7 @@ public class MainController implements Initializable, IController {
             return;
 
         String tabKey = item.getParent().getValue() + "@" + item.getValue();
-        Pair<Tab, IController> pair = tabMap.get(tabKey);
+        Pair<Tab, Controller> pair = tabMap.get(tabKey);
 
         if (pair == null) {
             Objects.requireNonNull(pair = createEditor(item));
@@ -367,5 +368,10 @@ public class MainController implements Initializable, IController {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void resourcesChanged() {
+        Platform.runLater(() -> tabMap.values().forEach(p -> p.getValue().resourcesChanged()));
     }
 }

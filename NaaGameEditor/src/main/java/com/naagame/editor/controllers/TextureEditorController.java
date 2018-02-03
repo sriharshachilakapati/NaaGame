@@ -16,7 +16,7 @@ import java.nio.file.Path;
 
 import static com.naagame.editor.util.RetentionFileChooser.EXTENSION_FILTER_IMAGES;
 
-public class TextureEditorController implements IController {
+public class TextureEditorController extends Controller {
     @FXML private TitledPane previewPane;
 
     private NgmTexture texture;
@@ -112,6 +112,7 @@ public class TextureEditorController implements IController {
     public void commitChanges() {
         changed = false;
         texture.setSource(source);
+        notifySave();
     }
 
     @FXML

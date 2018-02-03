@@ -12,7 +12,7 @@ import javafx.scene.control.TitledPane;
 
 import java.util.stream.Collectors;
 
-public class BackgroundEditorController implements IController {
+public class BackgroundEditorController extends Controller {
     @FXML private Slider hSpeedSlider;
     @FXML private Slider vSpeedSlider;
     @FXML private TitledPane previewPane;
@@ -75,6 +75,8 @@ public class BackgroundEditorController implements IController {
         background.setHSpeed(hSpeed);
         background.setVSpeed(vSpeed);
         background.setTexture(texture);
+
+        notifySave();
     }
 
     @FXML

@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class SpriteEditorController implements IController, Initializable {
+public class SpriteEditorController extends Controller implements Initializable {
     private @FXML TableView<NgmSprite.Frame> framesView;
     private @FXML TableColumn<NgmSprite.Frame, String> textureColumn;
     private @FXML TableColumn<NgmSprite.Frame, Integer> durationColumn;
