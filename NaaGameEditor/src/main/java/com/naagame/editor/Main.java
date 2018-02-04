@@ -26,7 +26,8 @@ public class Main extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.setResizable(true);
-        stage.setTitle("NaaGame");
+        stage.setTitle("NaaGame - Create your own games!");
+        stage.setMaximized(true);
         stage.show();
     }
 }

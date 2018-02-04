@@ -121,43 +121,15 @@ public class MainController extends Controller implements Initializable {
         groupMenu.getItems().add(createMenuItem);
         createMenuItem.setOnAction(event -> {
             TreeItem<String> item = resourceTree.getSelectionModel().getSelectedItem();
-            TreeItem<String> resourceItem = new TreeItem<>("");
 
             switch (item.getValue().toLowerCase()) {
-                case "textures":
-                    NgmProject.textures.add(new NgmTexture("Texture" + (++resourceNum)));
-                    resourceItem.setValue("Texture" + resourceNum);
-                    break;
-                case "sprites":
-                    NgmProject.sprites.add(new NgmSprite("Sprite" + (++resourceNum)));
-                    resourceItem.setValue("Sprite" + resourceNum);
-                    break;
-                case "backgrounds":
-                    NgmProject.backgrounds.add(new NgmBackground("Background" + (++resourceNum)));
-                    resourceItem.setValue("Background" + resourceNum);
-                    break;
-                case "sounds":
-                    NgmProject.sounds.add(new NgmSound("Sound" + (++resourceNum)));
-                    resourceItem.setValue("Sound" + resourceNum);
-                    break;
-                case "entities":
-                    NgmProject.entities.add(new NgmEntity("Entity" + (++resourceNum)));
-                    resourceItem.setValue("Entity" + resourceNum);
-                    break;
-                case "scenes":
-                    NgmProject.scenes.add(new NgmScene("Scene" + (++resourceNum)));
-                    resourceItem.setValue("Scene" + resourceNum);
-                    break;
+                case "textures":    onCreateTextureClicked();    break;
+                case "sprites":     onCreateSpriteClicked();     break;
+                case "backgrounds": onCreateBackgroundClicked(); break;
+                case "sounds":      onCreateSoundClicked();      break;
+                case "entities":    onCreateEntityClicked();     break;
+                case "scenes":      onCreateSceneClicked();      break;
             }
-
-            item.getChildren().add(resourceItem);
-            item.setExpanded(true);
-            resourceTree.setEditable(true);
-            resourceTree.layout();
-            resourceTree.getSelectionModel().select(resourceItem);
-            resourceTree.edit(resourceItem);
-
-            resourcesChanged();
         });
 
         Callback<TreeView<String>, TreeCell<String>> cellFactory = TextFieldTreeCell.forTreeView();
@@ -216,6 +188,72 @@ public class MainController extends Controller implements Initializable {
         });
 
         resourceTree.setOnEditCancel(event -> resourceTree.setEditable(false));
+    }
+
+    private void resourceCreated(TreeItem<String> item, TreeItem<String> parent) {
+        parent.getChildren().add(item);
+        parent.setExpanded(true);
+
+        resourceTree.setEditable(true);
+        resourceTree.layout();
+        resourceTree.getSelectionModel().select(item);
+        resourceTree.edit(item);
+
+        resourcesChanged();
+    }
+
+    @FXML
+    public void onCreateSceneClicked() {
+        TreeItem<String> item = new TreeItem<>("");
+        NgmProject.scenes.add(new NgmScene("Scene" + (++resourceNum)));
+        item.setValue("Scene" + resourceNum);
+
+        resourceCreated(item, scenes);
+    }
+
+    @FXML
+    public void onCreateEntityClicked() {
+        TreeItem<String> item = new TreeItem<>("");
+        NgmProject.entities.add(new NgmEntity("Entity" + (++resourceNum)));
+        item.setValue("Entity" + resourceNum);
+
+        resourceCreated(item, entities);
+    }
+
+    @FXML
+    public void onCreateSoundClicked() {
+        TreeItem<String> item = new TreeItem<>("");
+        NgmProject.sounds.add(new NgmSound("Sound" + (++resourceNum)));
+        item.setValue("Sound" + resourceNum);
+
+        resourceCreated(item, sounds);
+    }
+
+    @FXML
+    public void onCreateBackgroundClicked() {
+        TreeItem<String> item = new TreeItem<>("");
+        NgmProject.backgrounds.add(new NgmBackground("Background" + (++resourceNum)));
+        item.setValue("Background" + resourceNum);
+
+        resourceCreated(item, backgrounds);
+    }
+
+    @FXML
+    public void onCreateSpriteClicked() {
+        TreeItem<String> item = new TreeItem<>("");
+        NgmProject.sprites.add(new NgmSprite("Sprite" + (++resourceNum)));
+        item.setValue("Sprite" + resourceNum);
+
+        resourceCreated(item, sprites);
+    }
+
+    @FXML
+    public void onCreateTextureClicked() {
+        TreeItem<String> item = new TreeItem<>("");
+        NgmProject.textures.add(new NgmTexture("Texture" + (++resourceNum)));
+        item.setValue("Texture" + resourceNum);
+
+        resourceCreated(item, textures);
     }
 
     private List<? extends IResource> getResourceList(TreeItem<String> item) {

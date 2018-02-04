@@ -41,7 +41,17 @@
             <MenuItem mnemonicParsing="false" text="Quit" />
           </items>
         </Menu>
-            <Menu mnemonicParsing="false" text="Game">
+            <Menu mnemonicParsing="false" text="Resource">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#onCreateTextureClicked" text="Create Texture" />
+                  <MenuItem mnemonicParsing="false" onAction="#onCreateSpriteClicked" text="Create Sprite" />
+                  <MenuItem mnemonicParsing="false" onAction="#onCreateBackgroundClicked" text="Create Background" />
+                  <MenuItem mnemonicParsing="false" onAction="#onCreateSoundClicked" text="Create Sound" />
+                  <MenuItem mnemonicParsing="false" onAction="#onCreateEntityClicked" text="Create Entity" />
+                  <MenuItem mnemonicParsing="false" onAction="#onCreateSceneClicked" text="Create Scene" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Project">
               <items>
                   <MenuItem mnemonicParsing="false" text="Run the Game" />
                   <MenuItem mnemonicParsing="false" text="Run in Browser" />
