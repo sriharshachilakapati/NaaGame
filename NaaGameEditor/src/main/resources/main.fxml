@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.HBox?>
@@ -67,6 +71,57 @@
         </Menu>
       </menus>
     </MenuBar>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="New">
+               <graphic>
+                  <FontAwesomeIconView glyphName="FILE_ALT" text="" />
+               </graphic></Button>
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onOpenMenuItemClicked" text="Open">
+               <graphic>
+                  <FontAwesomeIconView glyphName="FOLDER_OPEN_ALT" />
+               </graphic></Button>
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onSaveMenuItemClicked" text="Save">
+               <graphic>
+                  <FontAwesomeIconView glyphName="SAVE" />
+               </graphic></Button>
+            <Separator orientation="VERTICAL" />
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Play">
+               <graphic>
+                  <FontAwesomeIconView glyphName="PLAY" />
+               </graphic></Button>
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Play in Browser">
+               <graphic>
+                  <FontAwesomeIconView glyphName="HTML5" />
+               </graphic>
+            </Button>
+            <Separator layoutX="172.0" layoutY="10.0" orientation="VERTICAL" />
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onCreateTextureClicked" text="Create Texture">
+               <graphic>
+                  <FontAwesomeIconView glyphName="FILE_IMAGE_ALT" />
+               </graphic></Button>
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onCreateSpriteClicked" text="Create Sprite">
+               <graphic>
+                  <FontAwesomeIconView glyphName="FILM" />
+               </graphic></Button>
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onCreateBackgroundClicked" text="Create Background">
+               <graphic>
+                  <FontAwesomeIconView glyphName="IMAGE" />
+               </graphic></Button>
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onCreateSoundClicked" text="Create Sound">
+               <graphic>
+                  <FontAwesomeIconView glyphName="FILE_SOUND_ALT" />
+               </graphic></Button>
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onCreateEntityClicked" text="Create Entity">
+               <graphic>
+                  <FontAwesomeIconView glyphName="ODNOKLASSNIKI" />
+               </graphic></Button>
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onCreateSceneClicked" text="Create Scene">
+               <graphic>
+                  <FontAwesomeIconView glyphName="SQUARE_ALT" />
+               </graphic></Button>
+        </items>
+      </ToolBar>
     <SplitPane dividerPositions="0.26686656671664166" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
             <TreeView fx:id="resourceTree" showRoot="false" SplitPane.resizableWithParent="false" />

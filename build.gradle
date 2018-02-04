@@ -59,6 +59,8 @@ project(":NaaGameEditor") {
     dependencies {
         compile project(":NaaGameCore")
         compile "com.goharsha:easyjson:${easyJsonVersion}:@jar"
+        compile 'de.jensd:fontawesomefx-commons:8.15'
+        compile 'de.jensd:fontawesomefx-fontawesome:4.7.0-5'
     }
 }
 
