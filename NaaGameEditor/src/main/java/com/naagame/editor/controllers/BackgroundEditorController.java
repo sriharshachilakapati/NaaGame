@@ -34,9 +34,14 @@ public class BackgroundEditorController extends Controller {
             previewPane.setContent(imageViewer);
 
             textureSelector.getSelectionModel().selectedItemProperty().addListener((v, o, n) -> {
-                texture = NgmProject.find(NgmProject.textures, n);
-                imageViewer.setImage(ImageCache.getImage(texture.getSource()));
-                changed = true;
+                if (n == null) {
+                    texture = null;
+                    imageViewer.setImage(null);
+                } else {
+                    texture = NgmProject.find(NgmProject.textures, n);
+                    imageViewer.setImage(ImageCache.getImage(texture.getSource()));
+                    changed = true;
+                }
             });
 
             hSpeedSlider.valueProperty().addListener((v, o, n) -> {
@@ -92,13 +97,20 @@ public class BackgroundEditorController extends Controller {
 
     @Override
     public void resourcesChanged() {
-        if (texture != null) {
-            imageViewer.setImage(ImageCache.getImage(texture.getSource()));
-        }
-
         textureSelector.getItems().clear();
         textureSelector.getItems().addAll(NgmProject.textures.stream()
                 .map(NgmTexture::getName)
                 .collect(Collectors.toList()));
+
+        if (texture != null) {
+            if (!textureSelector.getItems().contains(texture.getName())) {
+                texture = null;
+                imageViewer.setImage(null);
+                return;
+            }
+
+            imageViewer.setImage(ImageCache.getImage(texture.getSource()));
+            textureSelector.getSelectionModel().select(texture.getName());
+        }
     }
 }
