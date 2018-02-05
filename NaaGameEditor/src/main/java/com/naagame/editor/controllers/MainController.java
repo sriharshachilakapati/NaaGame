@@ -111,6 +111,8 @@ public class MainController extends Controller implements Initializable {
 
                 resources.remove(resource);
                 item.getParent().getChildren().remove(item);
+
+                NgmProject.pruneDeadReferences();
             }
 
             resourcesChanged();
