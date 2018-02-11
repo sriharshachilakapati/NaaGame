@@ -6,13 +6,16 @@ import com.naagame.core.resources.NgmTexture;
 import com.naagame.editor.util.ImageCache;
 import com.naagame.editor.util.ImageViewer;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TitledPane;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class BackgroundEditorController extends Controller {
+public class BackgroundEditorController extends Controller implements Initializable {
     @FXML private Slider hSpeedSlider;
     @FXML private Slider vSpeedSlider;
     @FXML private TitledPane previewPane;
@@ -29,32 +32,6 @@ public class BackgroundEditorController extends Controller {
 
     @Override
     public void init(String name) {
-        if (!changed) {
-            imageViewer = new ImageViewer();
-            previewPane.setContent(imageViewer);
-
-            textureSelector.getSelectionModel().selectedItemProperty().addListener((v, o, n) -> {
-                if (n == null) {
-                    texture = null;
-                    imageViewer.setImage(null);
-                } else {
-                    texture = NgmProject.find(NgmProject.textures, n);
-                    imageViewer.setImage(ImageCache.getImage(texture.getSource()));
-                    changed = true;
-                }
-            });
-
-            hSpeedSlider.valueProperty().addListener((v, o, n) -> {
-                hSpeed = n.floatValue();
-                changed = true;
-            });
-
-            vSpeedSlider.valueProperty().addListener((v, o, n) -> {
-                vSpeed = n.floatValue();
-                changed = true;
-            });
-        }
-
         background = NgmProject.find(NgmProject.backgrounds, name);
         hSpeed = background.getHSpeed();
         vSpeed = background.getVSpeed();
@@ -112,5 +89,32 @@ public class BackgroundEditorController extends Controller {
             imageViewer.setImage(ImageCache.getImage(texture.getSource()));
             textureSelector.getSelectionModel().select(texture.getName());
         }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        imageViewer = new ImageViewer();
+        previewPane.setContent(imageViewer);
+
+        textureSelector.getSelectionModel().selectedItemProperty().addListener((v, o, n) -> {
+            if (n == null) {
+                texture = null;
+                imageViewer.setImage(null);
+            } else {
+                texture = NgmProject.find(NgmProject.textures, n);
+                imageViewer.setImage(ImageCache.getImage(texture.getSource()));
+                changed = true;
+            }
+        });
+
+        hSpeedSlider.valueProperty().addListener((v, o, n) -> {
+            hSpeed = n.floatValue();
+            changed = true;
+        });
+
+        vSpeedSlider.valueProperty().addListener((v, o, n) -> {
+            vSpeed = n.floatValue();
+            changed = true;
+        });
     }
 }

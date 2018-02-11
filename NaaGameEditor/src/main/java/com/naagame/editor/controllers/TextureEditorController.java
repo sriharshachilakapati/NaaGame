@@ -8,15 +8,18 @@ import com.naagame.editor.util.ImageViewer;
 import com.naagame.editor.util.RetentionFileChooser;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.util.ResourceBundle;
 
 import static com.naagame.editor.util.RetentionFileChooser.EXTENSION_FILTER_IMAGES;
 
-public class TextureEditorController extends Controller {
+public class TextureEditorController extends Controller implements Initializable {
     @FXML private TitledPane previewPane;
 
     private NgmTexture texture;
@@ -27,12 +30,6 @@ public class TextureEditorController extends Controller {
 
     @Override
     public void init(String resourceName) {
-        if (!changed) {
-            imageViewer = new ImageViewer();
-            previewPane.setContent(imageViewer);
-            changed = false;
-        }
-
         texture = NgmProject.find(NgmProject.textures, resourceName);
         source = texture.getSource();
 
@@ -119,5 +116,12 @@ public class TextureEditorController extends Controller {
     @Override
     public void discardChanges() {
         init(texture.getName());
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        imageViewer = new ImageViewer();
+        previewPane.setContent(imageViewer);
+        changed = false;
     }
 }
