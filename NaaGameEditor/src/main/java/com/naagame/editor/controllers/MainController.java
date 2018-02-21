@@ -5,6 +5,7 @@ import com.naagame.core.io.ProjectReader;
 import com.naagame.core.resources.*;
 import com.naagame.editor.Main;
 import com.naagame.editor.io.ProjectWriter;
+import com.naagame.editor.util.ImageCache;
 import com.naagame.editor.util.RetentionFileChooser;
 import com.shc.easyjson.ParseException;
 import javafx.application.Platform;
@@ -405,6 +406,8 @@ public class MainController extends Controller implements Initializable {
             String json = new String(Files.readAllBytes(path));
             ProjectReader.loadFromJSON(json);
             refreshTreeUI();
+
+            ImageCache.setProjectDir(path.getParent());
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
