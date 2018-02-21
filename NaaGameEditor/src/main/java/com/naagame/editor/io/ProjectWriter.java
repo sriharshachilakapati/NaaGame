@@ -10,6 +10,7 @@ import com.shc.easyjson.JSONValue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -139,5 +140,21 @@ public final class ProjectWriter {
 
     public static void writeToFile(Path path) throws IOException {
         Files.write(path, jsonifyProject().getBytes());
+
+        if (!Files.exists(path.getParent().resolve("resources"))) {
+            Files.createDirectory(path.getParent().resolve("resources"));
+        }
+
+        for (NgmTexture texture : NgmProject.textures) {
+            if (!texture.getSource().startsWith("colour:") && !"".equals(texture.getSource().trim())) {
+                System.out.println(ProjectResourceWriter.writeFile(Paths.get(texture.getSource()), path.getParent()));
+            }
+        }
+
+        for (NgmSound sound : NgmProject.sounds) {
+            if (!"".equals(sound.getSource().trim())) {
+                System.out.println(ProjectResourceWriter.writeFile(Paths.get(sound.getSource()), path.getParent()));
+            }
+        }
     }
 }
