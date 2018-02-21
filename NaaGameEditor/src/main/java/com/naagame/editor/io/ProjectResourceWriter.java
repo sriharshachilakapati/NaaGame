@@ -20,7 +20,7 @@ public class ProjectResourceWriter {
             Files.copy(file, newPath);
         }
 
-        return newPath.relativize(parentDir).toString();
+        return newPath.toString();
     }
 
     private static String getExtension(Path file) {
