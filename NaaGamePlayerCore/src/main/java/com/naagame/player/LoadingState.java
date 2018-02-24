@@ -106,7 +106,11 @@ public class LoadingState extends ResourceLoadingState {
             }
 
             NaaGamePlayer.logger.info("Done loading all the resources");
-            NaaGamePlayer.instance.setGameState(new SceneState());
+
+            NaaGamePlayer.instance.setGameState(new SceneState(NgmProject.scenes.stream()
+                    .findFirst()
+                    .orElseThrow(RuntimeException::new)
+                    .getName()));
         });
     }
 }

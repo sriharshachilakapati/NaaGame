@@ -15,7 +15,7 @@
   ],
   "backgrounds": [],
   "sounds": [
-    { "name": "Snd1", "file": "" }
+    { "name": "Snd1", "source": "" }
   ],
   "entities": [
     {

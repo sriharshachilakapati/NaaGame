@@ -15,11 +15,7 @@ public class SceneState extends GameState {
     private Scene scene;
     private OrthoCam camera;
 
-    SceneState() {
-        this("Main");
-    }
-
-    private SceneState(String scene) {
+    SceneState(String scene) {
         ngmScene = NgmProject.find(NgmProject.scenes, scene);
 
         if (ngmScene == null) {
