@@ -1,6 +1,5 @@
 package com.naagame.player;
 
-import com.naagame.core.NgmProject;
 import com.naagame.core.io.ProjectReader;
 import com.shc.easyjson.ParseException;
 import com.shc.silenceengine.core.Game;

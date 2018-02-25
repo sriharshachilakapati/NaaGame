@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="10.0" minWidth="10.0" prefHeight="448.0" prefWidth="575.0" stylesheets="@imageViewer.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="10.0" minWidth="10.0" prefHeight="448.0" prefWidth="575.0" stylesheets="@checkeredBackground.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <HBox alignment="CENTER" prefHeight="57.0" prefWidth="458.0" BorderPane.alignment="CENTER">
          <children>
