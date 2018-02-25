@@ -37,10 +37,13 @@ public class SpriteEditorController extends Controller implements Initializable 
 
     private ObservableList<String> textures;
     private ObservableList<NgmSprite.Frame> frames;
+
     private NgmSprite currentSprite;
     private ImageViewer imageViewer;
 
     private Timeline timeline;
+
+    private boolean changed;
 
     @Override
     public void init(String name) {
@@ -51,6 +54,8 @@ public class SpriteEditorController extends Controller implements Initializable 
 
         resourcesChanged();
         updateAnimation();
+
+        changed = false;
     }
 
     @FXML
@@ -60,6 +65,8 @@ public class SpriteEditorController extends Controller implements Initializable 
         }
 
         frames.add(new NgmSprite.Frame(NgmProject.textures.get(0), 250));
+        changed = true;
+
         Platform.runLater(this::updateAnimation);
     }
 
@@ -72,6 +79,8 @@ public class SpriteEditorController extends Controller implements Initializable 
         }
 
         frames.remove(selected);
+        changed = true;
+
         Platform.runLater(this::updateAnimation);
     }
 
@@ -146,6 +155,27 @@ public class SpriteEditorController extends Controller implements Initializable 
         textures.addAll(NgmProject.textures
                 .stream().map(IResource::getName).collect(Collectors.toList()));
 
+        frames.removeIf(frame -> NgmProject.find(NgmProject.textures, frame.getTexture().getName()) == null);
+
         Platform.runLater(this::updateAnimation);
+    }
+
+    @Override
+    protected boolean hasUnsavedEdits() {
+        return changed;
+    }
+
+    @FXML
+    @Override
+    protected void commitChanges() {
+        currentSprite.getFrames().clear();
+        currentSprite.getFrames().addAll(frames);
+        changed = false;
+    }
+
+    @FXML
+    @Override
+    protected void discardChanges() {
+        init(currentSprite.getName());
     }
 }
