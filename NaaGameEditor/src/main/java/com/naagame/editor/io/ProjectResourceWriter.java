@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 public class ProjectResourceWriter {
     public static String writeFile(Path file, Path parentDir) throws IOException {
         if (file.toAbsolutePath().startsWith(parentDir.toAbsolutePath())) {
-            return file.relativize(parentDir).toString();
+            return parentDir.relativize(file).toString();
         }
 
         String hash = hash(file.toAbsolutePath());
@@ -20,7 +20,7 @@ public class ProjectResourceWriter {
             Files.copy(file, newPath);
         }
 
-        return newPath.toString();
+        return parentDir.relativize(newPath).toString();
     }
 
     private static String getExtension(Path file) {

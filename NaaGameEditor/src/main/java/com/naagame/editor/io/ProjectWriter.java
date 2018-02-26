@@ -2,6 +2,7 @@ package com.naagame.editor.io;
 
 import com.naagame.core.NgmProject;
 import com.naagame.core.resources.*;
+import com.naagame.editor.util.PathResolver;
 import com.shc.easyjson.JSON;
 import com.shc.easyjson.JSONArray;
 import com.shc.easyjson.JSONObject;
@@ -10,14 +11,12 @@ import com.shc.easyjson.JSONValue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class ProjectWriter {
-    private static Path projectDir;
 
     private ProjectWriter() {
     }
@@ -29,16 +28,8 @@ public final class ProjectWriter {
     private static JSONValue textureToJSON(NgmTexture texture) {
         JSONObject json = new JSONObject();
 
-        String source;
-
-        if (!texture.getSource().startsWith("colour:") && !"".equals(texture.getSource().trim())) {
-            source = projectDir.relativize(Paths.get(texture.getSource())).toString();
-        } else {
-            source = texture.getSource();
-        }
-
         json.put("name", new JSONValue(texture.getName()));
-        json.put("source", new JSONValue(source));
+        json.put("source", new JSONValue(texture.getSource()));
 
         return new JSONValue(json);
     }
@@ -75,16 +66,8 @@ public final class ProjectWriter {
     private static JSONValue soundToJSON(NgmSound sound) {
         JSONObject json = new JSONObject();
 
-        String source;
-
-        if (!"".equals(sound.getSource().trim())) {
-            source = projectDir.relativize(Paths.get(sound.getSource())).toString();
-        } else {
-            source = sound.getSource();
-        }
-
         json.put("name", new JSONValue(sound.getName()));
-        json.put("source", new JSONValue(source));
+        json.put("source", new JSONValue(sound.getSource()));
 
         return new JSONValue(json);
     }
@@ -157,7 +140,7 @@ public final class ProjectWriter {
     }
 
     public static void writeToFile(Path path) throws IOException {
-        projectDir = path.getParent();
+        Path projectDir = path.getParent();
 
         if (!Files.exists(projectDir.resolve("resources"))) {
             Files.createDirectory(projectDir.resolve("resources"));
@@ -165,14 +148,14 @@ public final class ProjectWriter {
 
         for (NgmTexture texture : NgmProject.textures) {
             if (!texture.getSource().startsWith("colour:") && !"".equals(texture.getSource().trim())) {
-                String newFile = ProjectResourceWriter.writeFile(Paths.get(texture.getSource()), projectDir);
+                String newFile = ProjectResourceWriter.writeFile(PathResolver.resolve(texture.getSource()), projectDir);
                 texture.setSource(newFile);
             }
         }
 
         for (NgmSound sound : NgmProject.sounds) {
             if (!"".equals(sound.getSource().trim())) {
-                String newFile = ProjectResourceWriter.writeFile(Paths.get(sound.getSource()), projectDir);
+                String newFile = ProjectResourceWriter.writeFile(PathResolver.resolve(sound.getSource()), projectDir);
                 sound.setSource(newFile);
             }
         }

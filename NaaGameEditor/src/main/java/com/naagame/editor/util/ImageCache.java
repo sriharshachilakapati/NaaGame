@@ -8,18 +8,11 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ImageCache {
     private static Map<String, Image> imageCache = new HashMap<>();
-
-    private static Path projectDir;
-
-    public static void setProjectDir(Path projectDir) {
-        ImageCache.projectDir = projectDir;
-    }
 
     public static Image updateCache(String source) {
         if (!"".equals(source)) {
@@ -49,14 +42,7 @@ public class ImageCache {
                 return image;
             } else {
                 try {
-                    Path path;
-
-                    if (source.startsWith("resources")) {
-                        path = projectDir.resolve(source);
-                    } else {
-                        path = Paths.get(source);
-                    }
-
+                    Path path = PathResolver.resolve(source);
                     Image image = new Image(Files.newInputStream(path));
                     imageCache.put(source, image);
 
