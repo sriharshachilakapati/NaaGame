@@ -68,6 +68,8 @@ public final class ProjectWriter {
 
         json.put("name", new JSONValue(sound.getName()));
         json.put("source", new JSONValue(sound.getSource()));
+        json.put("playOnStart", new JSONValue(sound.isPlayOnStart()));
+        json.put("loop", new JSONValue(sound.isLoop()));
 
         return new JSONValue(json);
     }

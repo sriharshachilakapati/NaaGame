@@ -53,7 +53,11 @@ public final class ProjectReader {
 
     private static NgmSound jsonToSound(JSONObject json) {
         NgmSound sound = new NgmSound(json.get("name").getValue());
+
         sound.setSource(json.get("source").getValue());
+        sound.setLoop(json.get("loop").getValue());
+        sound.setPlayOnStart(json.get("playOnStart").getValue());
+
         return sound;
     }
 
