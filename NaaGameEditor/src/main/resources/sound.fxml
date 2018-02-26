@@ -20,9 +20,9 @@
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-            <Button mnemonicParsing="false" text="Save" />
+            <Button mnemonicParsing="false" onAction="#commitChanges" text="Save" />
             <Pane HBox.hgrow="ALWAYS" />
-          <Button mnemonicParsing="false" text="Cancel" />
+          <Button mnemonicParsing="false" onAction="#discardChanges" text="Cancel" />
         </items>
       </ToolBar>
    </top>
@@ -30,10 +30,10 @@
       <VBox prefHeight="340.0" prefWidth="133.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Sound Source" />
-            <Button mnemonicParsing="false" text="Load From File" />
+            <Button mnemonicParsing="false" onAction="#onLoadFromFileClicked" text="Load From File" />
             <Label text="Properties" />
-            <CheckBox mnemonicParsing="false" text="Loop Sound" />
-            <CheckBox mnemonicParsing="false" text="Play on Start" />
+            <CheckBox fx:id="loopCheckBox" mnemonicParsing="false" text="Loop Sound" />
+            <CheckBox fx:id="playOnStartCheckBox" mnemonicParsing="false" text="Play on Start" />
          </children>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
@@ -61,11 +61,11 @@
                   <Label text="Title" />
                   <Label text="Artist" GridPane.rowIndex="1" />
                   <Label text="Album" GridPane.rowIndex="2" />
-                  <Label disable="true" text="Not Available" GridPane.columnIndex="1" />
-                  <Label disable="true" text="Not Available" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label disable="true" text="Not Available" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="infoTitle" disable="true" text="Not Available" GridPane.columnIndex="1" />
+                  <Label fx:id="infoArtist" disable="true" text="Not Available" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="infoAlbum" disable="true" text="Not Available" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label text="Duration" GridPane.rowIndex="3" />
-                  <Label disable="true" text="Not Available" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label fx:id="infoDuration" disable="true" text="Not Available" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </content>
@@ -93,13 +93,13 @@
                      <children>
                         <HBox alignment="CENTER" VBox.vgrow="NEVER">
                            <children>
-                              <Slider maxWidth="-Infinity" prefHeight="16.0" prefWidth="239.0" HBox.hgrow="ALWAYS" />
+                              <Slider fx:id="progressSlider" maxWidth="-Infinity" prefHeight="16.0" prefWidth="239.0" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox alignment="TOP_CENTER" spacing="5.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Play" />
-                              <Button mnemonicParsing="false" text="Stop" />
+                              <Button fx:id="playButton" mnemonicParsing="false" onAction="#onPlayClicked" text="Play" />
+                              <Button fx:id="stopButton" mnemonicParsing="false" onAction="#onStopClicked" text="Stop" />
                            </children>
                         </HBox>
                      </children>

@@ -3,7 +3,6 @@ package com.naagame.editor.util;
 import com.naagame.editor.Main;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -18,7 +17,7 @@ public final class RetentionFileChooser {
     public static final FileChooser.ExtensionFilter EXTENSION_FILTER_IMAGES =
             new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.bmp", "*.gif");
     public static final FileChooser.ExtensionFilter EXTENSION_FILTER_SOUNDS =
-            new FileChooser.ExtensionFilter("Sound Files", "*.wav", "*.ogg", "*.oga");
+            new FileChooser.ExtensionFilter("Sound Files", "*.wav");
 
     private RetentionFileChooser() {
     }
