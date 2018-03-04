@@ -1,5 +1,6 @@
 package com.naagame.player;
 
+import com.naagame.core.action.control.LibControl;
 import com.naagame.core.action.debug.LibDebug;
 import com.naagame.core.action.movement.LibMovement;
 import com.naagame.core.NgmProject;
@@ -73,13 +74,15 @@ class EntityInstance extends Entity {
             inputEvents = new ArrayList<>();
             actionExecutors = new HashMap<>();
 
-            actionExecutors.put(LibDebug.ACTION_LOG.getCode(), LibDebugImpl::log);
-            actionExecutors.put(LibDebug.ACTION_LOG_PROPS.getCode(), LibDebugImpl::logProps);
+            actionExecutors.put(LibDebug.LOG.getCode(), LibDebugImpl::log);
+            actionExecutors.put(LibDebug.LOG_PROPS.getCode(), LibDebugImpl::logProps);
 
-            actionExecutors.put(LibMovement.ACTION_SET_SPEED.getCode(), LibMovementImpl::setSpeed);
-            actionExecutors.put(LibMovement.ACTION_SET_HSPEED.getCode(), LibMovementImpl::setHSpeed);
-            actionExecutors.put(LibMovement.ACTION_SET_VSPEED.getCode(), LibMovementImpl::setVSpeed);
-            actionExecutors.put(LibMovement.ACTION_SET_POSITION.getCode(), LibMovementImpl::setPosition);
+            actionExecutors.put(LibMovement.SET_SPEED.getCode(), LibMovementImpl::setSpeed);
+            actionExecutors.put(LibMovement.SET_HSPEED.getCode(), LibMovementImpl::setHSpeed);
+            actionExecutors.put(LibMovement.SET_VSPEED.getCode(), LibMovementImpl::setVSpeed);
+            actionExecutors.put(LibMovement.SET_POSITION.getCode(), LibMovementImpl::setPosition);
+
+            actionExecutors.put(LibControl.CREATE_INSTANCE.getCode(), LibControlImpl::createInstance);
 
             createEvent = ngmEntity.getEvents().stream()
                     .filter(event -> event.getType() == NgmEntity.Event.Type.CREATE)

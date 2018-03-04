@@ -11,11 +11,15 @@ import com.shc.silenceengine.graphics.opengl.GLContext;
 import com.shc.silenceengine.scene.Scene;
 
 public class SceneState extends GameState {
+    static SceneState instance;
+
     private final NgmScene ngmScene;
-    private Scene scene;
+
+    Scene scene;
     private OrthoCam camera;
 
     SceneState(String scene) {
+        instance = this;
         ngmScene = NgmProject.find(NgmProject.scenes, scene);
 
         if (ngmScene == null) {

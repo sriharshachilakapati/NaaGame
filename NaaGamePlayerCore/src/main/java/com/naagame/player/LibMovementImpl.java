@@ -10,7 +10,7 @@ class LibMovementImpl {
     private static MovementSetPosition movementSetPosition = new MovementSetPosition();
 
     static void setSpeed(NgmEntity.Event.Action action, EntityInstance self) {
-        LibMovement.ACTION_SET_SPEED.decode(action.getArgs(), movementSetSpeed);
+        LibMovement.SET_SPEED.decode(action.getArgs(), movementSetSpeed);
 
         EntityInstance instance = null;
 
@@ -31,7 +31,7 @@ class LibMovementImpl {
     }
 
     static void setHSpeed(NgmEntity.Event.Action action, EntityInstance self) {
-        LibMovement.ACTION_SET_HSPEED.decode(action.getArgs(), movementSetHSpeed);
+        LibMovement.SET_HSPEED.decode(action.getArgs(), movementSetHSpeed);
 
         EntityInstance instance = null;
 
@@ -48,7 +48,7 @@ class LibMovementImpl {
     }
 
     static void setVSpeed(NgmEntity.Event.Action action, EntityInstance self) {
-        LibMovement.ACTION_SET_VSPEED.decode(action.getArgs(), movementSetVSpeed);
+        LibMovement.SET_VSPEED.decode(action.getArgs(), movementSetVSpeed);
 
         EntityInstance instance = null;
 
@@ -65,7 +65,7 @@ class LibMovementImpl {
     }
 
     static void setPosition(NgmEntity.Event.Action action, EntityInstance self) {
-        LibMovement.ACTION_SET_POSITION.decode(action.getArgs(), movementSetPosition);
+        LibMovement.SET_POSITION.decode(action.getArgs(), movementSetPosition);
 
         EntityInstance instance = null;
 

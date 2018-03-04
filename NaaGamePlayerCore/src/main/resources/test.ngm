@@ -15,7 +15,7 @@
   ],
   "backgrounds": [],
   "sounds": [
-    { "name": "Snd1", "source": "" }
+    { "name": "Snd1", "source": "", "loop": false, "playOnStart": false }
   ],
   "entities": [
     {
@@ -70,6 +70,13 @@
           "args": "1",
           "actions": [
             { "code": "movement_set_position", "args": "self;500;500;" }
+          ]
+        },
+        {
+          "type": "key_tap",
+          "args": "40",
+          "actions": [
+            { "code": "control_create_instance", "args": "Bush;30;30" }
           ]
         }
       ]

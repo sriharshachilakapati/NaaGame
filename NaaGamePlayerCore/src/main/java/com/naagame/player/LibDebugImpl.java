@@ -13,12 +13,12 @@ class LibDebugImpl {
     private static DebugLogProps debugLogProps = new DebugLogProps();
 
     static void log(NgmEntity.Event.Action action, EntityInstance self) {
-        LibDebug.ACTION_LOG.decode(action.getArgs(), debugLog);
+        LibDebug.LOG.decode(action.getArgs(), debugLog);
         NaaGamePlayer.logger.info(debugLog.getMessage());
     }
 
     static void logProps(NgmEntity.Event.Action action, EntityInstance self) {
-        LibDebug.ACTION_LOG_PROPS.decode(action.getArgs(), debugLogProps);
+        LibDebug.LOG_PROPS.decode(action.getArgs(), debugLogProps);
 
         EntityInstance instance = null;
 
