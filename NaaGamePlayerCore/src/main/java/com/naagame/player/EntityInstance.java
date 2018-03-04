@@ -68,10 +68,9 @@ class EntityInstance extends Entity {
 
         private List<NgmEntity.Event> inputEvents;
 
-        private Map<String, BiCallback<NgmEntity.Event.Action, EntityInstance>> actionExecutors;
+        private static Map<String, BiCallback<NgmEntity.Event.Action, EntityInstance>> actionExecutors;
 
-        private Behaviour(NgmEntity ngmEntity) {
-            inputEvents = new ArrayList<>();
+        static {
             actionExecutors = new HashMap<>();
 
             actionExecutors.put(LibDebug.LOG.getCode(), LibDebugImpl::log);
@@ -83,6 +82,11 @@ class EntityInstance extends Entity {
             actionExecutors.put(LibMovement.SET_POSITION.getCode(), LibMovementImpl::setPosition);
 
             actionExecutors.put(LibControl.CREATE_INSTANCE.getCode(), LibControlImpl::createInstance);
+            actionExecutors.put(LibControl.DESTROY_INSTANCE.getCode(), LibControlImpl::destroyInstance);
+        }
+
+        private Behaviour(NgmEntity ngmEntity) {
+            inputEvents = new ArrayList<>();
 
             createEvent = ngmEntity.getEvents().stream()
                     .filter(event -> event.getType() == NgmEntity.Event.Type.CREATE)
