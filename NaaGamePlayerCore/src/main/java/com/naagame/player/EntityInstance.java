@@ -12,8 +12,10 @@ import com.shc.silenceengine.graphics.Sprite;
 import com.shc.silenceengine.input.Keyboard;
 import com.shc.silenceengine.input.Mouse;
 import com.shc.silenceengine.math.Vector2;
+import com.shc.silenceengine.math.geom2d.Rectangle;
 import com.shc.silenceengine.scene.Component;
 import com.shc.silenceengine.scene.Entity;
+import com.shc.silenceengine.scene.components.CollisionComponent2D;
 import com.shc.silenceengine.scene.components.SpriteComponent;
 import com.shc.silenceengine.utils.functional.BiCallback;
 
@@ -22,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 class EntityInstance extends Entity {
 
@@ -30,7 +33,11 @@ class EntityInstance extends Entity {
     NgmSprite ngmSprite;
     Vector2 speed;
 
+    private String name;
+
     EntityInstance(float posX, float posY, String name) {
+        this.name = name;
+
         transformComponent.setPosition(posX, posY);
         speed = new Vector2();
 
@@ -44,6 +51,8 @@ class EntityInstance extends Entity {
 
         ngmSprite = ngmEntity.getSprite();
 
+        Behaviour behaviour = new Behaviour(ngmEntity);
+
         if (ngmSprite != null) {
             Animation animation = Resources.animations.get(ngmSprite.getName());
 
@@ -53,9 +62,26 @@ class EntityInstance extends Entity {
 
             SpriteComponent spriteComponent = new SpriteComponent(sprite);
             addComponent(spriteComponent);
+
+            float boundsWidth = 0;
+            float boundsHeight = 0;
+
+            for (int i = 0; i < animation.size(); i++) {
+                boundsWidth += animation.getFrameTexture(i).getWidth();
+                boundsHeight += animation.getFrameTexture(i).getHeight();
+            }
+
+            boundsWidth /= animation.size();
+            boundsHeight /= animation.size();
+
+            Rectangle bounds = new Rectangle(boundsWidth, boundsHeight);
+
+            addComponent(new CollisionComponent2D(Resources.collisionTags.get(name),
+                    bounds.createPolygon(),
+                    behaviour::onCollision));
         }
 
-        addComponent(new Behaviour(ngmEntity));
+        addComponent(behaviour);
     }
 
     private static class Behaviour extends Component {
@@ -67,6 +93,7 @@ class EntityInstance extends Entity {
         private NgmEntity.Event destroyEvent;
 
         private List<NgmEntity.Event> inputEvents;
+        private List<NgmEntity.Event> collisionEvents;
 
         private static Map<String, BiCallback<NgmEntity.Event.Action, EntityInstance>> actionExecutors;
 
@@ -99,6 +126,10 @@ class EntityInstance extends Entity {
             destroyEvent = ngmEntity.getEvents().stream()
                     .filter(event -> event.getType() == NgmEntity.Event.Type.DESTROY)
                     .findFirst().orElse(null);
+
+            collisionEvents = ngmEntity.getEvents().stream()
+                    .filter(event -> event.getType() == NgmEntity.Event.Type.COLLISION)
+                    .collect(Collectors.toList());
 
             ngmEntity.getEvents().stream().filter(this::isInputEvent).forEach(inputEvents::add);
         }
@@ -176,6 +207,15 @@ class EntityInstance extends Entity {
 
         private void unknownAction(NgmEntity.Event.Action action, EntityInstance self) {
             NaaGamePlayer.logger.warn("Unknown action code " + action.getCode());
+        }
+
+        private void onCollision(CollisionComponent2D otherComponent) {
+            self.other = (EntityInstance) otherComponent.getEntity();
+
+            collisionEvents.stream()
+                    .filter(event -> event.getArgs().equals(self.other.name))
+                    .findFirst()
+                    .ifPresent(this::interpret);
         }
     }
 }

@@ -11,6 +11,13 @@
         { "texture": "Tex1", "duration": 250 },
         { "texture": "Tex2", "duration": 250 }
       ]
+    },
+    {
+      "name": "Spr2",
+      "frames": [
+        { "texture": "Tex1", "duration": 100 },
+        { "texture": "Tex2", "duration": 100 }
+      ]
     }
   ],
   "backgrounds": [],
@@ -26,57 +33,108 @@
           "type": "create",
           "args": "",
           "actions": [
-            { "code": "debug_log",       "args": "In create action;" },
-            { "code": "debug_log_props", "args": "self;"             }
+            {
+              "code": "debug_log",
+              "args": "In create action;"
+            },
+            {
+              "code": "debug_log_props",
+              "args": "self;"
+            }
           ]
         },
         {
           "type": "update",
           "args": "",
           "actions": [
-            { "code": "movement_set_speed", "args": "self;0;0;false;" }
+            {
+              "code": "movement_set_speed",
+              "args": "self;0;0;false;"
+            }
           ]
         },
         {
           "type": "key_down",
           "args": "75",
           "actions": [
-            { "code": "movement_set_hspeed", "args": "self;-4;false;" }
+            {
+              "code": "movement_set_hspeed",
+              "args": "self;-4;false;"
+            }
           ]
         },
         {
           "type": "key_down",
           "args": "76",
           "actions": [
-            { "code": "movement_set_hspeed", "args": "self;4;false;" }
+            {
+              "code": "movement_set_hspeed",
+              "args": "self;4;false;"
+            }
           ]
         },
         {
           "type": "key_down",
           "args": "73",
           "actions": [
-            { "code": "movement_set_vspeed", "args": "self;-4;false;" }
+            {
+              "code": "movement_set_vspeed",
+              "args": "self;-4;false;"
+            }
           ]
         },
         {
           "type": "key_down",
           "args": "74",
           "actions": [
-            { "code": "movement_set_vspeed", "args": "self;4;false;" }
+            {
+              "code": "movement_set_vspeed",
+              "args": "self;4;false;"
+            }
           ]
         },
         {
           "type": "mouse_down",
           "args": "1",
           "actions": [
-            { "code": "movement_set_position", "args": "self;500;500;" }
+            {
+              "code": "movement_set_position",
+              "args": "self;500;500;"
+            }
           ]
         },
         {
           "type": "key_tap",
           "args": "40",
           "actions": [
-            { "code": "control_create_instance", "args": "Bush;30;30" }
+            {
+              "code": "control_create_instance",
+              "args": "Bush;30;30"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bush2",
+      "sprite": "Spr2",
+      "events": [
+        {
+          "type": "collision",
+          "args": "Bush",
+          "actions": [
+            {
+              "code": "debug_log",
+              "args": "In collision action;"
+            },
+            {
+              "code": "debug_log_props",
+              "args": "self;"
+            },
+            {
+              "code": "debug_log_props",
+              "args": "other;"
+            }
           ]
         }
       ]
@@ -88,7 +146,8 @@
       "backgrounds": [],
       "entities": [
         { "entity": "Bush", "posX": 100, "posY": 100 },
-        { "entity": "Bush", "posX": 200, "posY": 200 }
+        { "entity": "Bush", "posX": 200, "posY": 200 },
+        { "entity": "Bush2", "posX": 300, "posY": 300 }
       ]
     }
   ]
