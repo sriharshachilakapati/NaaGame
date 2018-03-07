@@ -3,3 +3,7 @@
             linear-gradient(from 0.5px 0.5px to 0.5px 16.5px, repeat, rgba(100, 100, 100, 0.3) 50%, rgba(150, 150, 150, 0.3) 50%),
             linear-gradient(from 0.5px 0.5px to 16.5px 0.5px, repeat, rgba(150, 150, 150, 0.3) 50%, rgba(100, 100, 100, 0.3) 50%);
 }
+
+.scroll-pane > .viewport {
+   -fx-background-color: transparent !important;
+}

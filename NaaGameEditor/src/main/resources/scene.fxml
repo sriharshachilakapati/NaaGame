@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
@@ -14,11 +15,14 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="455.0" prefWidth="696.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.controllers.SceneEditorController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="455.0" prefWidth="696.0" stylesheets="@checkeredBackground.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.naagame.editor.controllers.SceneEditorController">
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
@@ -30,13 +34,6 @@
          </items>
       </ToolBar>
    </top>
-   <center>
-      <ScrollPane BorderPane.alignment="TOP_LEFT">
-         <content>
-            <Canvas height="600.0" width="800.0" />
-         </content>
-      </ScrollPane>
-   </center>
    <left>
       <TabPane prefHeight="415.0" prefWidth="198.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
          <tabs>
@@ -52,9 +49,9 @@
                         <Label text="Grid Y" />
                         <Slider blockIncrement="2.0" majorTickUnit="16.0" max="64.0" minorTickCount="1" showTickMarks="true" value="16.0" />
                         <Label text="Width" />
-                        <Spinner editable="true" maxWidth="1.7976931348623157E308" />
+                        <Spinner fx:id="spinnerWidth" editable="true" maxWidth="1.7976931348623157E308" />
                         <Label text="Height" />
-                        <Spinner editable="true" maxWidth="1.7976931348623157E308" />
+                        <Spinner fx:id="spinnerHeight" editable="true" maxWidth="1.7976931348623157E308" />
                         <Label text="Entity Painter" />
                         <ChoiceBox maxWidth="1.7976931348623157E308" />
                      </children>
@@ -82,4 +79,24 @@
          </tabs>
       </TabPane>
    </left>
+   <center>
+      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <styleClass>
+            <String fx:value="scroll-pane" />
+            <String fx:value="background" />
+         </styleClass>
+         <content>
+            <GridPane style="-fx-background-color: black;">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Canvas fx:id="sceneCanvas" height="600.0" width="800.0" />
+               </children>
+            </GridPane>
+         </content></ScrollPane>
+   </center>
 </BorderPane>
