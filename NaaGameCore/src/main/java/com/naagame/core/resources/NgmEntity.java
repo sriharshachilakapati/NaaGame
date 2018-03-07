@@ -67,7 +67,6 @@ public class NgmEntity implements IResource {
             MOUSE_DOWN,
             MOUSE_UP,
             MOUSE_TAP,
-            TIMER,
             COLLISION,
             DESTROY
         }
