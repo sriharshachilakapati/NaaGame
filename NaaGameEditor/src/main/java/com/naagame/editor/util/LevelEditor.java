@@ -1,6 +1,7 @@
 package com.naagame.editor.util;
 
 import com.naagame.core.resources.*;
+import com.naagame.editor.controllers.SceneEditorController;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -8,12 +9,12 @@ import javafx.scene.paint.Color;
 
 public class LevelEditor {
     private final GraphicsContext ctx;
-    private final NgmScene scene;
     private final Canvas canvas;
+    private final SceneEditorController controller;
 
-    public LevelEditor(NgmScene scene, Canvas canvas) {
-        this.scene = scene;
+    public LevelEditor(SceneEditorController controller, Canvas canvas) {
         this.canvas = canvas;
+        this.controller = controller;
         this.ctx = canvas.getGraphicsContext2D();
     }
 
@@ -21,7 +22,7 @@ public class LevelEditor {
         ctx.setFill(Color.BLACK);
         ctx.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        for (NgmScene.Instance<NgmBackground> bgInstance : scene.getBackgrounds()) {
+        for (NgmScene.Instance<NgmBackground> bgInstance : controller.getBackgrounds()) {
             NgmBackground background = bgInstance.getObject();
             NgmTexture bgTexture = background.getTexture();
 
@@ -32,11 +33,12 @@ public class LevelEditor {
             Image textureImage = ImageCache.getImage(bgTexture.getSource());
 
             if (textureImage != null) {
-                ctx.drawImage(textureImage, 0, 0, canvas.getWidth(), canvas.getHeight());
+                ctx.drawImage(textureImage, bgInstance.getPosX(), bgInstance.getPosY(),
+                        canvas.getWidth(), canvas.getHeight());
             }
         }
 
-        for (NgmScene.Instance<NgmEntity> entityInstance : scene.getEntities()) {
+        for (NgmScene.Instance<NgmEntity> entityInstance : controller.getEntities()) {
             NgmEntity entity = entityInstance.getObject();
             NgmSprite sprite = entity.getSprite();
 
