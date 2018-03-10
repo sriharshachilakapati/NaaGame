@@ -47,7 +47,7 @@ public class ImageViewer extends BorderPane {
         double width = image.getWidth();
         double height = image.getHeight();
 
-        zoom = zoom / 200.0;
+        zoom = zoom / 100.0;
 
         width = Math.max(1, width * zoom);
         height = Math.max(1, height * zoom);
