@@ -50,7 +50,9 @@ public class SpriteEditorController extends Controller implements Initializable 
         currentSprite = NgmProject.find(NgmProject.sprites, name);
 
         frames.clear();
-        frames.addAll(currentSprite.getFrames());
+        frames.addAll(currentSprite.getFrames().stream()
+                .map(f -> new NgmSprite.Frame(f.getTexture(), f.getDuration()))
+                .collect(Collectors.toList()));
 
         resourcesChanged();
         updateAnimation();
@@ -125,6 +127,7 @@ public class SpriteEditorController extends Controller implements Initializable 
         textureColumn.setOnEditCommit(event -> {
             event.getRowValue()
                     .setTexture(NgmProject.find(NgmProject.textures, event.getNewValue()));
+            changed = true;
             Platform.runLater(this::updateAnimation);
         });
 
@@ -143,6 +146,7 @@ public class SpriteEditorController extends Controller implements Initializable 
 
         durationColumn.setOnEditCommit(event -> {
             event.getRowValue().setDuration(event.getNewValue());
+            changed = true;
             Platform.runLater(this::updateAnimation);
         });
 
@@ -169,7 +173,11 @@ public class SpriteEditorController extends Controller implements Initializable 
     @Override
     protected void commitChanges() {
         currentSprite.getFrames().clear();
-        currentSprite.getFrames().addAll(frames);
+
+        currentSprite.getFrames().addAll(frames.stream()
+                .map(f -> new NgmSprite.Frame(f.getTexture(), f.getDuration()))
+                .collect(Collectors.toList()));
+
         changed = false;
     }
 
