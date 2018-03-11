@@ -1,35 +1,16 @@
 {
-  "textures": [
-    { "name": "Tex1", "source": "imgs/tex1.png" },
-    { "name": "Tex2", "source": "imgs/tex2.png" },
-    { "name": "Tex3", "source": ""              }
-  ],
-  "sprites": [
-    {
-      "name": "Spr1",
-      "frames": [
-        { "texture": "Tex1", "duration": 250 },
-        { "texture": "Tex2", "duration": 250 }
-      ]
-    },
-    {
-      "name": "Spr2",
-      "frames": [
-        { "texture": "Tex1", "duration": 100 },
-        { "texture": "Tex2", "duration": 100 }
-      ]
-    }
-  ],
-  "backgrounds": [],
-  "sounds": [
-    { "name": "Snd1", "source": "", "loop": false, "playOnStart": false }
-  ],
-  "entities": [
-    {
-      "name": "Bush",
-      "sprite": "Spr1",
-      "events": [
-        {
+    "backgrounds": [
+            {
+                "hSpeed": 0,
+                "name": "Background1",
+                "texture": "Texture9",
+                "vSpeed": 0
+            }
+        ],
+    "entities": [
+            {
+                "events": [
+                        {
           "type": "create",
           "args": "",
           "actions": [
@@ -109,46 +90,110 @@
           "actions": [
             {
               "code": "control_create_instance",
-              "args": "Bush;30;30"
+              "args": "Entity;30;30"
             }
           ]
         }
-      ]
-    },
-    {
-      "name": "Bush2",
-      "sprite": "Spr2",
-      "events": [
-        {
-          "type": "collision",
-          "args": "Bush",
-          "actions": [
-            {
-              "code": "debug_log",
-              "args": "In collision action;"
-            },
-            {
-              "code": "debug_log_props",
-              "args": "self;"
-            },
-            {
-              "code": "debug_log_props",
-              "args": "other;"
+                    ],
+                "name": "Entity",
+                "sprite": "Sprite1"
             }
-          ]
-        }
-      ]
-    }
-  ],
-  "scenes": [
-    {
-      "name": "Main",
-      "backgrounds": [],
-      "entities": [
-        { "entity": "Bush", "posX": 100, "posY": 100 },
-        { "entity": "Bush", "posX": 200, "posY": 200 },
-        { "entity": "Bush2", "posX": 300, "posY": 300 }
-      ]
-    }
-  ]
+        ],
+    "scenes": [
+            {
+                "name": "Scene1",
+                "backgrounds": [
+                    { "background": "Background1", "posX": 0, "posY": 0 }
+                ],
+                "entities": [
+                    { "entity": "Entity", "posX": 100, "posY": 200 },
+                    { "entity": "Entity", "posX": 200, "posY": 200 }
+                ]
+            }
+        ],
+    "sounds": [
+            {
+                "loop": false,
+                "name": "Sound1",
+                "playOnStart": false,
+                "source": "resources/179eec5abd2f22532dc4858667914c8023477a33.wav"
+            }
+        ],
+    "sprites": [
+            {
+                "frames": [
+                        {
+                            "duration": 100,
+                            "texture": "Texture1"
+                        },
+                        {
+                            "duration": 100,
+                            "texture": "Texture2"
+                        },
+                        {
+                            "duration": 100,
+                            "texture": "Texture3"
+                        },
+                        {
+                            "duration": 100,
+                            "texture": "Texture4"
+                        },
+                        {
+                            "duration": 100,
+                            "texture": "Texture5"
+                        },
+                        {
+                            "duration": 100,
+                            "texture": "Texture6"
+                        },
+                        {
+                            "duration": 100,
+                            "texture": "Texture7"
+                        },
+                        {
+                            "duration": 100,
+                            "texture": "Texture8"
+                        }
+                    ],
+                "name": "Sprite1"
+            }
+        ],
+    "textures": [
+            {
+                "name": "Texture1",
+                "source": "resources/826279f5c5f4adf9d380638f62585b4fa483d91e.png"
+            },
+            {
+                "name": "Texture2",
+                "source": "resources/da31e4a692e35e562b4ac52f821983cc9bad28da.png"
+            },
+            {
+                "name": "Texture3",
+                "source": "resources/2e265f4aab166f87b1a600ac1810a6e9b7490ef0.png"
+            },
+            {
+                "name": "Texture4",
+                "source": "resources/6aab6f8171905310f6310aac01d1bc76307ec04a.png"
+            },
+            {
+                "name": "Texture5",
+                "source": "resources/ef4e9c5c2f60e3637b6e1823ba70f537a081fe5c.png"
+            },
+            {
+                "name": "Texture6",
+                "source": "resources/979c4248660cec6dc0f052c37bf66b134899a360.png"
+            },
+            {
+                "name": "Texture7",
+                "source": "resources/54f9f4d17c823671219f6d7b78054db1269659b1.png"
+            },
+            {
+                "name": "Texture8",
+                "source": "resources/af6573aad2ff767cc6a8ab1079e8e89079959de1.png"
+            },
+            {
+                "name": "Texture9",
+                "source": "resources/9c2da561c924438887ccd1aac609081dafdea4ad.jpg"
+            }
+        ]
 }
