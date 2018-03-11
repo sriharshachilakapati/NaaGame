@@ -37,6 +37,14 @@ public class NgmScene implements IResource {
         private float posX;
         private float posY;
 
+        public Instance() {}
+
+        public Instance(E object, float posX, float posY) {
+            this.object = object;
+            this.posX = posX;
+            this.posY = posY;
+        }
+
         public E getObject() {
             return object;
         }

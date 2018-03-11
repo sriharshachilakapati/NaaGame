@@ -1,6 +1,7 @@
 package com.naagame.editor.controllers;
 
 import com.naagame.core.NgmProject;
+import com.naagame.core.resources.IResource;
 import com.naagame.core.resources.NgmBackground;
 import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmScene;
@@ -15,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class SceneEditorController extends Controller implements Initializable {
 
@@ -28,15 +30,19 @@ public class SceneEditorController extends Controller implements Initializable {
     private List<NgmScene.Instance<NgmBackground>> backgrounds;
     private List<NgmScene.Instance<NgmEntity>> entities;
 
+    private <T extends IResource> NgmScene.Instance<T> cloneInstance(NgmScene.Instance<T> instance) {
+        return new NgmScene.Instance<>(instance.getObject(), instance.getPosX(), instance.getPosY());
+    }
+
     @Override
     public void init(String name) {
         NgmScene scene = NgmProject.find(NgmProject.scenes, name);
 
         backgrounds = new ArrayList<>();
-        backgrounds.addAll(scene.getBackgrounds());
+        backgrounds.addAll(scene.getBackgrounds().stream().map(this::cloneInstance).collect(Collectors.toList()));
 
         entities = new ArrayList<>();
-        entities.addAll(scene.getEntities());
+        entities.addAll(scene.getEntities().stream().map(this::cloneInstance).collect(Collectors.toList()));
 
         levelEditor = new LevelEditor(this, sceneCanvas);
         levelEditor.redraw();
