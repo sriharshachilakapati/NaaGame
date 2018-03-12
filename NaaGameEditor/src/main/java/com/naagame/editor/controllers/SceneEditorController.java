@@ -69,6 +69,27 @@ public class SceneEditorController extends Controller implements Initializable {
 
         spinnerWidth.focusedProperty().addListener((ov, o, n) -> spinnerWidth.increment(0));
         spinnerHeight.focusedProperty().addListener((ov, o, n) -> spinnerHeight.increment(0));
+
+        sceneCanvas.setOnMouseClicked(event -> {
+            switch (event.getButton()) {
+                case PRIMARY:
+                    String selected = getSelectedEntity();
+
+                    if (selected == null) {
+                        break;
+                    }
+
+                    entities.add(new NgmScene.Instance<>(NgmProject.find(NgmProject.entities, selected),
+                            (float) event.getX(),
+                            (float) event.getY()));
+
+                    levelEditor.redraw();
+                    break;
+
+                case SECONDARY:
+                    break;
+            }
+        });
     }
 
     @Override
