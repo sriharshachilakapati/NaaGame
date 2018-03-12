@@ -1,16 +1,16 @@
 {
-    "backgrounds": [
-            {
-                "hSpeed": 0,
-                "name": "Background1",
-                "texture": "Texture9",
-                "vSpeed": 0
-            }
-        ],
-    "entities": [
-            {
-                "events": [
-                        {
+  "backgrounds": [
+    {
+      "hSpeed": 0,
+      "name": "Background1",
+      "texture": "Texture9",
+      "vSpeed": 0
+    }
+  ],
+  "entities": [
+    {
+      "events": [
+        {
           "type": "create",
           "args": "",
           "actions": [
@@ -83,6 +83,22 @@
               "args": "self;500;500;"
             }
           ]
+        }
+      ],
+      "name": "Entity",
+      "sprite": "Sprite1"
+    },
+    {
+      "events": [
+        {
+          "type": "collision",
+          "args": "Entity",
+          "actions": [
+            {
+              "code": "control_destroy_instance",
+              "args": "other;"
+            }
+          ]
         },
         {
           "type": "key_tap",
@@ -94,106 +110,136 @@
             }
           ]
         }
-                    ],
-                "name": "Entity",
-                "sprite": "Sprite1"
-            }
-        ],
-    "scenes": [
-            {
-                "name": "Scene1",
-                "backgrounds": [
-                    { "background": "Background1", "posX": 0, "posY": 0 }
-                ],
-                "entities": [
-                    { "entity": "Entity", "posX": 100, "posY": 200 },
-                    { "entity": "Entity", "posX": 200, "posY": 200 }
-                ]
-            }
-        ],
-    "sounds": [
-            {
-                "loop": false,
-                "name": "Sound1",
-                "playOnStart": false,
-                "source": "resources/179eec5abd2f22532dc4858667914c8023477a33.wav"
-            }
-        ],
-    "sprites": [
-            {
-                "frames": [
-                        {
-                            "duration": 100,
-                            "texture": "Texture1"
-                        },
-                        {
-                            "duration": 100,
-                            "texture": "Texture2"
-                        },
-                        {
-                            "duration": 100,
-                            "texture": "Texture3"
-                        },
-                        {
-                            "duration": 100,
-                            "texture": "Texture4"
-                        },
-                        {
-                            "duration": 100,
-                            "texture": "Texture5"
-                        },
-                        {
-                            "duration": 100,
-                            "texture": "Texture6"
-                        },
-                        {
-                            "duration": 100,
-                            "texture": "Texture7"
-                        },
-                        {
-                            "duration": 100,
-                            "texture": "Texture8"
-                        }
-                    ],
-                "name": "Sprite1"
-            }
-        ],
-    "textures": [
-            {
-                "name": "Texture1",
-                "source": "resources/826279f5c5f4adf9d380638f62585b4fa483d91e.png"
-            },
-            {
-                "name": "Texture2",
-                "source": "resources/da31e4a692e35e562b4ac52f821983cc9bad28da.png"
-            },
-            {
-                "name": "Texture3",
-                "source": "resources/2e265f4aab166f87b1a600ac1810a6e9b7490ef0.png"
-            },
-            {
-                "name": "Texture4",
-                "source": "resources/6aab6f8171905310f6310aac01d1bc76307ec04a.png"
-            },
-            {
-                "name": "Texture5",
-                "source": "resources/ef4e9c5c2f60e3637b6e1823ba70f537a081fe5c.png"
-            },
-            {
-                "name": "Texture6",
-                "source": "resources/979c4248660cec6dc0f052c37bf66b134899a360.png"
-            },
-            {
-                "name": "Texture7",
-                "source": "resources/54f9f4d17c823671219f6d7b78054db1269659b1.png"
-            },
-            {
-                "name": "Texture8",
-                "source": "resources/af6573aad2ff767cc6a8ab1079e8e89079959de1.png"
-            },
-            {
-                "name": "Texture9",
-                "source": "resources/9c2da561c924438887ccd1aac609081dafdea4ad.jpg"
-            }
-        ]
+      ],
+      "name": "Destroyer",
+      "sprite": "Sprite2"
+    }
+  ],
+  "scenes": [
+    {
+      "name": "Scene1",
+      "backgrounds": [
+        {
+          "background": "Background1",
+          "posX": 0,
+          "posY": 0
+        }
+      ],
+      "entities": [
+        {
+          "entity": "Entity",
+          "posX": 100,
+          "posY": 200
+        },
+        {
+          "entity": "Entity",
+          "posX": 200,
+          "posY": 200
+        },
+        {
+          "entity": "Destroyer",
+          "posX": 600,
+          "posY": 500
+        }
+      ]
+    }
+  ],
+  "sounds": [
+    {
+      "loop": false,
+      "name": "Sound1",
+      "playOnStart": false,
+      "source": "resources/179eec5abd2f22532dc4858667914c8023477a33.wav"
+    }
+  ],
+  "sprites": [
+    {
+      "frames": [
+        {
+          "duration": 100,
+          "texture": "Texture1"
+        },
+        {
+          "duration": 100,
+          "texture": "Texture2"
+        },
+        {
+          "duration": 100,
+          "texture": "Texture3"
+        },
+        {
+          "duration": 100,
+          "texture": "Texture4"
+        },
+        {
+          "duration": 100,
+          "texture": "Texture5"
+        },
+        {
+          "duration": 100,
+          "texture": "Texture6"
+        },
+        {
+          "duration": 100,
+          "texture": "Texture7"
+        },
+        {
+          "duration": 100,
+          "texture": "Texture8"
+        }
+      ],
+      "name": "Sprite1"
+    },
+    {
+      "name": "Sprite2",
+      "frames": [
+        {
+          "duration": 100000,
+          "texture": "Texture10"
+        }
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "name": "Texture1",
+      "source": "resources/826279f5c5f4adf9d380638f62585b4fa483d91e.png"
+    },
+    {
+      "name": "Texture2",
+      "source": "resources/da31e4a692e35e562b4ac52f821983cc9bad28da.png"
+    },
+    {
+      "name": "Texture3",
+      "source": "resources/2e265f4aab166f87b1a600ac1810a6e9b7490ef0.png"
+    },
+    {
+      "name": "Texture4",
+      "source": "resources/6aab6f8171905310f6310aac01d1bc76307ec04a.png"
+    },
+    {
+      "name": "Texture5",
+      "source": "resources/ef4e9c5c2f60e3637b6e1823ba70f537a081fe5c.png"
+    },
+    {
+      "name": "Texture6",
+      "source": "resources/979c4248660cec6dc0f052c37bf66b134899a360.png"
+    },
+    {
+      "name": "Texture7",
+      "source": "resources/54f9f4d17c823671219f6d7b78054db1269659b1.png"
+    },
+    {
+      "name": "Texture8",
+      "source": "resources/af6573aad2ff767cc6a8ab1079e8e89079959de1.png"
+    },
+    {
+      "name": "Texture9",
+      "source": "resources/9c2da561c924438887ccd1aac609081dafdea4ad.jpg"
+    },
+    {
+      "name": "Texture10",
+      "source": "colour:1;1;1;0.75;100;100"
+    }
+  ]
 }
