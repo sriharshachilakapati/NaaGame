@@ -9,6 +9,7 @@ import com.naagame.editor.util.LevelEditor;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 
@@ -24,6 +25,8 @@ public class SceneEditorController extends Controller implements Initializable {
 
     @FXML private Spinner<Integer> spinnerWidth;
     @FXML private Spinner<Integer> spinnerHeight;
+
+    @FXML private ChoiceBox<String> entitySelector;
 
     private LevelEditor levelEditor;
 
@@ -46,6 +49,8 @@ public class SceneEditorController extends Controller implements Initializable {
 
         levelEditor = new LevelEditor(this, sceneCanvas);
         levelEditor.redraw();
+
+        resourcesChanged();
     }
 
     @Override
@@ -64,6 +69,18 @@ public class SceneEditorController extends Controller implements Initializable {
 
         spinnerWidth.focusedProperty().addListener((ov, o, n) -> spinnerWidth.increment(0));
         spinnerHeight.focusedProperty().addListener((ov, o, n) -> spinnerHeight.increment(0));
+    }
+
+    @Override
+    protected void resourcesChanged() {
+        entitySelector.getItems().clear();
+        entitySelector.getItems().addAll(NgmProject.entities.stream()
+                .map(IResource::getName)
+                .collect(Collectors.toList()));
+    }
+
+    public String getSelectedEntity() {
+        return entitySelector.getSelectionModel().getSelectedItem();
     }
 
     public List<NgmScene.Instance<NgmBackground>> getBackgrounds() {

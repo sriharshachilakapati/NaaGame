@@ -1,5 +1,6 @@
 package com.naagame.editor.util;
 
+import com.naagame.core.NgmProject;
 import com.naagame.core.resources.*;
 import com.naagame.editor.controllers.SceneEditorController;
 import javafx.scene.canvas.Canvas;
@@ -12,10 +13,20 @@ public class LevelEditor {
     private final Canvas canvas;
     private final SceneEditorController controller;
 
+    private double mouseX;
+    private double mouseY;
+
     public LevelEditor(SceneEditorController controller, Canvas canvas) {
         this.canvas = canvas;
         this.controller = controller;
         this.ctx = canvas.getGraphicsContext2D();
+
+        canvas.setOnMouseMoved(event -> {
+            mouseX = event.getX();
+            mouseY = event.getY();
+
+            redraw();
+        });
     }
 
     public void redraw() {
@@ -59,6 +70,34 @@ public class LevelEditor {
                         entityInstance.getPosX() - textureImage.getWidth() / 2,
                         entityInstance.getPosY() - textureImage.getHeight() / 2);
             }
+        }
+
+        String selected;
+
+        if ((selected = controller.getSelectedEntity()) != null) {
+            NgmEntity entity = NgmProject.find(NgmProject.entities, selected);
+
+            NgmSprite sprite = entity.getSprite();
+
+            if (sprite == null || sprite.getFrames().size() == 0) {
+                return;
+            }
+
+            NgmTexture texture = sprite.getFrames().get(0).getTexture();
+
+            if (texture == null) {
+                return;
+            }
+
+            Image image = ImageCache.getImage(texture.getSource());
+
+            if (image == null) {
+                return;
+            }
+
+            ctx.setGlobalAlpha(0.75);
+            ctx.drawImage(image, mouseX - image.getWidth() / 2, mouseY - image.getHeight() / 2);
+            ctx.setGlobalAlpha(1.0);
         }
     }
 }

@@ -50,7 +50,7 @@
                         <Label text="Height" />
                         <Spinner fx:id="spinnerHeight" editable="true" maxWidth="1.7976931348623157E308" />
                         <Label text="Entity Painter" />
-                        <ChoiceBox maxWidth="1.7976931348623157E308" />
+                        <ChoiceBox fx:id="entitySelector" maxWidth="1.7976931348623157E308" />
                      </children>
                   </VBox>
                </content>
