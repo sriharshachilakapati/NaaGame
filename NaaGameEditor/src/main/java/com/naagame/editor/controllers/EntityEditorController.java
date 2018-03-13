@@ -46,6 +46,11 @@ public class EntityEditorController extends Controller implements Initializable 
     @FXML private ListView<ActionDefinition<?>> movementActionsList;
     @FXML private ListView<ActionDefinition<?>> controlActionsList;
 
+    @FXML private ListView<NgmEntity.Event> eventsList;
+    @FXML private ListView<NgmEntity.Event.Action> actionsList;
+
+    private NgmEntity.Event currentEvent;
+
     private NgmEntity entity;
     private NgmSprite sprite;
     private boolean changed;
@@ -60,7 +65,33 @@ public class EntityEditorController extends Controller implements Initializable 
             spriteSelector.getSelectionModel().select(sprite.getName());
         }
 
+        eventsList.getItems().clear();
+        eventsList.getItems().addAll(entity.getEvents().stream()
+                .map(this::cloneEvent)
+                .collect(Collectors.toList()));
+
+        currentEvent = eventsList.getItems().stream().findFirst().orElse(null);
+
+        if (currentEvent != null) {
+            actionsList.getItems().clear();
+            actionsList.getItems().addAll(currentEvent.getActions());
+        }
+
         resourcesChanged();
+    }
+
+    private NgmEntity.Event.Action cloneAction(NgmEntity.Event.Action action) {
+        return new NgmEntity.Event.Action(action.getCode(), action.getArgs());
+    }
+
+    private NgmEntity.Event cloneEvent(NgmEntity.Event event) {
+        NgmEntity.Event newEvent = new NgmEntity.Event(event.getType(), event.getArgs());
+
+        newEvent.getActions().addAll(event.getActions().stream()
+                .map(this::cloneAction)
+                .collect(Collectors.toList()));
+
+        return newEvent;
     }
 
     @FXML
@@ -118,6 +149,46 @@ public class EntityEditorController extends Controller implements Initializable 
         createActionLibraryItems(debugActionsList, LibDebug.class);
         createActionLibraryItems(movementActionsList, LibMovement.class);
         createActionLibraryItems(controlActionsList, LibControl.class);
+
+        eventsList.setCellFactory(list_ -> new ListCell<NgmEntity.Event>() {
+            @Override
+            protected void updateItem(NgmEntity.Event item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item != null) {
+                    setText(wordCamelCase(item.getType().toString()) + " " + item.getArgs());
+                } else {
+                    setText("");
+                }
+            }
+        });
+
+        actionsList.setCellFactory(list_ -> new ListCell<NgmEntity.Event.Action>() {
+            @Override
+            protected void updateItem(NgmEntity.Event.Action item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item != null) {
+                    setText(wordCamelCase(item.getCode()) + ": " + item.getArgs());
+                } else {
+                    setText("");
+                }
+            }
+        });
+
+        eventsList.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
+            if (currentEvent != null) {
+                currentEvent.getActions().clear();
+                currentEvent.getActions().addAll(actionsList.getItems());
+            }
+
+            currentEvent = n;
+
+            if (currentEvent != null) {
+                actionsList.getItems().clear();
+                actionsList.getItems().addAll(currentEvent.getActions());
+            }
+        });
     }
 
     private void createActionLibraryItems(ListView<ActionDefinition<?>> list, Class<?> lib) {
@@ -128,6 +199,8 @@ public class EntityEditorController extends Controller implements Initializable 
 
                 if (item != null) {
                     setText(wordCamelCase(item.getCode()).replaceFirst("[a-zA-Z]+\\s", ""));
+                } else {
+                    setText("");
                 }
             }
         });
