@@ -105,6 +105,10 @@ public final class ProjectReader {
                 jsonToInstance(backgroundJSON, name -> NgmProject.find(NgmProject.backgrounds, name), "background");
 
         NgmScene scene = new NgmScene(json.get("name").getValue());
+
+        scene.setWidth(json.get("width").<Number> getValue().intValue());
+        scene.setHeight(json.get("height").<Number> getValue().intValue());
+
         loadToList(scene.getEntities(), json.get("entities"), jsonToEntityInstance);
         loadToList(scene.getBackgrounds(), json.get("backgrounds"), jsonToBackgroundInstance);
 

@@ -9,6 +9,9 @@ public class NgmScene implements IResource {
 
     private String name;
 
+    private int width = 800;
+    private int height = 600;
+
     public NgmScene(String name) {
         this.name = name;
     }
@@ -16,6 +19,22 @@ public class NgmScene implements IResource {
     @Override
     public String getName() {
         return name;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public List<Instance<NgmEntity>> getEntities() {

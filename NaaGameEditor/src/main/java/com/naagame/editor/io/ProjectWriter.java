@@ -122,6 +122,10 @@ public final class ProjectWriter {
         JSONObject json = new JSONObject();
 
         json.put("name", new JSONValue(scene.getName()));
+
+        json.put("width", new JSONValue(scene.getWidth()));
+        json.put("height", new JSONValue(scene.getHeight()));
+
         json.put("entities", listToJSON(scene.getEntities(), entitiesToJSON));
         json.put("backgrounds", listToJSON(scene.getBackgrounds(), backgroundsToJSON));
 

@@ -118,6 +118,8 @@
   "scenes": [
     {
       "name": "Scene1",
+      "width": 640,
+      "height": 480,
       "backgrounds": [
         {
           "background": "Background1",
