@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -25,12 +27,15 @@ import java.util.stream.Collectors;
 public class EntityEditorController extends Controller implements Initializable {
 
     private static JSONObject keyCodes;
+    private static Map<String, String> keyCodeNames;
 
     static {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(EntityEditorController.class
                 .getClassLoader().getResourceAsStream("keyCodes.json")))) {
             String json = reader.lines().collect(Collectors.joining("\n"));
             keyCodes = JSON.parse(json);
+
+            keyCodeNames = new HashMap<>();
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
@@ -156,7 +161,26 @@ public class EntityEditorController extends Controller implements Initializable 
                 super.updateItem(item, empty);
 
                 if (item != null) {
-                    setText(wordCamelCase(item.getType().toString()) + " " + item.getArgs());
+                    switch (item.getType()) {
+                        case KEY_UP:
+                        case KEY_DOWN:
+                        case KEY_TAP:
+                            setText(wordCamelCase(item.getType().toString()) + " " + keyCodeNames.get(item.getArgs()));
+                            break;
+
+                        case MOUSE_UP:
+                        case MOUSE_TAP:
+                        case MOUSE_DOWN:
+                            switch (item.getArgs()) {
+                                case "1": setText(wordCamelCase(item.getType().toString()) + " LEFT");   break;
+                                case "2": setText(wordCamelCase(item.getType().toString()) + " RIGHT");  break;
+                                case "3": setText(wordCamelCase(item.getType().toString()) + " MIDDLE"); break;
+                            }
+                            break;
+
+                        default:
+                            setText(wordCamelCase(item.getType().toString()) + " " + item.getArgs());
+                    }
                 } else {
                     setText("");
                 }
@@ -227,6 +251,9 @@ public class EntityEditorController extends Controller implements Initializable 
     private void createKeyMenu(Menu root, NgmEntity.Event.Type type) {
         final Function<JSONObject, MenuItem> createMenuItem = json -> {
             MenuItem menuItem = new MenuItem(json.get("key").getValue());
+
+            keyCodeNames.put(String.valueOf(json.get("code").<Number> getValue().intValue()),
+                    json.get("key").getValue());
             
             menuItem.setOnAction(actionEvent ->
                     System.out.println(String.format("Create %s event for key %s with code %d",
