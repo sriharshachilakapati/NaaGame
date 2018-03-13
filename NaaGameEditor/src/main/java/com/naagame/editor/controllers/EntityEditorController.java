@@ -1,6 +1,7 @@
 package com.naagame.editor.controllers;
 
 import com.naagame.core.NgmProject;
+import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.control.LibControl;
 import com.naagame.core.action.debug.LibDebug;
 import com.naagame.core.action.movement.LibMovement;
@@ -9,10 +10,7 @@ import com.naagame.core.resources.NgmSprite;
 import com.shc.easyjson.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,9 +42,9 @@ public class EntityEditorController extends Controller implements Initializable 
     @FXML private Menu addEvtKeyReleasedMenu;
     @FXML private Menu addEvtKeyTappedMenu;
 
-    @FXML private ListView<String> debugActionsList;
-    @FXML private ListView<String> movementActionsList;
-    @FXML private ListView<String> controlActionsList;
+    @FXML private ListView<ActionDefinition<?>> debugActionsList;
+    @FXML private ListView<ActionDefinition<?>> movementActionsList;
+    @FXML private ListView<ActionDefinition<?>> controlActionsList;
 
     private NgmEntity entity;
     private NgmSprite sprite;
@@ -122,9 +120,24 @@ public class EntityEditorController extends Controller implements Initializable 
         createActionLibraryItems(controlActionsList, LibControl.class);
     }
 
-    private void createActionLibraryItems(ListView<String> list, Class<?> lib) {
+    private void createActionLibraryItems(ListView<ActionDefinition<?>> list, Class<?> lib) {
+        list.setCellFactory(list_ -> new ListCell<ActionDefinition<?>>() {
+            @Override
+            protected void updateItem(ActionDefinition<?> item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item != null) {
+                    setText(wordCamelCase(item.getCode()).replaceFirst("[a-zA-Z]+\\s", ""));
+                }
+            }
+        });
+
         for (Field field : lib.getFields()) {
-            list.getItems().add(wordCamelCase(field.getName()));
+            try {
+                list.getItems().add((ActionDefinition<?>) field.get(null));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
     }
 
