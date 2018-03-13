@@ -16,6 +16,9 @@ public class LevelEditor {
     private double mouseX;
     private double mouseY;
 
+    private int correctedMouseX;
+    private int correctedMouseY;
+
     public LevelEditor(SceneEditorController controller, Canvas canvas) {
         this.canvas = canvas;
         this.controller = controller;
@@ -95,9 +98,40 @@ public class LevelEditor {
                 return;
             }
 
+            correctedMouseX = (int) mouseX;
+            correctedMouseY = (int) mouseY;
+
+            if (controller.isGridEnabled()) {
+                correctedMouseX -= correctedMouseX % controller.getGridX();
+                correctedMouseX += controller.getGridX() / 2;
+
+                correctedMouseY -= correctedMouseY % controller.getGridY();
+                correctedMouseY += controller.getGridY() / 2;
+            }
+
             ctx.setGlobalAlpha(0.75);
-            ctx.drawImage(image, mouseX - image.getWidth() / 2, mouseY - image.getHeight() / 2);
+            ctx.drawImage(image, correctedMouseX - image.getWidth() / 2, correctedMouseY - image.getHeight() / 2);
             ctx.setGlobalAlpha(1.0);
         }
+
+        if (controller.isGridEnabled()) {
+            ctx.setStroke(Color.DARKGRAY);
+
+            for (double i = 0; i < canvas.getWidth(); i += controller.getGridX()) {
+                ctx.strokeLine(i, 0, i, canvas.getHeight());
+            }
+
+            for (double i = 0; i < canvas.getHeight(); i += controller.getGridY()) {
+                ctx.strokeLine(0, i, canvas.getWidth(), i);
+            }
+        }
+    }
+
+    public int getCorrectedMouseX() {
+        return correctedMouseX;
+    }
+
+    public int getCorrectedMouseY() {
+        return correctedMouseY;
     }
 }

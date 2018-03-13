@@ -7,9 +7,7 @@ import com.naagame.editor.util.LevelEditor;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
@@ -28,6 +26,10 @@ public class SceneEditorController extends Controller implements Initializable {
     @FXML private Spinner<Integer> spinnerHeight;
 
     @FXML private ChoiceBox<String> entitySelector;
+    @FXML private ToggleButton gridToggleButton;
+
+    @FXML private Slider gridXSlider;
+    @FXML private Slider gridYSlider;
 
     private LevelEditor levelEditor;
 
@@ -71,6 +73,10 @@ public class SceneEditorController extends Controller implements Initializable {
         spinnerWidth.focusedProperty().addListener((ov, o, n) -> spinnerWidth.increment(0));
         spinnerHeight.focusedProperty().addListener((ov, o, n) -> spinnerHeight.increment(0));
 
+        gridToggleButton.setOnAction(e -> levelEditor.redraw());
+        gridXSlider.valueProperty().addListener((ov, o, n) -> levelEditor.redraw());
+        gridYSlider.valueProperty().addListener((ov, o, n) -> levelEditor.redraw());
+
         sceneCanvas.setOnMouseClicked(event -> {
             String selected = getSelectedEntity();
 
@@ -81,8 +87,8 @@ public class SceneEditorController extends Controller implements Initializable {
             switch (event.getButton()) {
                 case PRIMARY:
                     entities.add(new NgmScene.Instance<>(NgmProject.find(NgmProject.entities, selected),
-                            (float) event.getX(),
-                            (float) event.getY()));
+                            levelEditor.getCorrectedMouseX(),
+                            levelEditor.getCorrectedMouseY()));
                     break;
 
                 case SECONDARY:
@@ -135,6 +141,18 @@ public class SceneEditorController extends Controller implements Initializable {
 
     public String getSelectedEntity() {
         return entitySelector.getSelectionModel().getSelectedItem();
+    }
+
+    public boolean isGridEnabled() {
+        return gridToggleButton.isSelected();
+    }
+
+    public double getGridX() {
+        return gridXSlider.getValue();
+    }
+
+    public double getGridY() {
+        return gridYSlider.getValue();
     }
 
     public List<NgmScene.Instance<NgmBackground>> getBackgrounds() {
