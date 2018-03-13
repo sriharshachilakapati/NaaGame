@@ -12,7 +12,6 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -93,15 +92,20 @@
             <TabPane prefHeight="200.0" prefWidth="200.0" side="RIGHT" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Debug">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
+                     <content>
+                        <ListView fx:id="debugActionsList" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
                 </Tab>
                 <Tab text="Movement">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
+                     <content>
+                        <ListView fx:id="movementActionsList" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
                 </Tab>
+                  <Tab text="Control">
+                     <content>
+                        <ListView fx:id="controlActionsList" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
               </tabs>
             </TabPane>
          </content>

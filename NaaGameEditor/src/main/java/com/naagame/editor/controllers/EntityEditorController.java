@@ -1,17 +1,23 @@
 package com.naagame.editor.controllers;
 
 import com.naagame.core.NgmProject;
+import com.naagame.core.action.control.LibControl;
+import com.naagame.core.action.debug.LibDebug;
+import com.naagame.core.action.movement.LibMovement;
 import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmSprite;
 import com.shc.easyjson.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
@@ -37,6 +43,10 @@ public class EntityEditorController extends Controller implements Initializable 
     @FXML private Menu addEvtKeyPressedMenu;
     @FXML private Menu addEvtKeyReleasedMenu;
     @FXML private Menu addEvtKeyTappedMenu;
+
+    @FXML private ListView<String> debugActionsList;
+    @FXML private ListView<String> movementActionsList;
+    @FXML private ListView<String> controlActionsList;
 
     private NgmEntity entity;
     private NgmSprite sprite;
@@ -106,6 +116,26 @@ public class EntityEditorController extends Controller implements Initializable 
         createKeyMenu(addEvtKeyPressedMenu, NgmEntity.Event.Type.KEY_DOWN);
         createKeyMenu(addEvtKeyReleasedMenu, NgmEntity.Event.Type.KEY_UP);
         createKeyMenu(addEvtKeyTappedMenu, NgmEntity.Event.Type.KEY_TAP);
+
+        createActionLibraryItems(debugActionsList, LibDebug.class);
+        createActionLibraryItems(movementActionsList, LibMovement.class);
+        createActionLibraryItems(controlActionsList, LibControl.class);
+    }
+
+    private void createActionLibraryItems(ListView<String> list, Class<?> lib) {
+        for (Field field : lib.getFields()) {
+            list.getItems().add(wordCamelCase(field.getName()));
+        }
+    }
+
+    private String wordCamelCase(String str) {
+        String[] parts = str.toLowerCase().split("\\s+|_");
+
+        for (int i = 0; i < parts.length; i++) {
+            parts[i] = Character.toUpperCase(parts[i].charAt(0)) + parts[i].substring(1);
+        }
+
+        return String.join(" ", parts);
     }
     
     private void createKeyMenu(Menu root, NgmEntity.Event.Type type) {
