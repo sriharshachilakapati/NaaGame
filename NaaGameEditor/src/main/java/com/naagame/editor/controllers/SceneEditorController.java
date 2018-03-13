@@ -1,10 +1,8 @@
 package com.naagame.editor.controllers;
 
 import com.naagame.core.NgmProject;
-import com.naagame.core.resources.IResource;
-import com.naagame.core.resources.NgmBackground;
-import com.naagame.core.resources.NgmEntity;
-import com.naagame.core.resources.NgmScene;
+import com.naagame.core.resources.*;
+import com.naagame.editor.util.ImageCache;
 import com.naagame.editor.util.LevelEditor;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,9 +10,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -71,25 +72,57 @@ public class SceneEditorController extends Controller implements Initializable {
         spinnerHeight.focusedProperty().addListener((ov, o, n) -> spinnerHeight.increment(0));
 
         sceneCanvas.setOnMouseClicked(event -> {
+            String selected = getSelectedEntity();
+
+            if (selected == null) {
+                return;
+            }
+
             switch (event.getButton()) {
                 case PRIMARY:
-                    String selected = getSelectedEntity();
-
-                    if (selected == null) {
-                        break;
-                    }
-
                     entities.add(new NgmScene.Instance<>(NgmProject.find(NgmProject.entities, selected),
                             (float) event.getX(),
                             (float) event.getY()));
-
-                    levelEditor.redraw();
                     break;
 
                 case SECONDARY:
+                    Collections.reverse(entities);
+                    entities.stream()
+                            .filter(entityInstance -> getEntityBounds(entityInstance).contains(event.getX(), event.getY()))
+                            .findFirst()
+                            .ifPresent(entities::remove);
+                    Collections.reverse(entities);
                     break;
             }
+
+            levelEditor.redraw();
         });
+    }
+
+    private Rectangle getEntityBounds(NgmScene.Instance<NgmEntity> entityInstance) {
+        Rectangle rectangle = new Rectangle();
+
+        NgmEntity entity = entityInstance.getObject();
+        NgmSprite sprite = entity.getSprite();
+
+        if (sprite == null || sprite.getFrames().size() == 0 || sprite.getFrames().get(0).getTexture() == null) {
+            rectangle.setX(entityInstance.getPosX());
+            rectangle.setY(entityInstance.getPosY());
+            rectangle.setWidth(0);
+            rectangle.setHeight(0);
+
+            return rectangle;
+        }
+
+        NgmTexture texture = sprite.getFrames().get(0).getTexture();
+        Image image = ImageCache.getImage(texture.getSource());
+
+        rectangle.setX(entityInstance.getPosX() - image.getWidth() / 2);
+        rectangle.setY(entityInstance.getPosY() - image.getHeight() / 2);
+        rectangle.setWidth(image.getWidth());
+        rectangle.setHeight(image.getHeight());
+
+        return rectangle;
     }
 
     @Override
