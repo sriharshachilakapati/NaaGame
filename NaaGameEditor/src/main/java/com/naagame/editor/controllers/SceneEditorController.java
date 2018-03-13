@@ -49,23 +49,34 @@ public class SceneEditorController extends Controller implements Initializable {
 
     private List<NgmScene.Instance<NgmEntity>> entities;
 
+    private boolean changed;
+    private NgmScene scene;
+
     private <T extends IResource> NgmScene.Instance<T> cloneInstance(NgmScene.Instance<T> instance) {
         return new NgmScene.Instance<>(instance.getObject(), instance.getPosX(), instance.getPosY());
     }
 
     @Override
     public void init(String name) {
-        NgmScene scene = NgmProject.find(NgmProject.scenes, name);
+        scene = NgmProject.find(NgmProject.scenes, name);
+
+        levelEditor = new LevelEditor(this, sceneCanvas);
 
         backgrounds.addAll(scene.getBackgrounds().stream().map(this::cloneInstance).collect(Collectors.toList()));
 
         entities = new ArrayList<>();
         entities.addAll(scene.getEntities().stream().map(this::cloneInstance).collect(Collectors.toList()));
 
-        levelEditor = new LevelEditor(this, sceneCanvas);
+        spinnerWidth.getValueFactory().setValue(scene.getWidth());
+        spinnerHeight.getValueFactory().setValue(scene.getHeight());
+
+        sceneCanvas.setWidth(scene.getWidth());
+        sceneCanvas.setHeight(scene.getHeight());
+
         levelEditor.redraw();
 
         resourcesChanged();
+        changed = false;
     }
 
     @Override
@@ -82,6 +93,7 @@ public class SceneEditorController extends Controller implements Initializable {
         backgroundColumn.setOnEditCommit(event -> {
             event.getRowValue().setObject(NgmProject.find(NgmProject.backgrounds, event.getNewValue()));
             levelEditor.redraw();
+            changed = true;
         });
 
         StringConverter<Float> converter = new StringConverter<Float>() {
@@ -101,6 +113,7 @@ public class SceneEditorController extends Controller implements Initializable {
         xPosColumn.setOnEditCommit(event -> {
             event.getRowValue().setPosX(event.getNewValue());
             levelEditor.redraw();
+            changed = true;
         });
 
         yPosColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getPosY()));
@@ -108,6 +121,7 @@ public class SceneEditorController extends Controller implements Initializable {
         yPosColumn.setOnEditCommit(event -> {
             event.getRowValue().setPosY(event.getNewValue());
             levelEditor.redraw();
+            changed = true;
         });
 
         backgroundsTable.setItems(backgrounds);
@@ -143,6 +157,7 @@ public class SceneEditorController extends Controller implements Initializable {
                     entities.add(new NgmScene.Instance<>(NgmProject.find(NgmProject.entities, selected),
                             levelEditor.getCorrectedMouseX(),
                             levelEditor.getCorrectedMouseY()));
+                    changed = true;
                     break;
 
                 case SECONDARY:
@@ -152,6 +167,8 @@ public class SceneEditorController extends Controller implements Initializable {
                             .findFirst()
                             .ifPresent(entities::remove);
                     Collections.reverse(entities);
+
+                    changed = true;
                     break;
             }
 
@@ -207,6 +224,7 @@ public class SceneEditorController extends Controller implements Initializable {
 
         backgrounds.add(new NgmScene.Instance<>(NgmProject.backgrounds.get(0), 0, 0));
         levelEditor.redraw();
+        changed = true;
     }
 
     @FXML
@@ -219,6 +237,7 @@ public class SceneEditorController extends Controller implements Initializable {
 
         backgrounds.remove(selected);
         levelEditor.redraw();
+        changed = true;
     }
 
     public String getSelectedEntity() {
@@ -243,5 +262,32 @@ public class SceneEditorController extends Controller implements Initializable {
 
     public List<NgmScene.Instance<NgmEntity>> getEntities() {
         return entities;
+    }
+
+    @Override
+    protected boolean hasUnsavedEdits() {
+        return changed;
+    }
+
+    @FXML
+    @Override
+    protected void commitChanges() {
+        scene.getBackgrounds().clear();
+        scene.getBackgrounds().addAll(backgrounds.stream().map(this::cloneInstance).collect(Collectors.toList()));
+
+        scene.getEntities().clear();
+        scene.getEntities().addAll(entities.stream().map(this::cloneInstance).collect(Collectors.toList()));
+
+        scene.setWidth(spinnerWidth.getValue());
+        scene.setHeight(spinnerHeight.getValue());
+
+        changed = false;
+        notifySave();
+    }
+
+    @FXML
+    @Override
+    protected void discardChanges() {
+        init(scene.getName());
     }
 }
