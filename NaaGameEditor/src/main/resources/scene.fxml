@@ -60,14 +60,14 @@
               <content>
                   <VBox spacing="10.0">
                      <children>
-                        <TableView editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="backgroundsTable" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                            <placeholder>
                               <Label prefHeight="68.0" prefWidth="139.0" text="No backgrounds added for this Scene" textAlignment="CENTER" wrapText="true" />
                            </placeholder>
                           <columns>
-                            <TableColumn minWidth="70.0" prefWidth="114.0" text="Background" />
-                            <TableColumn minWidth="15.0" prefWidth="2.0" text="X" />
-                              <TableColumn minWidth="15.0" prefWidth="22.0" text="Y" />
+                            <TableColumn fx:id="backgroundColumn" minWidth="70.0" prefWidth="114.0" text="Background" />
+                            <TableColumn minWidth="15.0" prefWidth="2.0" text="X" fx:id="xPosColumn" />
+                              <TableColumn fx:id="yPosColumn" minWidth="15.0" prefWidth="22.0" text="Y" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

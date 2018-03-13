@@ -4,12 +4,18 @@ import com.naagame.core.NgmProject;
 import com.naagame.core.resources.*;
 import com.naagame.editor.util.ImageCache;
 import com.naagame.editor.util.LevelEditor;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,9 +37,16 @@ public class SceneEditorController extends Controller implements Initializable {
     @FXML private Slider gridXSlider;
     @FXML private Slider gridYSlider;
 
+    @FXML private TableView<NgmScene.Instance<NgmBackground>> backgroundsTable;
+    @FXML private TableColumn<NgmScene.Instance<NgmBackground>, String> backgroundColumn;
+    @FXML private TableColumn<NgmScene.Instance<NgmBackground>, Float> xPosColumn;
+    @FXML private TableColumn<NgmScene.Instance<NgmBackground>, Float> yPosColumn;
+
+    private ObservableList<String> allBackgrounds;
+    private ObservableList<NgmScene.Instance<NgmBackground>> backgrounds;
+
     private LevelEditor levelEditor;
 
-    private List<NgmScene.Instance<NgmBackground>> backgrounds;
     private List<NgmScene.Instance<NgmEntity>> entities;
 
     private <T extends IResource> NgmScene.Instance<T> cloneInstance(NgmScene.Instance<T> instance) {
@@ -44,7 +57,6 @@ public class SceneEditorController extends Controller implements Initializable {
     public void init(String name) {
         NgmScene scene = NgmProject.find(NgmProject.scenes, name);
 
-        backgrounds = new ArrayList<>();
         backgrounds.addAll(scene.getBackgrounds().stream().map(this::cloneInstance).collect(Collectors.toList()));
 
         entities = new ArrayList<>();
@@ -58,6 +70,48 @@ public class SceneEditorController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        backgrounds = FXCollections.observableArrayList();
+        allBackgrounds = FXCollections.observableArrayList();
+
+        backgroundColumn.setCellValueFactory(param -> {
+            NgmScene.Instance<NgmBackground> bgInstance = param.getValue();
+            NgmBackground background = bgInstance.getObject();
+            return new SimpleObjectProperty<>(background == null ? "" : background.getName());
+        });
+        backgroundColumn.setCellFactory(ComboBoxTableCell.forTableColumn(allBackgrounds));
+        backgroundColumn.setOnEditCommit(event -> {
+            event.getRowValue().setObject(NgmProject.find(NgmProject.backgrounds, event.getNewValue()));
+            levelEditor.redraw();
+        });
+
+        StringConverter<Float> converter = new StringConverter<Float>() {
+            @Override
+            public String toString(Float object) {
+                return String.valueOf(object);
+            }
+
+            @Override
+            public Float fromString(String string) {
+                return Float.parseFloat(string);
+            }
+        };
+
+        xPosColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getPosX()));
+        xPosColumn.setCellFactory(TextFieldTableCell.forTableColumn(converter));
+        xPosColumn.setOnEditCommit(event -> {
+            event.getRowValue().setPosX(event.getNewValue());
+            levelEditor.redraw();
+        });
+
+        yPosColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getPosY()));
+        yPosColumn.setCellFactory(TextFieldTableCell.forTableColumn(converter));
+        yPosColumn.setOnEditCommit(event -> {
+            event.getRowValue().setPosY(event.getNewValue());
+            levelEditor.redraw();
+        });
+
+        backgroundsTable.setItems(backgrounds);
+
         spinnerHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50000, 600));
         spinnerWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50000, 800));
 
@@ -137,6 +191,12 @@ public class SceneEditorController extends Controller implements Initializable {
         entitySelector.getItems().addAll(NgmProject.entities.stream()
                 .map(IResource::getName)
                 .collect(Collectors.toList()));
+
+        allBackgrounds.clear();
+        allBackgrounds.addAll(NgmProject.backgrounds.stream().map(IResource::getName).collect(Collectors.toList()));
+
+        backgrounds.removeIf(bgInstance ->
+                NgmProject.find(NgmProject.backgrounds, bgInstance.getObject().getName()) == null);
     }
 
     public String getSelectedEntity() {
