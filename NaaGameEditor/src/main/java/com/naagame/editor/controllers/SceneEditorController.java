@@ -199,6 +199,28 @@ public class SceneEditorController extends Controller implements Initializable {
                 NgmProject.find(NgmProject.backgrounds, bgInstance.getObject().getName()) == null);
     }
 
+    @FXML
+    private void onAddBackgroundClick() {
+        if (NgmProject.backgrounds.size() == 0) {
+            return;
+        }
+
+        backgrounds.add(new NgmScene.Instance<>(NgmProject.backgrounds.get(0), 0, 0));
+        levelEditor.redraw();
+    }
+
+    @FXML
+    private void onDeleteBackgroundClick() {
+        NgmScene.Instance<NgmBackground> selected = backgroundsTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            return;
+        }
+
+        backgrounds.remove(selected);
+        levelEditor.redraw();
+    }
+
     public String getSelectedEntity() {
         return entitySelector.getSelectionModel().getSelectedItem();
     }

@@ -75,8 +75,8 @@
                         </TableView>
                         <HBox spacing="10.0" VBox.vgrow="NEVER">
                            <children>
-                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add" HBox.hgrow="ALWAYS" />
-                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete" HBox.hgrow="ALWAYS" />
+                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAddBackgroundClick" text="Add" HBox.hgrow="ALWAYS" />
+                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onDeleteBackgroundClick" text="Delete" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                      </children>
