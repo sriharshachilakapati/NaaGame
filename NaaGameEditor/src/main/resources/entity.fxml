@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuButton?>
@@ -37,15 +38,19 @@
          <children>
             <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="312.0" prefWidth="233.0" text="Events" VBox.vgrow="ALWAYS">
                <content>
-                  <ListView fx:id="eventsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="285.0" prefWidth="222.0" />
+                  <ListView fx:id="eventsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="285.0" prefWidth="222.0">
+                      <placeholder>
+                          <Label prefHeight="68.0" prefWidth="185.0" text="Add an event to get started!" textAlignment="CENTER" wrapText="true" />
+                      </placeholder>
+                  </ListView>
                </content>
             </TitledPane>
             <HBox spacing="10.0" VBox.vgrow="NEVER">
                <children>
                   <MenuButton mnemonicParsing="false" text="Add Event" HBox.hgrow="ALWAYS">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Create" />
-                      <MenuItem mnemonicParsing="false" text="Update" />
+                      <MenuItem mnemonicParsing="false" onAction="#addCreateEvent" text="Create" />
+                      <MenuItem mnemonicParsing="false" onAction="#addUpdateEvent" text="Update" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <Menu mnemonicParsing="false" text="Keyboard">
                            <items>
@@ -56,15 +61,15 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Mouse">
                             <items>
-                                <Menu mnemonicParsing="false" text="Pressed" />
-                                <Menu mnemonicParsing="false" text="Released" />
-                                <Menu mnemonicParsing="false" text="Tapped" />
+                                <Menu fx:id="addEvtMousePressedMenu" mnemonicParsing="false" text="Pressed" />
+                                <Menu fx:id="addEvtMouseReleasedMenu" mnemonicParsing="false" text="Released" />
+                                <Menu fx:id="addEvtMouseTappedMenu" mnemonicParsing="false" text="Tapped" />
                             </items>
                         </Menu>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <Menu mnemonicParsing="false" text="Collision" />
+                        <Menu fx:id="addEvtCollisionMenu" mnemonicParsing="false" text="Collision" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Destroy" />
+                        <MenuItem mnemonicParsing="false" onAction="#addDestroyEvent" text="Destroy" />
                     </items>
                   </MenuButton>
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete Event" HBox.hgrow="ALWAYS" />
@@ -79,7 +84,11 @@
             <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
          </BorderPane.margin>
          <content>
-            <ListView fx:id="actionsList" prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="actionsList" prefHeight="200.0" prefWidth="200.0">
+                <placeholder>
+                    <Label alignment="CENTER" prefHeight="68.0" prefWidth="200.0" text="There are no actions here!" textAlignment="CENTER" wrapText="true" />
+                </placeholder>
+            </ListView>
          </content>
       </TitledPane>
    </center>

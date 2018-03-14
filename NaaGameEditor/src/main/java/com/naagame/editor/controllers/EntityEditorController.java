@@ -5,6 +5,7 @@ import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.control.LibControl;
 import com.naagame.core.action.debug.LibDebug;
 import com.naagame.core.action.movement.LibMovement;
+import com.naagame.core.resources.IResource;
 import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmSprite;
 import com.shc.easyjson.*;
@@ -46,6 +47,10 @@ public class EntityEditorController extends Controller implements Initializable 
     @FXML private Menu addEvtKeyPressedMenu;
     @FXML private Menu addEvtKeyReleasedMenu;
     @FXML private Menu addEvtKeyTappedMenu;
+    @FXML private Menu addEvtMousePressedMenu;
+    @FXML private Menu addEvtMouseReleasedMenu;
+    @FXML private Menu addEvtMouseTappedMenu;
+    @FXML private Menu addEvtCollisionMenu;
 
     @FXML private ListView<ActionDefinition<?>> debugActionsList;
     @FXML private ListView<ActionDefinition<?>> movementActionsList;
@@ -99,6 +104,42 @@ public class EntityEditorController extends Controller implements Initializable 
         return newEvent;
     }
 
+    private void addEvent(NgmEntity.Event.Type type, String... args) {
+        String allArgs = String.join("", args);
+
+        boolean alreadyAdded = eventsList.getItems().stream()
+                .anyMatch(event -> event.getType() == type && event.getArgs().equals(allArgs));
+
+        NgmEntity.Event event;
+
+        if (!alreadyAdded) {
+            event = new NgmEntity.Event(type, allArgs);
+            eventsList.getItems().add(event);
+        } else {
+            event = eventsList.getItems().stream()
+                    .filter(e -> e.getType() == type && e.getArgs().equals(allArgs))
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        eventsList.getSelectionModel().select(event);
+    }
+
+    @FXML
+    private void addCreateEvent() {
+        addEvent(NgmEntity.Event.Type.CREATE);
+    }
+
+    @FXML
+    private void addUpdateEvent() {
+        addEvent(NgmEntity.Event.Type.UPDATE);
+    }
+
+    @FXML
+    private void addDestroyEvent() {
+        addEvent(NgmEntity.Event.Type.DESTROY);
+    }
+
     @FXML
     @Override
     protected void discardChanges() {
@@ -107,6 +148,8 @@ public class EntityEditorController extends Controller implements Initializable 
 
     @Override
     protected void resourcesChanged() {
+        createCollisionMenu();
+
         spriteSelector.getItems().clear();
         spriteSelector.getItems().addAll(NgmProject.sprites.stream()
                 .map(NgmSprite::getName)
@@ -134,6 +177,11 @@ public class EntityEditorController extends Controller implements Initializable 
     @Override
     protected void commitChanges() {
         entity.setSprite(sprite);
+
+        entity.getEvents().clear();
+        entity.getEvents().addAll(eventsList.getItems().stream()
+                .map(this::cloneEvent).collect(Collectors.toList()));
+
         changed = false;
         notifySave();
     }
@@ -150,6 +198,12 @@ public class EntityEditorController extends Controller implements Initializable 
         createKeyMenu(addEvtKeyPressedMenu, NgmEntity.Event.Type.KEY_DOWN);
         createKeyMenu(addEvtKeyReleasedMenu, NgmEntity.Event.Type.KEY_UP);
         createKeyMenu(addEvtKeyTappedMenu, NgmEntity.Event.Type.KEY_TAP);
+
+        createMouseMenu(addEvtMousePressedMenu, NgmEntity.Event.Type.MOUSE_DOWN);
+        createMouseMenu(addEvtMouseReleasedMenu, NgmEntity.Event.Type.MOUSE_UP);
+        createMouseMenu(addEvtMouseTappedMenu, NgmEntity.Event.Type.MOUSE_TAP);
+
+        createCollisionMenu();
 
         createActionLibraryItems(debugActionsList, LibDebug.class);
         createActionLibraryItems(movementActionsList, LibMovement.class);
@@ -251,15 +305,10 @@ public class EntityEditorController extends Controller implements Initializable 
     private void createKeyMenu(Menu root, NgmEntity.Event.Type type) {
         final Function<JSONObject, MenuItem> createMenuItem = json -> {
             MenuItem menuItem = new MenuItem(json.get("key").getValue());
+            String code = String.valueOf(json.get("code").<Number> getValue().intValue());
 
-            keyCodeNames.put(String.valueOf(json.get("code").<Number> getValue().intValue()),
-                    json.get("key").getValue());
-            
-            menuItem.setOnAction(actionEvent ->
-                    System.out.println(String.format("Create %s event for key %s with code %d",
-                            type,
-                            json.get("key").getValue(),
-                            json.get("code").<Number> getValue().intValue())));
+            keyCodeNames.put(code, json.get("key").getValue());
+            menuItem.setOnAction(actionEvent -> addEvent(type, code));
             
             return menuItem;
         };
@@ -292,5 +341,42 @@ public class EntityEditorController extends Controller implements Initializable 
                 createMenu.apply(lockKeys, "Lock Keys"),
                 createMenu.apply(otherKeys, "Other Keys")
         );
+    }
+
+    private void createMouseMenu(Menu root, NgmEntity.Event.Type type) {
+        final Function<String, MenuItem> createMenuItem = code -> {
+            MenuItem item = new MenuItem();
+
+            switch (code) {
+                case "1": item.setText("LEFT");   break;
+                case "2": item.setText("RIGHT");  break;
+                case "3": item.setText("MIDDLE"); break;
+            }
+
+            item.setOnAction(event -> addEvent(type, code));
+
+            return item;
+        };
+
+        root.getItems().addAll(
+                createMenuItem.apply("1"),
+                createMenuItem.apply("3"),
+                createMenuItem.apply("2")
+        );
+    }
+
+    private void createCollisionMenu() {
+        final Function<String, MenuItem> createMenuItem = entityName -> {
+            MenuItem item = new MenuItem(entityName);
+            item.setOnAction(event -> addEvent(NgmEntity.Event.Type.COLLISION, entityName));
+
+            return item;
+        };
+
+        addEvtCollisionMenu.getItems().clear();
+        addEvtCollisionMenu.getItems().addAll(NgmProject.entities.stream()
+                .map(IResource::getName)
+                .map(createMenuItem)
+                .collect(Collectors.toList()));
     }
 }
