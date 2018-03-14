@@ -85,6 +85,7 @@ public class EntityEditorController extends Controller implements Initializable 
         if (currentEvent != null) {
             actionsList.getItems().clear();
             actionsList.getItems().addAll(currentEvent.getActions());
+            eventsList.getSelectionModel().select(currentEvent);
         }
 
         resourcesChanged();
@@ -138,6 +139,15 @@ public class EntityEditorController extends Controller implements Initializable 
     @FXML
     private void addDestroyEvent() {
         addEvent(NgmEntity.Event.Type.DESTROY);
+    }
+
+    @FXML
+    private void onDeleteEventClicked() {
+        NgmEntity.Event selected;
+
+        if ((selected = eventsList.getSelectionModel().getSelectedItem()) != null) {
+            eventsList.getItems().remove(selected);
+        }
     }
 
     @FXML

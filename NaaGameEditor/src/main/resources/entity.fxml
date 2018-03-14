@@ -72,7 +72,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#addDestroyEvent" text="Destroy" />
                     </items>
                   </MenuButton>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete Event" HBox.hgrow="ALWAYS" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onDeleteEventClicked" text="Delete Event" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </children>
