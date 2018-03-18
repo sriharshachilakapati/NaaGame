@@ -1,7 +1,9 @@
 package com.naagame.core.resources;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class NgmEntity implements IResource {
     private final List<Event> events = new ArrayList<>();
@@ -72,7 +74,7 @@ public class NgmEntity implements IResource {
             DESTROY
         }
 
-        public static class Action {
+        public static class Action implements Serializable {
             private final String code;
             private String args;
 
@@ -87,6 +89,20 @@ public class NgmEntity implements IResource {
 
             public String getArgs() {
                 return args;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                Action action = (Action) o;
+                return Objects.equals(code, action.code) &&
+                        Objects.equals(args, action.args);
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(code, args);
             }
         }
     }

@@ -8,6 +8,7 @@ import com.naagame.core.action.movement.LibMovement;
 import com.naagame.core.resources.IResource;
 import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmSprite;
+import com.naagame.editor.util.ReorderableListCell;
 import com.shc.easyjson.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -251,18 +252,8 @@ public class EntityEditorController extends Controller implements Initializable 
             }
         });
 
-        actionsList.setCellFactory(list_ -> new ListCell<NgmEntity.Event.Action>() {
-            @Override
-            protected void updateItem(NgmEntity.Event.Action item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item != null) {
-                    setText(wordCamelCase(item.getCode()) + ": " + item.getArgs());
-                } else {
-                    setText("");
-                }
-            }
-        });
+        actionsList.setCellFactory(list_ -> new ReorderableListCell<>(item ->
+                        wordCamelCase(item.getCode()) + ": " + item.getArgs()));
 
         eventsList.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
             if (currentEvent != null) {
