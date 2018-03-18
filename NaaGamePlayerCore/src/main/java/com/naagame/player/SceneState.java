@@ -5,6 +5,7 @@ import com.naagame.core.resources.NgmBackground;
 import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmScene;
 import com.naagame.core.resources.NgmTexture;
+import com.shc.silenceengine.collision.broadphase.Grid;
 import com.shc.silenceengine.collision.colliders.CollisionSystem2D;
 import com.shc.silenceengine.core.GameState;
 import com.shc.silenceengine.core.SilenceEngine;
@@ -38,7 +39,11 @@ public class SceneState extends GameState {
         if (ngmScene == null) {
             NaaGamePlayer.logger.error("Scene " + scene + " is not present in project file");
             SilenceEngine.display.close();
+            return;
         }
+
+        SilenceEngine.display.setSize(ngmScene.getWidth(), ngmScene.getHeight());
+        SilenceEngine.display.centerOnScreen();
     }
 
     @Override
@@ -49,7 +54,7 @@ public class SceneState extends GameState {
         scene = new Scene();
         scene.registerRenderSystem(new SceneRenderSystem());
 
-        collider = new CollisionSystem2D();
+        collider = new CollisionSystem2D(new Grid(ngmScene.getWidth(), ngmScene.getHeight(), 128, 128));
         scene.registerUpdateSystem(collider);
 
         loadScene();

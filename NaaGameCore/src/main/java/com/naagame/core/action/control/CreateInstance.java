@@ -9,6 +9,8 @@ public class CreateInstance {
     private float posX;
     private float posY;
 
+    private boolean relative;
+
     public String getEntity() {
         return entity;
     }
@@ -33,6 +35,14 @@ public class CreateInstance {
         this.posY = posY;
     }
 
+    public boolean isRelative() {
+        return relative;
+    }
+
+    public void setRelative(boolean relative) {
+        this.relative = relative;
+    }
+
     static final class Definition extends ActionDefinition<CreateInstance> {
 
         public Definition() {
@@ -49,6 +59,10 @@ public class CreateInstance {
             addArgument(ArgumentType.FLOAT,
                     CreateInstance::getPosY,
                     (o, v) -> o.setPosY((Float) v));
+
+            addArgument(ArgumentType.BOOLEAN,
+                    CreateInstance::isRelative,
+                    (o, v) -> o.setRelative((Boolean) v));
         }
     }
 }

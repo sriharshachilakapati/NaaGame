@@ -4,6 +4,7 @@ import com.naagame.core.action.control.CreateInstance;
 import com.naagame.core.action.control.DestroyInstance;
 import com.naagame.core.action.control.LibControl;
 import com.naagame.core.resources.NgmEntity;
+import com.shc.silenceengine.utils.TaskManager;
 
 public class LibControlImpl {
     private static CreateInstance createInstance = new CreateInstance();
@@ -12,9 +13,15 @@ public class LibControlImpl {
     static void createInstance(NgmEntity.Event.Action action, EntityInstance self) {
         LibControl.CREATE_INSTANCE.decode(action.getArgs(), createInstance);
 
-        EntityInstance entityInstance = new EntityInstance(createInstance.getPosX(),
-                createInstance.getPosY(),
-                createInstance.getEntity());
+        float posX = createInstance.getPosX();
+        float posY = createInstance.getPosY();
+
+        if (createInstance.isRelative()) {
+            posX += self.transformComponent.getPosition().x;
+            posY += self.transformComponent.getPosition().y;
+        }
+
+        EntityInstance entityInstance = new EntityInstance(posX, posY, createInstance.getEntity());
 
         SceneState.instance.scene.addEntity(entityInstance);
     }
@@ -29,6 +36,7 @@ public class LibControlImpl {
             case OTHER: instance = self.other; break;
         }
 
-        instance.destroy();
+        EntityInstance finalInstance = instance;
+        TaskManager.runOnUpdate(finalInstance::destroy);
     }
 }

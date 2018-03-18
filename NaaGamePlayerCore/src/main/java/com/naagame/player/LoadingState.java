@@ -31,6 +31,8 @@ public class LoadingState extends ResourceLoadingState {
         Map<String, Long> textureIds = new HashMap<>();
         Map<String, Long> soundIds = new HashMap<>();
 
+        loader.define(Texture.class, FilePath.getResourceFile("engine_resources/logo.png"));
+
         NgmProject.textures.forEach(texture -> {
             final String source = texture.getSource();
 
