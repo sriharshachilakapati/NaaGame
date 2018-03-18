@@ -12,6 +12,7 @@ import com.shc.silenceengine.graphics.Sprite;
 import com.shc.silenceengine.input.Keyboard;
 import com.shc.silenceengine.input.Mouse;
 import com.shc.silenceengine.math.Vector2;
+import com.shc.silenceengine.math.geom2d.Polygon;
 import com.shc.silenceengine.math.geom2d.Rectangle;
 import com.shc.silenceengine.scene.Component;
 import com.shc.silenceengine.scene.Entity;
@@ -19,10 +20,7 @@ import com.shc.silenceengine.scene.components.CollisionComponent2D;
 import com.shc.silenceengine.scene.components.SpriteComponent;
 import com.shc.silenceengine.utils.functional.BiCallback;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -91,9 +89,12 @@ class EntityInstance extends Entity {
         private NgmEntity.Event createEvent;
         private NgmEntity.Event updateEvent;
         private NgmEntity.Event destroyEvent;
+        private NgmEntity.Event outOfBoundsEvent;
 
         private List<NgmEntity.Event> inputEvents;
         private List<NgmEntity.Event> collisionEvents;
+
+        private Polygon polygon;
 
         private static Map<String, BiCallback<NgmEntity.Event.Action, EntityInstance>> actionExecutors;
 
@@ -121,6 +122,10 @@ class EntityInstance extends Entity {
 
             updateEvent = ngmEntity.getEvents().stream()
                     .filter(event -> event.getType() == NgmEntity.Event.Type.UPDATE)
+                    .findFirst().orElse(null);
+
+            outOfBoundsEvent = ngmEntity.getEvents().stream()
+                    .filter(event -> event.getType() == NgmEntity.Event.Type.OUT_OF_BOUNDS)
                     .findFirst().orElse(null);
 
             destroyEvent = ngmEntity.getEvents().stream()
@@ -153,6 +158,12 @@ class EntityInstance extends Entity {
             if (createEvent != null) {
                 interpret(createEvent);
             }
+
+            CollisionComponent2D collisionComponent = entity.getComponent(CollisionComponent2D.class);
+
+            if (collisionComponent != null) {
+                polygon = collisionComponent.polygon;
+            }
         }
 
         @Override
@@ -161,6 +172,10 @@ class EntityInstance extends Entity {
 
             if (updateEvent != null) {
                 interpret(updateEvent);
+            }
+
+            if (outOfBoundsEvent != null && polygon != null && !SceneState.instance.bounds.intersects(polygon)) {
+                interpret(outOfBoundsEvent);
             }
 
             inputEvents.forEach(event -> {

@@ -85,7 +85,17 @@
                                 ],
                             "args": "",
                             "type": "create"
-                        }
+                        },
+                  {
+                    "actions": [
+                      {
+                        "code": "control_destroy_instance",
+                        "args": "self;"
+                      }
+                    ],
+                    "args": "",
+                    "type": "out_of_bounds"
+                  }
                     ],
                 "name": "bullet",
                 "sprite": "bullet"

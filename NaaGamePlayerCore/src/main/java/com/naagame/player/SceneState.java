@@ -16,6 +16,8 @@ import com.shc.silenceengine.graphics.cameras.OrthoCam;
 import com.shc.silenceengine.graphics.opengl.GLContext;
 import com.shc.silenceengine.graphics.opengl.Primitive;
 import com.shc.silenceengine.graphics.opengl.Texture;
+import com.shc.silenceengine.math.geom2d.Polygon;
+import com.shc.silenceengine.math.geom2d.Rectangle;
 import com.shc.silenceengine.scene.Scene;
 
 import java.util.List;
@@ -27,6 +29,7 @@ public class SceneState extends GameState {
     private final NgmScene ngmScene;
 
     Scene scene;
+    Polygon bounds;
 
     private OrthoCam camera;
     private CollisionSystem2D collider;
@@ -41,6 +44,8 @@ public class SceneState extends GameState {
             SilenceEngine.display.close();
             return;
         }
+
+        bounds = new Rectangle(ngmScene.getWidth(), ngmScene.getHeight()).createPolygon();
 
         SilenceEngine.display.setSize(ngmScene.getWidth(), ngmScene.getHeight());
         SilenceEngine.display.centerOnScreen();
