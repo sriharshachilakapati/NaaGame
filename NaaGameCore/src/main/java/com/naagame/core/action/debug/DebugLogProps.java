@@ -17,7 +17,7 @@ public class DebugLogProps {
 
     static final class Definition extends ActionDefinition<DebugLogProps> {
         Definition() {
-            super("debug_log_props", "Logs the properties of an entity instance");
+            super("debug_log_props", "Logs the properties of an entity instance", DebugLogProps::new);
 
             addArgument(ArgumentType.TARGET,
                     DebugLogProps::getTarget,

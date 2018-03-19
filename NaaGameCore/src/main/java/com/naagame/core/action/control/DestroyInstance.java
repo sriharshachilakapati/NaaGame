@@ -17,7 +17,7 @@ public class DestroyInstance {
 
     static class Definition extends ActionDefinition<DestroyInstance> {
         Definition() {
-            super("control_destroy_instance", "Destroys an entity instance. Can be the self or other.");
+            super("control_destroy_instance", "Destroys an entity instance. Can be the self or other.", DestroyInstance::new);
 
             addArgument(ArgumentType.TARGET,
                     DestroyInstance::getTarget,

@@ -21,7 +21,7 @@ public class LibControlImpl {
             posY += self.transformComponent.getPosition().y;
         }
 
-        EntityInstance entityInstance = new EntityInstance(posX, posY, createInstance.getEntity());
+        EntityInstance entityInstance = new EntityInstance(posX, posY, createInstance.getEntity().getName());
 
         SceneState.instance.scene.addEntity(entityInstance);
     }

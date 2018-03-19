@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class ActionDefinition<T> {
     private String code;
     private String desc;
+    private Supplier<T> supplier;
 
     private List<ActionArgument<T>> arguments;
 
-    public ActionDefinition(String code, String desc) {
+    public ActionDefinition(String code, String desc, Supplier<T> supplier) {
         this.code = code;
         this.desc = desc;
+        this.supplier = supplier;
 
         this.arguments = new ArrayList<>();
     }
@@ -59,5 +62,9 @@ public abstract class ActionDefinition<T> {
 
     public String getDescription() {
         return desc;
+    }
+
+    public Supplier<T> getSupplier() {
+        return supplier;
     }
 }

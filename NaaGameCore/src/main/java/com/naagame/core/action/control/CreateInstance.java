@@ -2,20 +2,21 @@ package com.naagame.core.action.control;
 
 import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ArgumentType;
+import com.naagame.core.resources.NgmEntity;
 
 public class CreateInstance {
-    private String entity;
+    private NgmEntity entity;
 
     private float posX;
     private float posY;
 
     private boolean relative;
 
-    public String getEntity() {
+    public NgmEntity getEntity() {
         return entity;
     }
 
-    public void setEntity(String entity) {
+    public void setEntity(NgmEntity entity) {
         this.entity = entity;
     }
 
@@ -46,11 +47,11 @@ public class CreateInstance {
     static final class Definition extends ActionDefinition<CreateInstance> {
 
         public Definition() {
-            super("control_create_instance", "Creates an instance of an entity at a position");
+            super("control_create_instance", "Creates an instance of an entity at a position", CreateInstance::new);
 
-            addArgument(ArgumentType.STRING,
+            addArgument(ArgumentType.ENTITY,
                     CreateInstance::getEntity,
-                    (o, v) -> o.setEntity((String) v));
+                    (o, v) -> o.setEntity((NgmEntity) v));
 
             addArgument(ArgumentType.FLOAT,
                     CreateInstance::getPosX,

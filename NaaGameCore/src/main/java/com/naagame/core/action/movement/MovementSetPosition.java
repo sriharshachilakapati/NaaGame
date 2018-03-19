@@ -36,7 +36,7 @@ public class MovementSetPosition {
 
     static final class Definition extends ActionDefinition<MovementSetPosition> {
         Definition() {
-            super("movement_set_position", "Moves the entity to a specific position");
+            super("movement_set_position", "Moves the entity to a specific position", MovementSetPosition::new);
 
             addArgument(ArgumentType.TARGET,
                     MovementSetPosition::getTarget,

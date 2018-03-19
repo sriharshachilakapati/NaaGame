@@ -37,7 +37,7 @@ public class MovementSetVSpeed {
 
     static final class Definition extends ActionDefinition<MovementSetVSpeed> {
         Definition() {
-            super("movement_set_vspeed", "Sets the vertical speed of the entity");
+            super("movement_set_vspeed", "Sets the vertical speed of the entity", MovementSetVSpeed::new);
 
             addArgument(ArgumentType.TARGET,
                     MovementSetVSpeed::getTarget,

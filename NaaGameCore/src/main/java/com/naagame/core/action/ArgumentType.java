@@ -1,5 +1,8 @@
 package com.naagame.core.action;
 
+import com.naagame.core.NgmProject;
+import com.naagame.core.resources.NgmEntity;
+
 import java.util.function.Function;
 
 public class ArgumentType<T> {
@@ -7,6 +10,11 @@ public class ArgumentType<T> {
     public static final ArgumentType<String> STRING = new ArgumentType<>(
             x -> x.replaceAll(";", "\\;"),
             x -> x.replaceAll("\\\\;", ";")
+    );
+
+    public static final ArgumentType<NgmEntity> ENTITY = new ArgumentType<>(
+            x -> x == null ? "" : x.getName(),
+            x -> NgmProject.find(NgmProject.entities, x)
     );
 
     public static final ArgumentType<ActionTarget> TARGET = new ArgumentType<>(
