@@ -1,23 +1,31 @@
 package com.naagame.editor.util;
 
+import com.naagame.core.action.ActionDefinition;
+import com.naagame.core.action.control.LibControl;
+import com.naagame.core.action.debug.LibDebug;
+import com.naagame.core.action.movement.LibMovement;
+import com.naagame.core.resources.NgmEntity;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.input.*;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class ReorderableListCell<T> extends ListCell<T> {
+public class EntityActionListCell extends ListCell<NgmEntity.Event.Action> {
 
     private static final DataFormat customTFormat = new DataFormat("reorderableCellCustomFormat");
 
-    private Function<T, String> transformer;
+    private Function<NgmEntity.Event.Action, String> transformer;
 
     @SuppressWarnings("unchecked")
-    public ReorderableListCell(Function<T, String> transformer) {
-        ListCell<T> thisCell = this;
+    public EntityActionListCell(Function<NgmEntity.Event.Action, String> transformer) {
+        ListCell<NgmEntity.Event.Action> thisCell = this;
         this.transformer = transformer;
 
         setOnDragDetected(event -> {
@@ -63,14 +71,14 @@ public class ReorderableListCell<T> extends ListCell<T> {
             boolean success = false;
 
             if (db.hasContent(customTFormat)) {
-                ObservableList<T> items = getListView().getItems();
+                ObservableList<NgmEntity.Event.Action> items = getListView().getItems();
 
-                T draggedObject = (T) db.getContent(customTFormat);
+                NgmEntity.Event.Action draggedObject = (NgmEntity.Event.Action) db.getContent(customTFormat);
                 int draggedIdx = items.indexOf(draggedObject);
                 int thisIdx = items.indexOf(getItem());
 
                 Platform.runLater(() -> {
-                    List<T> itemsCopy = new ArrayList<>(getListView().getItems());
+                    List<NgmEntity.Event.Action> itemsCopy = new ArrayList<>(getListView().getItems());
 
                     itemsCopy.set(draggedIdx, getItem());
                     itemsCopy.set(thisIdx, draggedObject);
@@ -82,15 +90,44 @@ public class ReorderableListCell<T> extends ListCell<T> {
             }
 
             event.setDropCompleted(success);
-
             event.consume();
         });
 
         setOnDragDone(DragEvent::consume);
+
+        setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getClickCount() == 2) {
+                NgmEntity.Event.Action action = getItem();
+
+                if (ActionEditor.edit(findDefinition(action.getCode()), action)) {
+                    updateItem(action, false);
+                }
+            }
+        });
+    }
+
+    private ActionDefinition<?> findDefinition(String code) {
+        final Function<Field[], List<ActionDefinition<?>>> getDefinitions = fields -> Arrays.stream(fields).map(f -> {
+            try {
+                return (ActionDefinition<?>) f.get(null);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }).collect(Collectors.toList());
+
+        List<ActionDefinition<?>> actionDefinitions = new ArrayList<>();
+
+        actionDefinitions.addAll(getDefinitions.apply(LibDebug.class.getDeclaredFields()));
+        actionDefinitions.addAll(getDefinitions.apply(LibMovement.class.getDeclaredFields()));
+        actionDefinitions.addAll(getDefinitions.apply(LibControl.class.getDeclaredFields()));
+
+        return actionDefinitions.stream().filter(ad -> ad.getCode().equals(code)).findFirst().orElse(null);
     }
 
     @Override
-    protected void updateItem(T item, boolean empty) {
+    protected void updateItem(NgmEntity.Event.Action item, boolean empty) {
         super.updateItem(item, empty);
 
         if (item != null && !empty) {

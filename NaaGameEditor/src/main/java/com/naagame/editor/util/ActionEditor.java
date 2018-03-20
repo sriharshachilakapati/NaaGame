@@ -14,12 +14,12 @@ import javafx.scene.layout.Priority;
 import javafx.util.StringConverter;
 
 public class ActionEditor {
-    public static <T> void edit(ActionDefinition<T> actionDef) {
-        edit(actionDef, new NgmEntity.Event.Action(actionDef.getCode(),
+    public static <T> boolean edit(ActionDefinition<T> actionDef) {
+        return edit(actionDef, new NgmEntity.Event.Action(actionDef.getCode(),
                 actionDef.encode(actionDef.getSupplier().get())));
     }
 
-    private static <T> void edit(ActionDefinition<T> actionDef, NgmEntity.Event.Action action) {
+    public static <T> boolean edit(ActionDefinition<T> actionDef, NgmEntity.Event.Action action) {
         Dialog<ButtonType> dialog = new Dialog<>();
         DialogPane content = dialog.getDialogPane();
 
@@ -96,7 +96,14 @@ public class ActionEditor {
         content.setPrefSize(350, 400);
         content.setContent(layout);
 
-        dialog.showAndWait();
+        ButtonType selected = dialog.showAndWait().orElse(cancelBtn);
+
+        if (selected == saveBtn) {
+            action.setArgs(actionDef.encode(actionObject));
+            return true;
+        }
+
+        return false;
     }
 
     private static <T> ChoiceBox<NgmEntity> getEntityChoiceBox(ActionArgument<T> argument, T actionObject) {
@@ -177,8 +184,8 @@ public class ActionEditor {
 
     private static <T> Spinner<Double> getDoubleSpinner(ActionArgument<T> argument, T actionObject) {
         Spinner<Double> spinner = new Spinner<>();
-        spinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(Double.MIN_VALUE,
-                Double.MAX_VALUE, 0));
+        spinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(Integer.MIN_VALUE,
+                Integer.MAX_VALUE, 0));
 
         spinner.setEditable(true);
         spinner.getEditor().setText(String.valueOf(argument.getGetter().apply(actionObject)));

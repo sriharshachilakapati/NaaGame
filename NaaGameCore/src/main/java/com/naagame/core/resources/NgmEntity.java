@@ -91,6 +91,10 @@ public class NgmEntity implements IResource {
                 return args;
             }
 
+            public void setArgs(String args) {
+                this.args = args;
+            }
+
             @Override
             public boolean equals(Object o) {
                 if (this == o) return true;
