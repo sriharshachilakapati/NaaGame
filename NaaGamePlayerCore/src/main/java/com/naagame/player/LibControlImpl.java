@@ -1,14 +1,17 @@
 package com.naagame.player;
 
-import com.naagame.core.action.control.CreateInstance;
-import com.naagame.core.action.control.DestroyInstance;
-import com.naagame.core.action.control.LibControl;
+import com.naagame.core.action.control.*;
 import com.naagame.core.resources.NgmEntity;
+import com.naagame.core.resources.NgmSound;
 import com.shc.silenceengine.utils.TaskManager;
 
 public class LibControlImpl {
     private static CreateInstance createInstance = new CreateInstance();
     private static DestroyInstance destroyInstance = new DestroyInstance();
+
+    private static PlaySound playSound = new PlaySound();
+    private static StopSound stopSound = new StopSound();
+    private static GotoScene gotoScene = new GotoScene();
 
     static void createInstance(NgmEntity.Event.Action action, EntityInstance self) {
         LibControl.CREATE_INSTANCE.decode(action.getArgs(), createInstance);
@@ -38,5 +41,22 @@ public class LibControlImpl {
 
         EntityInstance finalInstance = instance;
         TaskManager.runOnUpdate(finalInstance::destroy);
+    }
+
+    static void playSound(NgmEntity.Event.Action action, EntityInstance self) {
+        LibControl.PLAY_SOUND.decode(action.getArgs(), playSound);
+
+        NgmSound sound = playSound.getSound();
+        Resources.sounds.get(sound.getName()).play(sound.isLoop());
+    }
+
+    static void stopSound(NgmEntity.Event.Action action, EntityInstance self) {
+        LibControl.STOP_SOUND.decode(action.getArgs(), stopSound);
+        Resources.sounds.get(stopSound.getSound().getName()).stop();
+    }
+
+    static void gotoScene(NgmEntity.Event.Action action, EntityInstance self) {
+        LibControl.GOTO_SCENE.decode(action.getArgs(), gotoScene);
+        NaaGamePlayer.instance.setGameState(new SceneState(gotoScene.getScene().getName()));
     }
 }

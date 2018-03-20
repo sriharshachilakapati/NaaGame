@@ -2,6 +2,8 @@ package com.naagame.core.action;
 
 import com.naagame.core.NgmProject;
 import com.naagame.core.resources.NgmEntity;
+import com.naagame.core.resources.NgmScene;
+import com.naagame.core.resources.NgmSound;
 
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -16,6 +18,16 @@ public class ArgumentType<T> {
     public static final ArgumentType<NgmEntity> ENTITY = new ArgumentType<>(
             x -> x == null ? "" : x.getName(),
             x -> NgmProject.find(NgmProject.entities, x)
+    );
+
+    public static final ArgumentType<NgmSound> SOUND = new ArgumentType<>(
+            x -> x == null ? "" : x.getName(),
+            x -> NgmProject.find(NgmProject.sounds, x)
+    );
+
+    public static final ArgumentType<NgmScene> SCENE = new ArgumentType<>(
+            x -> x == null ? "" : x.getName(),
+            x -> NgmProject.find(NgmProject.scenes, x)
     );
 
     public static final ArgumentType<ActionTarget> TARGET = new ArgumentType<>(

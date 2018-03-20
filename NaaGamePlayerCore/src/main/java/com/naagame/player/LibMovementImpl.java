@@ -2,6 +2,7 @@ package com.naagame.player;
 
 import com.naagame.core.action.movement.*;
 import com.naagame.core.resources.NgmEntity;
+import com.shc.silenceengine.math.Vector3;
 
 class LibMovementImpl {
     private static MovementSetSpeed movementSetSpeed = new MovementSetSpeed();
@@ -76,6 +77,13 @@ class LibMovementImpl {
 
         float posX = movementSetPosition.getPosX();
         float posY = movementSetPosition.getPosY();
+
+        Vector3 selfPos = self.transformComponent.getPosition();
+
+        if (movementSetPosition.isRelative()) {
+            posX += selfPos.x;
+            posY += selfPos.y;
+        }
 
         instance.transformComponent.setPosition(posX, posY);
     }

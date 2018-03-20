@@ -111,6 +111,9 @@ class EntityInstance extends Entity {
 
             actionExecutors.put(LibControl.CREATE_INSTANCE.getCode(), LibControlImpl::createInstance);
             actionExecutors.put(LibControl.DESTROY_INSTANCE.getCode(), LibControlImpl::destroyInstance);
+            actionExecutors.put(LibControl.PLAY_SOUND.getCode(), LibControlImpl::playSound);
+            actionExecutors.put(LibControl.STOP_SOUND.getCode(), LibControlImpl::stopSound);
+            actionExecutors.put(LibControl.GOTO_SCENE.getCode(), LibControlImpl::gotoScene);
         }
 
         private Behaviour(NgmEntity ngmEntity) {

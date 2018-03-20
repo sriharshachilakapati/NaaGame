@@ -5,7 +5,10 @@ import com.naagame.core.action.ActionArgument;
 import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 import com.naagame.core.action.ArgumentType;
+import com.naagame.core.resources.IResource;
 import com.naagame.core.resources.NgmEntity;
+import com.naagame.core.resources.NgmScene;
+import com.naagame.core.resources.NgmSound;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
@@ -71,6 +74,14 @@ public class ActionEditor {
             } else if (argumentType == ArgumentType.ENTITY) {
                 ChoiceBox<NgmEntity> choiceBox = getEntityChoiceBox(argument, actionObject);
                 layout.add(choiceBox, 1, row);
+
+            } else if (argumentType == ArgumentType.SOUND) {
+                ChoiceBox<NgmSound> choiceBox = getSoundChoiceBox(argument, actionObject);
+                layout.add(choiceBox, 1, row);
+
+            } else if (argumentType == ArgumentType.SCENE) {
+                ChoiceBox<NgmScene> choiceBox = getSceneChoiceBox(argument, actionObject);
+                layout.add(choiceBox, 1, row);
             }
 
             row++;
@@ -101,6 +112,32 @@ public class ActionEditor {
         return false;
     }
 
+    private static <T> ChoiceBox<NgmScene> getSceneChoiceBox(ActionArgument<T> argument, T actionObject) {
+        ChoiceBox<NgmScene> choiceBox = new ChoiceBox<>();
+
+        choiceBox.getItems().addAll(NgmProject.scenes);
+        choiceBox.setConverter(new StringConverter<NgmScene>() {
+            @Override
+            public String toString(NgmScene object) {
+                return object == null ? "" : object.getName();
+            }
+
+            @Override
+            public NgmScene fromString(String string) {
+                return NgmProject.find(NgmProject.scenes, string);
+            }
+        });
+
+        choiceBox.getSelectionModel().select((NgmScene) argument.getGetter().apply(actionObject));
+        choiceBox.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
+            if (n != null) {
+                argument.getSetter().accept(actionObject, n);
+            }
+        });
+
+        return choiceBox;
+    }
+
     private static <T> ChoiceBox<NgmEntity> getEntityChoiceBox(ActionArgument<T> argument, T actionObject) {
         ChoiceBox<NgmEntity> choiceBox = new ChoiceBox<>();
 
@@ -118,6 +155,32 @@ public class ActionEditor {
         });
 
         choiceBox.getSelectionModel().select((NgmEntity) argument.getGetter().apply(actionObject));
+        choiceBox.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
+            if (n != null) {
+                argument.getSetter().accept(actionObject, n);
+            }
+        });
+
+        return choiceBox;
+    }
+
+    private static <T> ChoiceBox<NgmSound> getSoundChoiceBox(ActionArgument<T> argument, T actionObject) {
+        ChoiceBox<NgmSound> choiceBox = new ChoiceBox<>();
+
+        choiceBox.getItems().addAll(NgmProject.sounds);
+        choiceBox.setConverter(new StringConverter<NgmSound>() {
+            @Override
+            public String toString(NgmSound object) {
+                return object == null ? "" : object.getName();
+            }
+
+            @Override
+            public NgmSound fromString(String string) {
+                return NgmProject.find(NgmProject.sounds, string);
+            }
+        });
+
+        choiceBox.getSelectionModel().select((NgmSound) argument.getGetter().apply(actionObject));
         choiceBox.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
             if (n != null) {
                 argument.getSetter().accept(actionObject, n);

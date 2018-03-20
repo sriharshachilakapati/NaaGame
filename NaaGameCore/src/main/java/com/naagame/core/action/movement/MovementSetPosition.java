@@ -10,6 +10,8 @@ public class MovementSetPosition {
     private float posX;
     private float posY;
 
+    private boolean relative;
+
     public ActionTarget getTarget() {
         return target;
     }
@@ -34,6 +36,14 @@ public class MovementSetPosition {
         this.posY = posY;
     }
 
+    public boolean isRelative() {
+        return relative;
+    }
+
+    public void setRelative(boolean relative) {
+        this.relative = relative;
+    }
+
     static final class Definition extends ActionDefinition<MovementSetPosition> {
         Definition() {
             super("movement_set_position", "Moves the entity to a specific position", MovementSetPosition::new);
@@ -49,6 +59,10 @@ public class MovementSetPosition {
             addArgument(ArgumentType.FLOAT, "Position Y",
                     MovementSetPosition::getPosY,
                     (o, v) -> o.setPosY((Float) v));
+
+            addArgument(ArgumentType.BOOLEAN, "Relative",
+                    MovementSetPosition::isRelative,
+                    (o, v) -> o.setRelative((Boolean) v));
         }
     }
 }

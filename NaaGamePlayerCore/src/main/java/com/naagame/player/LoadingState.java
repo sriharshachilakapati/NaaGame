@@ -109,6 +109,12 @@ public class LoadingState extends ResourceLoadingState {
 
             NaaGamePlayer.logger.info("Done loading all the resources");
 
+            for (NgmSound ngmSound : NgmProject.sounds) {
+                if (ngmSound.isPlayOnStart() && Resources.sounds.get(ngmSound.getName()) != null) {
+                    Resources.sounds.get(ngmSound.getName()).play(ngmSound.isLoop());
+                }
+            }
+
             NaaGamePlayer.instance.setGameState(new SceneState(NgmProject.scenes.stream()
                     .findFirst()
                     .orElseThrow(RuntimeException::new)
