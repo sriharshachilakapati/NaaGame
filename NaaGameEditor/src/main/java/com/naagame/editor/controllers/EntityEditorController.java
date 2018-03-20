@@ -151,6 +151,11 @@ public class EntityEditorController extends Controller implements Initializable 
     }
 
     @FXML
+    private void addEvtNoMoreLives() {
+        addEvent(NgmEntity.Event.Type.NO_MORE_LIVES);
+    }
+
+    @FXML
     private void onDeleteEventClicked() {
         NgmEntity.Event selected;
 

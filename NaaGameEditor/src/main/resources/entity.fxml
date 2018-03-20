@@ -69,7 +69,9 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <Menu fx:id="addEvtCollisionMenu" mnemonicParsing="false" text="Collision" />
                         <Menu fx:id="addEvtNoneExistsMenu" mnemonicParsing="false" text="None Exists" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#addOutOfBoundsEvent" text="Out Of Bounds" />
+                        <MenuItem mnemonicParsing="false" onAction="#addEvtNoMoreLives" text="No More Lives" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#addDestroyEvent" text="Destroy" />
                     </items>

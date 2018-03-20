@@ -101,6 +101,7 @@ class EntityInstance extends Entity {
         private NgmEntity.Event updateEvent;
         private NgmEntity.Event destroyEvent;
         private NgmEntity.Event outOfBoundsEvent;
+        private NgmEntity.Event noMoreLivesEvent;
 
         private List<NgmEntity.Event> inputEvents;
         private List<NgmEntity.Event> collisionEvents;
@@ -126,6 +127,8 @@ class EntityInstance extends Entity {
             actionExecutors.put(LibControl.PLAY_SOUND.getCode(), LibControlImpl::playSound);
             actionExecutors.put(LibControl.STOP_SOUND.getCode(), LibControlImpl::stopSound);
             actionExecutors.put(LibControl.GOTO_SCENE.getCode(), LibControlImpl::gotoScene);
+            actionExecutors.put(LibControl.SET_SCORE.getCode(), LibControlImpl::setScore);
+            actionExecutors.put(LibControl.SET_LIVES.getCode(), LibControlImpl::setLives);
         }
 
         private Behaviour(NgmEntity ngmEntity) {
@@ -154,6 +157,10 @@ class EntityInstance extends Entity {
             noneExistEvents = ngmEntity.getEvents().stream()
                     .filter(event -> event.getType() == NgmEntity.Event.Type.NONE_EXISTS)
                     .collect(Collectors.toList());
+
+            noMoreLivesEvent = ngmEntity.getEvents().stream()
+                    .filter(event -> event.getType() == NgmEntity.Event.Type.NO_MORE_LIVES)
+                    .findFirst().orElse(null);
 
             ngmEntity.getEvents().stream().filter(this::isInputEvent).forEach(inputEvents::add);
         }
@@ -204,6 +211,10 @@ class EntityInstance extends Entity {
                 }
             }
 
+            if (SceneState.lives <= 0 && noMoreLivesEvent != null) {
+                interpret(noMoreLivesEvent);
+            }
+
             inputEvents.forEach(event -> {
                 Function<Integer, Boolean> condition = null;
 
@@ -235,7 +246,7 @@ class EntityInstance extends Entity {
             if (destroyEvent != null) {
                 interpret(destroyEvent);
             }
-            countMap.put(self.name, countMap.get(self.name) - 1);
+            countMap.put(self.name, countMap.getOrDefault(self.name, 1) - 1);
         }
 
         private void interpret(NgmEntity.Event event) {

@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 
 public class SceneState extends GameState {
     static SceneState instance;
+    static int score;
+    static int lives;
 
     private final NgmScene ngmScene;
 
@@ -91,6 +93,8 @@ public class SceneState extends GameState {
     @Override
     public void update(float delta) {
         scene.update(delta);
+        SilenceEngine.display.setTitle("NaaGamePlayer | SilenceEngine " + SilenceEngine.getVersionString() +
+                "| Score: " + score + " | Lives: " + lives);
     }
 
     @Override

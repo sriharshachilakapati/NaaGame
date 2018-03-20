@@ -72,6 +72,7 @@ public class NgmEntity implements IResource {
             OUT_OF_BOUNDS,
             NONE_EXISTS,
             COLLISION,
+            NO_MORE_LIVES,
             DESTROY
         }
 

@@ -13,6 +13,9 @@ public class LibControlImpl {
     private static StopSound stopSound = new StopSound();
     private static GotoScene gotoScene = new GotoScene();
 
+    private static SetScore setScore = new SetScore();
+    private static SetLives setLives = new SetLives();
+
     static void createInstance(NgmEntity.Event.Action action, EntityInstance self) {
         LibControl.CREATE_INSTANCE.decode(action.getArgs(), createInstance);
 
@@ -58,5 +61,29 @@ public class LibControlImpl {
     static void gotoScene(NgmEntity.Event.Action action, EntityInstance self) {
         LibControl.GOTO_SCENE.decode(action.getArgs(), gotoScene);
         NaaGamePlayer.instance.setGameState(new SceneState(gotoScene.getScene().getName()));
+    }
+
+    static void setScore(NgmEntity.Event.Action action, EntityInstance self) {
+        LibControl.SET_SCORE.decode(action.getArgs(), setScore);
+
+        if (setScore.isRelative()) {
+            SceneState.score += setScore.getScore();
+        } else {
+            SceneState.score = setScore.getScore();
+        }
+
+        SceneState.score = Math.max(SceneState.score, 0);
+    }
+
+    static void setLives(NgmEntity.Event.Action action, EntityInstance self) {
+        LibControl.SET_LIVES.decode(action.getArgs(), setLives);
+
+        if (setLives.isRelative()) {
+            SceneState.lives += setLives.getLives();
+        } else {
+            SceneState.lives = setLives.getLives();
+        }
+
+        SceneState.lives = Math.max(SceneState.lives, 0);
     }
 }
