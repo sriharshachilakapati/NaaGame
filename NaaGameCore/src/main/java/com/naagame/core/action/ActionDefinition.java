@@ -39,7 +39,12 @@ public abstract class ActionDefinition<T> {
     }
 
     public T decode(String args, T object) {
-        String[] parts = args.split(";");
+        String[] parts = args.split("(?<!(\\\\));");
+
+        if (parts.length == 0) {
+            parts = new String[] { "" };
+        }
+
         int argIndex = 0;
 
         for (ActionArgument<T> argument : arguments) {

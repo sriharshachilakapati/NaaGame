@@ -4,12 +4,13 @@ import com.naagame.core.NgmProject;
 import com.naagame.core.resources.NgmEntity;
 
 import java.util.function.Function;
+import java.util.regex.Matcher;
 
 public class ArgumentType<T> {
 
     public static final ArgumentType<String> STRING = new ArgumentType<>(
-            x -> x.replaceAll(";", "\\;"),
-            x -> x.replaceAll("\\\\;", ";")
+            x -> x.replaceAll(";", Matcher.quoteReplacement("\\;")),
+            x -> x.replaceAll("\\\\;", Matcher.quoteReplacement(";"))
     );
 
     public static final ArgumentType<NgmEntity> ENTITY = new ArgumentType<>(

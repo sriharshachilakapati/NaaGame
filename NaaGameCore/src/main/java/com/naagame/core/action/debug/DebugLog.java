@@ -4,7 +4,7 @@ import com.naagame.core.action.ArgumentType;
 import com.naagame.core.action.ActionDefinition;
 
 public class DebugLog {
-    private String message;
+    private String message = "";
 
     public String getMessage() {
         return message;

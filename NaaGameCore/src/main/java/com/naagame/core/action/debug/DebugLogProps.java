@@ -5,7 +5,7 @@ import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 
 public class DebugLogProps {
-    private ActionTarget target;
+    private ActionTarget target = ActionTarget.SELF;
 
     public ActionTarget getTarget() {
         return target;

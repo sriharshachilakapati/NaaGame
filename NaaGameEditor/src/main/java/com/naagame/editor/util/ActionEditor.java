@@ -14,11 +14,6 @@ import javafx.scene.layout.Priority;
 import javafx.util.StringConverter;
 
 public class ActionEditor {
-    public static <T> boolean edit(ActionDefinition<T> actionDef) {
-        return edit(actionDef, new NgmEntity.Event.Action(actionDef.getCode(),
-                actionDef.encode(actionDef.getSupplier().get())));
-    }
-
     public static <T> boolean edit(ActionDefinition<T> actionDef, NgmEntity.Event.Action action) {
         Dialog<ButtonType> dialog = new Dialog<>();
         DialogPane content = dialog.getDialogPane();

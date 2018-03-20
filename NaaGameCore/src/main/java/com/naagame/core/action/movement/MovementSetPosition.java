@@ -5,7 +5,7 @@ import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 
 public class MovementSetPosition {
-    private ActionTarget target;
+    private ActionTarget target = ActionTarget.SELF;
 
     private float posX;
     private float posY;

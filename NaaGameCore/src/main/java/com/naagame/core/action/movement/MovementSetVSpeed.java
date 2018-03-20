@@ -5,7 +5,7 @@ import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 
 public class MovementSetVSpeed {
-    private ActionTarget target;
+    private ActionTarget target = ActionTarget.SELF;
 
     private float vSpeed;
 

@@ -8,6 +8,7 @@ import com.naagame.core.action.movement.LibMovement;
 import com.naagame.core.resources.IResource;
 import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmSprite;
+import com.naagame.editor.util.ActionEditor;
 import com.naagame.editor.util.EntityActionListCell;
 import com.shc.easyjson.*;
 import javafx.fxml.FXML;
@@ -270,8 +271,25 @@ public class EntityEditorController extends Controller implements Initializable 
         });
     }
 
+    @SuppressWarnings("unchecked")
     private void createActionLibraryItems(ListView<ActionDefinition<?>> list, Class<?> lib) {
         list.setCellFactory(list_ -> new ListCell<ActionDefinition<?>>() {
+            {
+                setOnMouseClicked(mouseEvent -> {
+                    if (mouseEvent.getClickCount() == 2) {
+                        ActionDefinition<Object> definition = (ActionDefinition<Object>) getItem();
+                        NgmEntity.Event.Action action = new NgmEntity.Event.Action(
+                                definition.getCode(),
+                                definition.encode(definition.getSupplier().get())
+                        );
+
+                        if (ActionEditor.edit(definition, action)) {
+                            actionsList.getItems().add(action);
+                        }
+                    }
+                });
+            }
+
             @Override
             protected void updateItem(ActionDefinition<?> item, boolean empty) {
                 super.updateItem(item, empty);
