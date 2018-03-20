@@ -46,6 +46,7 @@ public class SceneState extends GameState {
         }
 
         bounds = new Rectangle(ngmScene.getWidth(), ngmScene.getHeight()).createPolygon();
+        EntityInstance.countMap.clear();
 
         SilenceEngine.display.setSize(ngmScene.getWidth(), ngmScene.getHeight());
         SilenceEngine.display.centerOnScreen();

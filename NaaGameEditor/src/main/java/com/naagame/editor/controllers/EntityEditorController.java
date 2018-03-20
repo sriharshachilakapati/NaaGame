@@ -53,6 +53,7 @@ public class EntityEditorController extends Controller implements Initializable 
     @FXML private Menu addEvtMouseReleasedMenu;
     @FXML private Menu addEvtMouseTappedMenu;
     @FXML private Menu addEvtCollisionMenu;
+    @FXML private Menu addEvtNoneExistsMenu;
 
     @FXML private ListView<ActionDefinition<?>> debugActionsList;
     @FXML private ListView<ActionDefinition<?>> movementActionsList;
@@ -166,6 +167,7 @@ public class EntityEditorController extends Controller implements Initializable 
     @Override
     protected void resourcesChanged() {
         createCollisionMenu();
+        createNoneExistsMenu();
 
         spriteSelector.getItems().clear();
         spriteSelector.getItems().addAll(NgmProject.sprites.stream()
@@ -221,6 +223,7 @@ public class EntityEditorController extends Controller implements Initializable 
         createMouseMenu(addEvtMouseTappedMenu, NgmEntity.Event.Type.MOUSE_TAP);
 
         createCollisionMenu();
+        createNoneExistsMenu();
 
         createActionLibraryItems(debugActionsList, LibDebug.class);
         createActionLibraryItems(movementActionsList, LibMovement.class);
@@ -399,6 +402,21 @@ public class EntityEditorController extends Controller implements Initializable 
 
         addEvtCollisionMenu.getItems().clear();
         addEvtCollisionMenu.getItems().addAll(NgmProject.entities.stream()
+                .map(IResource::getName)
+                .map(createMenuItem)
+                .collect(Collectors.toList()));
+    }
+
+    private void createNoneExistsMenu() {
+        final Function<String, MenuItem> createMenuItem = entityName -> {
+            MenuItem item = new MenuItem(entityName);
+            item.setOnAction(event -> addEvent(NgmEntity.Event.Type.NONE_EXISTS, entityName));
+
+            return item;
+        };
+
+        addEvtNoneExistsMenu.getItems().clear();
+        addEvtNoneExistsMenu.getItems().addAll(NgmProject.entities.stream()
                 .map(IResource::getName)
                 .map(createMenuItem)
                 .collect(Collectors.toList()));

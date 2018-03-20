@@ -25,6 +25,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 class EntityInstance extends Entity {
+    static final Map<String, Integer> countMap = new HashMap<>();
 
     EntityInstance other;
 
@@ -32,6 +33,8 @@ class EntityInstance extends Entity {
     Vector2 speed;
 
     private String name;
+
+    private Behaviour behaviour;
 
     EntityInstance(float posX, float posY, String name) {
         this.name = name;
@@ -49,7 +52,7 @@ class EntityInstance extends Entity {
 
         ngmSprite = ngmEntity.getSprite();
 
-        Behaviour behaviour = new Behaviour(ngmEntity);
+        behaviour = new Behaviour(ngmEntity);
 
         if (ngmSprite != null) {
             Animation animation = Resources.animations.get(ngmSprite.getName());
@@ -82,6 +85,14 @@ class EntityInstance extends Entity {
         addComponent(behaviour);
     }
 
+    @Override
+    public void destroy() {
+        if (!isDestroyed()) {
+            behaviour.handleDestroy();
+            super.destroy();
+        }
+    }
+
     private static class Behaviour extends Component {
 
         private EntityInstance self;
@@ -93,6 +104,7 @@ class EntityInstance extends Entity {
 
         private List<NgmEntity.Event> inputEvents;
         private List<NgmEntity.Event> collisionEvents;
+        private List<NgmEntity.Event> noneExistEvents;
 
         private Polygon polygon;
 
@@ -139,6 +151,10 @@ class EntityInstance extends Entity {
                     .filter(event -> event.getType() == NgmEntity.Event.Type.COLLISION)
                     .collect(Collectors.toList());
 
+            noneExistEvents = ngmEntity.getEvents().stream()
+                    .filter(event -> event.getType() == NgmEntity.Event.Type.NONE_EXISTS)
+                    .collect(Collectors.toList());
+
             ngmEntity.getEvents().stream().filter(this::isInputEvent).forEach(inputEvents::add);
         }
 
@@ -157,6 +173,7 @@ class EntityInstance extends Entity {
         @Override
         protected void onCreate() {
             self = (EntityInstance) entity;
+            countMap.put(self.name, countMap.getOrDefault(self.name, 0) + 1);
 
             if (createEvent != null) {
                 interpret(createEvent);
@@ -179,6 +196,12 @@ class EntityInstance extends Entity {
 
             if (outOfBoundsEvent != null && polygon != null && !SceneState.instance.bounds.intersects(polygon)) {
                 interpret(outOfBoundsEvent);
+            }
+
+            for (NgmEntity.Event event : noneExistEvents) {
+                if (countMap.getOrDefault(event.getArgs(), 0) == 0) {
+                    interpret(event);
+                }
             }
 
             inputEvents.forEach(event -> {
@@ -208,11 +231,11 @@ class EntityInstance extends Entity {
             transformComponent.translate(self.speed);
         }
 
-        @Override
-        protected void onDestroyed() {
+        void handleDestroy() {
             if (destroyEvent != null) {
                 interpret(destroyEvent);
             }
+            countMap.put(self.name, countMap.get(self.name) - 1);
         }
 
         private void interpret(NgmEntity.Event event) {
