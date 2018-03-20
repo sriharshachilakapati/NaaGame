@@ -118,6 +118,8 @@ public class EntityActionListCell extends ListCell<NgmEntity.Event.Action> {
             getListView().getItems().remove(getItem());
             callback.run();
         });
+
+        setContextMenu(menu);
     }
 
     private ActionDefinition<?> findDefinition(String code) {
