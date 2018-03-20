@@ -48,19 +48,19 @@ public class MovementSetSpeed {
         Definition() {
             super("movement_set_speed", "Sets the speed of the entity", MovementSetSpeed::new);
 
-            addArgument(ArgumentType.TARGET,
+            addArgument(ArgumentType.TARGET, "Target",
                     MovementSetSpeed::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
 
-            addArgument(ArgumentType.FLOAT,
+            addArgument(ArgumentType.FLOAT, "HSpeed",
                     MovementSetSpeed::getHSpeed,
                     (o, v) -> o.setHSpeed((Float) v));
 
-            addArgument(ArgumentType.FLOAT,
+            addArgument(ArgumentType.FLOAT, "VSpeed",
                     MovementSetSpeed::getVSpeed,
                     (o, v) -> o.setVSpeed((Float) v));
 
-            addArgument(ArgumentType.BOOLEAN,
+            addArgument(ArgumentType.BOOLEAN, "Relative",
                     MovementSetSpeed::isRelative,
                     (o, v) -> o.setRelative((Boolean) v));
         }

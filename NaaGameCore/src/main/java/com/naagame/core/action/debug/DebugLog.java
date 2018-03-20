@@ -17,7 +17,9 @@ public class DebugLog {
     static final class Definition extends ActionDefinition<DebugLog> {
         Definition() {
             super("debug_log", "Logs a message to the debug console", DebugLog::new);
-            addArgument(ArgumentType.STRING, DebugLog::getMessage, (o, s) -> o.setMessage(String.valueOf(s)));
+            addArgument(ArgumentType.STRING, "Message",
+                    DebugLog::getMessage,
+                    (o, s) -> o.setMessage(String.valueOf(s)));
         }
     }
 }

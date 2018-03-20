@@ -8,9 +8,12 @@ public class ActionArgument<T> {
     private Function<T, Object> getter;
     private BiConsumer<T, Object> setter;
 
+    private String name;
+
     @SuppressWarnings("unchecked")
-    ActionArgument(ArgumentType<?> type, Function<T, Object> getter, BiConsumer<T, Object> setter) {
+    ActionArgument(ArgumentType<?> type, String name, Function<T, Object> getter, BiConsumer<T, Object> setter) {
         this.type = (ArgumentType<Object>) type;
+        this.name = name;
         this.getter = getter;
         this.setter = setter;
     }
@@ -25,5 +28,9 @@ public class ActionArgument<T> {
 
     public BiConsumer<T, Object> getSetter() {
         return setter;
+    }
+
+    public String getName() {
+        return name;
     }
 }

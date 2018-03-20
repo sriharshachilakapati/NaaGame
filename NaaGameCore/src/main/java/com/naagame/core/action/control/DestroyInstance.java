@@ -19,7 +19,7 @@ public class DestroyInstance {
         Definition() {
             super("control_destroy_instance", "Destroys an entity instance. Can be the self or other.", DestroyInstance::new);
 
-            addArgument(ArgumentType.TARGET,
+            addArgument(ArgumentType.TARGET, "Target",
                     DestroyInstance::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
         }

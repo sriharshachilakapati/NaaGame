@@ -19,7 +19,7 @@ public class DebugLogProps {
         Definition() {
             super("debug_log_props", "Logs the properties of an entity instance", DebugLogProps::new);
 
-            addArgument(ArgumentType.TARGET,
+            addArgument(ArgumentType.TARGET, "Target",
                     DebugLogProps::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
         }

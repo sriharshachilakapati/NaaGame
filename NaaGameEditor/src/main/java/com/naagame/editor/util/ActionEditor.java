@@ -42,7 +42,7 @@ public class ActionEditor {
         T actionObject = actionDef.decode(action.getArgs(), actionDef.getSupplier().get());
 
         for (ActionArgument<T> argument : actionDef.getArguments()) {
-            layout.add(new Label(String.format("Argument %d", row + 1)), 0, row);
+            layout.add(new Label(argument.getName()), 0, row);
 
             ArgumentType<?> argumentType = argument.getType();
 

@@ -49,19 +49,19 @@ public class CreateInstance {
         public Definition() {
             super("control_create_instance", "Creates an instance of an entity at a position", CreateInstance::new);
 
-            addArgument(ArgumentType.ENTITY,
+            addArgument(ArgumentType.ENTITY, "Entity",
                     CreateInstance::getEntity,
                     (o, v) -> o.setEntity((NgmEntity) v));
 
-            addArgument(ArgumentType.FLOAT,
+            addArgument(ArgumentType.FLOAT, "Position X",
                     CreateInstance::getPosX,
                     (o, v) -> o.setPosX((Float) v));
 
-            addArgument(ArgumentType.FLOAT,
+            addArgument(ArgumentType.FLOAT, "Position Y",
                     CreateInstance::getPosY,
                     (o, v) -> o.setPosY((Float) v));
 
-            addArgument(ArgumentType.BOOLEAN,
+            addArgument(ArgumentType.BOOLEAN, "Relative",
                     CreateInstance::isRelative,
                     (o, v) -> o.setRelative((Boolean) v));
         }

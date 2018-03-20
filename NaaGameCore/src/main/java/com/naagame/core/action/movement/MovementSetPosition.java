@@ -38,15 +38,15 @@ public class MovementSetPosition {
         Definition() {
             super("movement_set_position", "Moves the entity to a specific position", MovementSetPosition::new);
 
-            addArgument(ArgumentType.TARGET,
+            addArgument(ArgumentType.TARGET, "Target",
                     MovementSetPosition::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
 
-            addArgument(ArgumentType.FLOAT,
+            addArgument(ArgumentType.FLOAT, "Position X",
                     MovementSetPosition::getPosX,
                     (o, v) -> o.setPosX((Float) v));
 
-            addArgument(ArgumentType.FLOAT,
+            addArgument(ArgumentType.FLOAT, "Position Y",
                     MovementSetPosition::getPosY,
                     (o, v) -> o.setPosY((Float) v));
         }

@@ -39,15 +39,15 @@ public class MovementSetVSpeed {
         Definition() {
             super("movement_set_vspeed", "Sets the vertical speed of the entity", MovementSetVSpeed::new);
 
-            addArgument(ArgumentType.TARGET,
+            addArgument(ArgumentType.TARGET, "Target",
                     MovementSetVSpeed::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
 
-            addArgument(ArgumentType.FLOAT,
+            addArgument(ArgumentType.FLOAT, "VSpeed",
                     MovementSetVSpeed::getVSpeed,
                     (o, v) -> o.setVSpeed((Float) v));
 
-            addArgument(ArgumentType.BOOLEAN,
+            addArgument(ArgumentType.BOOLEAN, "Relative",
                     MovementSetVSpeed::isRelative,
                     (o, v) -> o.setRelative((Boolean) v));
         }

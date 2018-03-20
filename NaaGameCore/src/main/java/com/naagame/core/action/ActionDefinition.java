@@ -22,8 +22,8 @@ public abstract class ActionDefinition<T> {
     }
 
     @SuppressWarnings("unchecked")
-    protected void addArgument(ArgumentType<?> argument, Function<T, Object> getter, BiConsumer<T, Object> setter) {
-        arguments.add(new ActionArgument<>(argument, getter, setter));
+    protected void addArgument(ArgumentType<?> argument, String name, Function<T, Object> getter, BiConsumer<T, Object> setter) {
+        arguments.add(new ActionArgument<>(argument, name, getter, setter));
     }
 
     public String encode(T object) {
