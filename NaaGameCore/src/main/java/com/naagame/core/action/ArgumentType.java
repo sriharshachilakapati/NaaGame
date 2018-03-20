@@ -6,13 +6,12 @@ import com.naagame.core.resources.NgmScene;
 import com.naagame.core.resources.NgmSound;
 
 import java.util.function.Function;
-import java.util.regex.Matcher;
 
 public class ArgumentType<T> {
 
     public static final ArgumentType<String> STRING = new ArgumentType<>(
-            x -> x.replaceAll(";", Matcher.quoteReplacement("\\;")),
-            x -> x.replaceAll("\\\\;", Matcher.quoteReplacement(";"))
+            x -> x.replaceAll(";", "\\\\;"),
+            x -> x.replaceAll("\\\\;", ";")
     );
 
     public static final ArgumentType<NgmEntity> ENTITY = new ArgumentType<>(
