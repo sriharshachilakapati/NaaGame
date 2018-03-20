@@ -139,6 +139,11 @@ public class EntityEditorController extends Controller implements Initializable 
     }
 
     @FXML
+    private void addOutOfBoundsEvent() {
+        addEvent(NgmEntity.Event.Type.OUT_OF_BOUNDS);
+    }
+
+    @FXML
     private void addDestroyEvent() {
         addEvent(NgmEntity.Event.Type.DESTROY);
     }

@@ -68,6 +68,7 @@
                         </Menu>
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <Menu fx:id="addEvtCollisionMenu" mnemonicParsing="false" text="Collision" />
+                        <MenuItem mnemonicParsing="false" onAction="#addOutOfBoundsEvent" text="Out Of Bounds" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#addDestroyEvent" text="Destroy" />
                     </items>
