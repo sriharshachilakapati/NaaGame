@@ -2,7 +2,7 @@ package com.naagame.editor.controllers;
 
 import com.naagame.core.NgmProject;
 import com.naagame.core.action.ActionDefinition;
-import com.naagame.core.action.control.LibControl;
+import com.naagame.core.action.control.*;
 import com.naagame.core.action.debug.LibDebug;
 import com.naagame.core.action.movement.LibMovement;
 import com.naagame.core.resources.IResource;
@@ -72,7 +72,6 @@ public class EntityEditorController extends Controller implements Initializable 
     public void init(String name) {
         entity = NgmProject.find(NgmProject.entities, name);
         sprite = entity.getSprite();
-        changed = false;
 
         if (sprite != null) {
             spriteSelector.getSelectionModel().select(sprite.getName());
@@ -92,6 +91,7 @@ public class EntityEditorController extends Controller implements Initializable 
         }
 
         resourcesChanged();
+        changed = false;
     }
 
     private NgmEntity.Event.Action cloneAction(NgmEntity.Event.Action action) {
@@ -127,6 +127,7 @@ public class EntityEditorController extends Controller implements Initializable 
         }
 
         eventsList.getSelectionModel().select(event);
+        changed = true;
     }
 
     @FXML
@@ -155,6 +156,7 @@ public class EntityEditorController extends Controller implements Initializable 
 
         if ((selected = eventsList.getSelectionModel().getSelectedItem()) != null) {
             eventsList.getItems().remove(selected);
+            changed = true;
         }
     }
 
@@ -185,6 +187,43 @@ public class EntityEditorController extends Controller implements Initializable 
         } else {
             spriteSelector.getSelectionModel().select(sprite.getName());
         }
+
+        eventsList.getItems().removeIf(
+                event -> (event.getType() == NgmEntity.Event.Type.COLLISION ||
+                        event.getType() == NgmEntity.Event.Type.NONE_EXISTS) &&
+                        NgmProject.find(NgmProject.entities, event.getArgs()) == null
+        );
+
+        for (NgmEntity.Event event : eventsList.getItems()) {
+            event.getActions().removeIf(action -> {
+                if (action.getCode().equals(LibControl.CREATE_INSTANCE.getCode())) {
+                    CreateInstance object = LibControl.CREATE_INSTANCE.decode(action.getArgs(),
+                            LibControl.CREATE_INSTANCE.getSupplier().get());
+
+                    return NgmProject.find(NgmProject.entities, object.getEntity().getName()) == null;
+
+                } else if (action.getCode().equals(LibControl.GOTO_SCENE.getCode())) {
+                    GotoScene object = LibControl.GOTO_SCENE.decode(action.getArgs(),
+                            LibControl.GOTO_SCENE.getSupplier().get());
+
+                    return NgmProject.find(NgmProject.scenes, object.getScene().getName()) == null;
+
+                } else if (action.getCode().equals(LibControl.PLAY_SOUND.getCode())) {
+                    PlaySound object = LibControl.PLAY_SOUND.decode(action.getArgs(),
+                            LibControl.PLAY_SOUND.getSupplier().get());
+
+                    return NgmProject.find(NgmProject.sounds, object.getSound().getName()) == null;
+
+                } else if (action.getCode().equals(LibControl.STOP_SOUND.getCode())) {
+                    StopSound object = LibControl.STOP_SOUND.decode(action.getArgs(),
+                            LibControl.STOP_SOUND.getSupplier().get());
+
+                    return NgmProject.find(NgmProject.sounds, object.getSound().getName()) == null;
+                }
+
+                return false;
+            });
+        }
     }
 
     @Override
@@ -201,8 +240,8 @@ public class EntityEditorController extends Controller implements Initializable 
         entity.getEvents().addAll(eventsList.getItems().stream()
                 .map(this::cloneEvent).collect(Collectors.toList()));
 
-        changed = false;
         notifySave();
+        changed = false;
     }
 
     @Override
@@ -262,7 +301,7 @@ public class EntityEditorController extends Controller implements Initializable 
         });
 
         actionsList.setCellFactory(list_ -> new EntityActionListCell(item ->
-                        wordCamelCase(item.getCode()) + ": " + item.getArgs()));
+                        wordCamelCase(item.getCode()) + ": " + item.getArgs(), () -> changed = true));
 
         eventsList.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
             if (currentEvent != null) {
@@ -293,6 +332,7 @@ public class EntityEditorController extends Controller implements Initializable 
 
                         if (ActionEditor.edit(definition, action)) {
                             actionsList.getItems().add(action);
+                            changed = true;
                         }
                     }
                 });

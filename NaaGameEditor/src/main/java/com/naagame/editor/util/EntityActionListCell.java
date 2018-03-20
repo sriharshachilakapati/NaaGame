@@ -7,7 +7,9 @@ import com.naagame.core.action.movement.LibMovement;
 import com.naagame.core.resources.NgmEntity;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.*;
 
 import java.lang.reflect.Field;
@@ -24,7 +26,7 @@ public class EntityActionListCell extends ListCell<NgmEntity.Event.Action> {
     private Function<NgmEntity.Event.Action, String> transformer;
 
     @SuppressWarnings("unchecked")
-    public EntityActionListCell(Function<NgmEntity.Event.Action, String> transformer) {
+    public EntityActionListCell(Function<NgmEntity.Event.Action, String> transformer, Runnable callback) {
         ListCell<NgmEntity.Event.Action> thisCell = this;
         this.transformer = transformer;
 
@@ -89,6 +91,10 @@ public class EntityActionListCell extends ListCell<NgmEntity.Event.Action> {
                 success = true;
             }
 
+            if (success) {
+                callback.run();
+            }
+
             event.setDropCompleted(success);
             event.consume();
         });
@@ -101,8 +107,16 @@ public class EntityActionListCell extends ListCell<NgmEntity.Event.Action> {
 
                 if (ActionEditor.edit(findDefinition(action.getCode()), action)) {
                     updateItem(action, false);
+                    callback.run();
                 }
             }
+        });
+
+        ContextMenu menu = new ContextMenu();
+        MenuItem delete = new MenuItem("Delete");
+        delete.setOnAction(evt -> {
+            getListView().getItems().remove(getItem());
+            callback.run();
         });
     }
 
