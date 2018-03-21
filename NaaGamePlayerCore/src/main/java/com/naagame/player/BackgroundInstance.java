@@ -34,8 +34,8 @@ public class BackgroundInstance {
 
         Texture texture = Resources.textures.get(background.getTexture().getName());
 
-        float xOffset = x / texture.getWidth();
-        float yOffset = y / texture.getHeight();
+        float xOffset = -x / texture.getWidth();
+        float yOffset = -y / texture.getHeight();
 
         texture.bind();
         renderer.begin(Primitive.TRIANGLE_FAN);

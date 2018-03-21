@@ -106,15 +106,15 @@ class LibMovementImpl {
         float iw = aRect.getIntersectionWidth(bRect);
         float ih = aRect.getIntersectionHeight(bRect);
 
-        if (iw > ih) {
-            a.speed.y *= -1;
+        Vector3 aPos = a.transformComponent.getPosition();
+        Vector3 bPos = b.transformComponent.getPosition();
+
+        if (iw >= ih) {
+            a.speed.y = (aPos.y > bPos.y ? 1 : -1) * Math.abs(a.speed.y);
         }
-        else if (ih > iw) {
-            a.speed.x *= -1;
-        }
-        else {
-            a.speed.x *= -1;
-            a.speed.y *= -1;
+
+        if (ih >= iw) {
+            a.speed.x = (aPos.x < bPos.x ? -1 : 1) * Math.abs(a.speed.x);
         }
     }
 }

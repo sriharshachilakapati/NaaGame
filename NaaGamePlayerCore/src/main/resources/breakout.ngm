@@ -1,0 +1,641 @@
+{
+    "backgrounds": [
+            {
+                "hSpeed": 4,
+                "name": "background",
+                "texture": "background",
+                "vSpeed": 0
+            }
+        ],
+    "entities": [
+            {
+                "events": [
+                        {
+                            "actions": [
+                                    {
+                                        "args": "3;false;",
+                                        "code": "control_set_lives"
+                                    },
+                                    {
+                                        "args": "0;false;",
+                                        "code": "control_set_score"
+                                    }
+                                ],
+                            "args": "",
+                            "type": "create"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;0.0;false;",
+                                        "code": "movement_set_hspeed"
+                                    }
+                                ],
+                            "args": "",
+                            "type": "update"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;-4.0;false;",
+                                        "code": "movement_set_hspeed"
+                                    }
+                                ],
+                            "args": "75",
+                            "type": "key_down"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;4.0;false;",
+                                        "code": "movement_set_hspeed"
+                                    }
+                                ],
+                            "args": "76",
+                            "type": "key_down"
+                        }
+                    ],
+                "name": "player",
+                "sprite": "player"
+            },
+            {
+                "events": [
+                        
+                    ],
+                "name": "brick",
+                "sprite": "brick"
+            },
+            {
+                "events": [
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;4.0;-4.0;false;",
+                                        "code": "movement_set_speed"
+                                    }
+                                ],
+                            "args": "",
+                            "type": "create"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;",
+                                        "code": "movement_bounce"
+                                    }
+                                ],
+                            "args": "wall",
+                            "type": "collision"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;",
+                                        "code": "movement_bounce"
+                                    }
+                                ],
+                            "args": "player",
+                            "type": "collision"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;",
+                                        "code": "movement_bounce"
+                                    },
+                                    {
+                                        "args": "other;",
+                                        "code": "control_destroy_instance"
+                                    },
+                                    {
+                                        "args": "10;true;",
+                                        "code": "control_set_score"
+                                    }
+                                ],
+                            "args": "brick",
+                            "type": "collision"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "-1;true;",
+                                        "code": "control_set_lives"
+                                    },
+                              {
+                                "args": "self;336;368;false;",
+                                "code": "movement_set_position"
+                              }
+                                ],
+                            "args": "",
+                            "type": "out_of_bounds"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "3;false;",
+                                        "code": "control_set_lives"
+                                    },
+                                    {
+                                        "args": "0;false;",
+                                        "code": "control_set_score"
+                                    },
+                              {
+                                "args": "Main;",
+                                "code": "control_goto_scene"
+                              }
+                                ],
+                            "args": "",
+                            "type": "no_more_lives"
+                        }
+                    ],
+                "name": "ball",
+                "sprite": "ball"
+            },
+            {
+                "events": [
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;",
+                                        "code": "control_destroy_instance"
+                                    },
+                                    {
+                                        "args": "ball;0.0;0.0;true;",
+                                        "code": "control_create_instance"
+                                    }
+                                ],
+                            "args": "103",
+                            "type": "key_down"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;0.0;false;",
+                                        "code": "movement_set_hspeed"
+                                    }
+                                ],
+                            "args": "",
+                            "type": "update"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;-4.0;false;",
+                                        "code": "movement_set_hspeed"
+                                    }
+                                ],
+                            "args": "75",
+                            "type": "key_down"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;4.0;false;",
+                                        "code": "movement_set_hspeed"
+                                    }
+                                ],
+                            "args": "76",
+                            "type": "key_down"
+                        }
+                    ],
+                "name": "unlaunched_ball",
+                "sprite": "ball"
+            },
+            {
+                "events": [
+                        
+                    ],
+                "name": "wall",
+                "sprite": "wall"
+            }
+        ],
+    "scenes": [
+            {
+                "backgrounds": [
+                        {
+                            "background": "background",
+                            "posX": 0,
+                            "posY": 32
+                        }
+                    ],
+                "entities": [
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 400
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 368
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 336
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 304
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 272
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 240
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 208
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 176
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 144
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 112
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 80
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 48
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 16,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 48,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 80,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 112,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 144,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 176,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 208,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 240,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 272,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 304,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 336,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 368,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 400,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 432,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 464,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 496,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 528,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 560,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 592,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 16
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 48
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 80
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 112
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 144
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 208
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 176
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 240
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 272
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 304
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 336
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 368
+                        },
+                        {
+                            "entity": "wall",
+                            "posX": 624,
+                            "posY": 400
+                        },
+                        {
+                            "entity": "player",
+                            "posX": 336,
+                            "posY": 432
+                        },
+                        {
+                            "entity": "unlaunched_ball",
+                            "posX": 336,
+                            "posY": 368
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 112,
+                            "posY": 112
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 176,
+                            "posY": 112
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 272,
+                            "posY": 112
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 336,
+                            "posY": 112
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 432,
+                            "posY": 112
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 496,
+                            "posY": 112
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 528,
+                            "posY": 144
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 464,
+                            "posY": 144
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 368,
+                            "posY": 144
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 304,
+                            "posY": 144
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 208,
+                            "posY": 144
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 144,
+                            "posY": 144
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 112,
+                            "posY": 176
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 176,
+                            "posY": 176
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 272,
+                            "posY": 176
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 336,
+                            "posY": 176
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 432,
+                            "posY": 176
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 496,
+                            "posY": 176
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 112,
+                            "posY": 240
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 176,
+                            "posY": 240
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 272,
+                            "posY": 240
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 336,
+                            "posY": 240
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 432,
+                            "posY": 240
+                        },
+                        {
+                            "entity": "brick",
+                            "posX": 496,
+                            "posY": 240
+                        }
+                    ],
+                "height": 480,
+                "name": "Main",
+                "width": 640
+            }
+        ],
+    "sounds": [
+            
+        ],
+    "sprites": [
+            {
+                "frames": [
+                        {
+                            "duration": 250,
+                            "texture": "player"
+                        }
+                    ],
+                "name": "player"
+            },
+            {
+                "frames": [
+                        {
+                            "duration": 250,
+                            "texture": "brick"
+                        }
+                    ],
+                "name": "brick"
+            },
+            {
+                "frames": [
+                        {
+                            "duration": 250,
+                            "texture": "ball"
+                        }
+                    ],
+                "name": "ball"
+            },
+            {
+                "frames": [
+                        {
+                            "duration": 250,
+                            "texture": "wall"
+                        }
+                    ],
+                "name": "wall"
+            }
+        ],
+    "textures": [
+            {
+                "name": "player",
+                "source": "resources/6045b448aa5ab350101745ffe9b8502942031561.png"
+            },
+            {
+                "name": "brick",
+                "source": "resources/842baa4517ad67cd226fd9d74602df20d3a19689.png"
+            },
+            {
+                "name": "ball",
+                "source": "resources/e969e6e64fc22961180a2affb7dec84376a45338.png"
+            },
+            {
+                "name": "background",
+                "source": "resources/bad69df1c1c3abf481e79ad13d86df96ccb689f5.png"
+            },
+            {
+                "name": "wall",
+                "source": "colour:0.501961;0.200000;0.301961;1.000000;32;32;"
+            }
+        ]
+}

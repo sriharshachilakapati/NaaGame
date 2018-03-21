@@ -5,7 +5,7 @@ import com.naagame.core.action.ActionTarget;
 import com.naagame.core.action.ArgumentType;
 
 public class Bounce {
-    private ActionTarget target;
+    private ActionTarget target = ActionTarget.SELF;
 
     public ActionTarget getTarget() {
         return target;
