@@ -6,15 +6,15 @@ import com.naagame.core.resources.NgmSound;
 import com.shc.silenceengine.utils.TaskManager;
 
 public class LibControlImpl {
-    private static CreateInstance createInstance = new CreateInstance();
-    private static DestroyInstance destroyInstance = new DestroyInstance();
+    private static final CreateInstance createInstance = new CreateInstance();
+    private static final DestroyInstance destroyInstance = new DestroyInstance();
 
-    private static PlaySound playSound = new PlaySound();
-    private static StopSound stopSound = new StopSound();
-    private static GotoScene gotoScene = new GotoScene();
+    private static final PlaySound playSound = new PlaySound();
+    private static final StopSound stopSound = new StopSound();
+    private static final GotoScene gotoScene = new GotoScene();
 
-    private static SetScore setScore = new SetScore();
-    private static SetLives setLives = new SetLives();
+    private static final SetScore setScore = new SetScore();
+    private static final SetLives setLives = new SetLives();
 
     static void createInstance(NgmEntity.Event.Action action, EntityInstance self) {
         LibControl.CREATE_INSTANCE.decode(action.getArgs(), createInstance);

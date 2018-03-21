@@ -4,7 +4,7 @@ import com.naagame.core.action.ArgumentType;
 import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 
-public class MovementSetPosition {
+public class SetPosition {
     private ActionTarget target = ActionTarget.SELF;
 
     private float posX;
@@ -44,24 +44,24 @@ public class MovementSetPosition {
         this.relative = relative;
     }
 
-    static final class Definition extends ActionDefinition<MovementSetPosition> {
+    static final class Definition extends ActionDefinition<SetPosition> {
         Definition() {
-            super("movement_set_position", "Moves the entity to a specific position", MovementSetPosition::new);
+            super("movement_set_position", "Moves the entity to a specific position", SetPosition::new);
 
             addArgument(ArgumentType.TARGET, "Target",
-                    MovementSetPosition::getTarget,
+                    SetPosition::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
 
             addArgument(ArgumentType.FLOAT, "Position X",
-                    MovementSetPosition::getPosX,
+                    SetPosition::getPosX,
                     (o, v) -> o.setPosX((Float) v));
 
             addArgument(ArgumentType.FLOAT, "Position Y",
-                    MovementSetPosition::getPosY,
+                    SetPosition::getPosY,
                     (o, v) -> o.setPosY((Float) v));
 
             addArgument(ArgumentType.BOOLEAN, "Relative",
-                    MovementSetPosition::isRelative,
+                    SetPosition::isRelative,
                     (o, v) -> o.setRelative((Boolean) v));
         }
     }

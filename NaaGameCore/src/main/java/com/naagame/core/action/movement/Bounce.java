@@ -1,11 +1,11 @@
-package com.naagame.core.action.debug;
+package com.naagame.core.action.movement;
 
-import com.naagame.core.action.ArgumentType;
 import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
+import com.naagame.core.action.ArgumentType;
 
-public class DebugLogProps {
-    private ActionTarget target = ActionTarget.SELF;
+public class Bounce {
+    private ActionTarget target;
 
     public ActionTarget getTarget() {
         return target;
@@ -15,12 +15,12 @@ public class DebugLogProps {
         this.target = target;
     }
 
-    static final class Definition extends ActionDefinition<DebugLogProps> {
+    static class Definition extends ActionDefinition<Bounce> {
         Definition() {
-            super("debug_log_props", "Logs the properties of an entity instance", DebugLogProps::new);
+            super("movement_bounce", "Bounces an entity off of another entity", Bounce::new);
 
             addArgument(ArgumentType.TARGET, "Target",
-                    DebugLogProps::getTarget,
+                    Bounce::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
         }
     }

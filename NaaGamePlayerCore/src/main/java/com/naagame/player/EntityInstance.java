@@ -32,6 +32,8 @@ class EntityInstance extends Entity {
     NgmSprite ngmSprite;
     Vector2 speed;
 
+    CollisionComponent2D collisionComponent;
+
     private String name;
 
     private Behaviour behaviour;
@@ -61,8 +63,7 @@ class EntityInstance extends Entity {
             sprite.setEndCallback(sprite::start);
             sprite.start();
 
-            SpriteComponent spriteComponent = new SpriteComponent(sprite);
-            addComponent(spriteComponent);
+            addComponent(new SpriteComponent(sprite));
 
             float boundsWidth = 0;
             float boundsHeight = 0;
@@ -77,7 +78,7 @@ class EntityInstance extends Entity {
 
             Rectangle bounds = new Rectangle(boundsWidth, boundsHeight);
 
-            addComponent(new CollisionComponent2D(Resources.collisionTags.get(name),
+            addComponent(collisionComponent = new CollisionComponent2D(Resources.collisionTags.get(name),
                     bounds.createPolygon(),
                     behaviour::onCollision));
         }
@@ -121,6 +122,7 @@ class EntityInstance extends Entity {
             actionExecutors.put(LibMovement.SET_HSPEED.getCode(), LibMovementImpl::setHSpeed);
             actionExecutors.put(LibMovement.SET_VSPEED.getCode(), LibMovementImpl::setVSpeed);
             actionExecutors.put(LibMovement.SET_POSITION.getCode(), LibMovementImpl::setPosition);
+            actionExecutors.put(LibMovement.BOUNCE.getCode(), LibMovementImpl::bounce);
 
             actionExecutors.put(LibControl.CREATE_INSTANCE.getCode(), LibControlImpl::createInstance);
             actionExecutors.put(LibControl.DESTROY_INSTANCE.getCode(), LibControlImpl::destroyInstance);

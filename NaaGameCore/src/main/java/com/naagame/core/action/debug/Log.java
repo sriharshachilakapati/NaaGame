@@ -3,7 +3,7 @@ package com.naagame.core.action.debug;
 import com.naagame.core.action.ArgumentType;
 import com.naagame.core.action.ActionDefinition;
 
-public class DebugLog {
+public class Log {
     private String message = "";
 
     public String getMessage() {
@@ -14,11 +14,11 @@ public class DebugLog {
         this.message = message;
     }
 
-    static final class Definition extends ActionDefinition<DebugLog> {
+    static final class Definition extends ActionDefinition<Log> {
         Definition() {
-            super("debug_log", "Logs a message to the debug console", DebugLog::new);
+            super("debug_log", "Logs a message to the debug console", Log::new);
             addArgument(ArgumentType.STRING, "Message",
-                    DebugLog::getMessage,
+                    Log::getMessage,
                     (o, s) -> o.setMessage(String.valueOf(s)));
         }
     }

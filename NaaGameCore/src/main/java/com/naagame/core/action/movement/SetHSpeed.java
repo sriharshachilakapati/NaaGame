@@ -4,7 +4,7 @@ import com.naagame.core.action.ArgumentType;
 import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 
-public class MovementSetHSpeed {
+public class SetHSpeed {
     private ActionTarget target = ActionTarget.SELF;
 
     private float hSpeed;
@@ -35,20 +35,20 @@ public class MovementSetHSpeed {
         this.relative = relative;
     }
 
-    static final class Definition extends ActionDefinition<MovementSetHSpeed> {
+    static final class Definition extends ActionDefinition<SetHSpeed> {
         Definition() {
-            super("movement_set_hspeed", "Sets the horizontal speed of the entity", MovementSetHSpeed::new);
+            super("movement_set_hspeed", "Sets the horizontal speed of the entity", SetHSpeed::new);
 
             addArgument(ArgumentType.TARGET, "Target",
-                    MovementSetHSpeed::getTarget,
+                    SetHSpeed::getTarget,
                     (o, v) -> o.setTarget((ActionTarget) v));
 
             addArgument(ArgumentType.FLOAT, "HSpeed",
-                    MovementSetHSpeed::getHSpeed,
+                    SetHSpeed::getHSpeed,
                     (o, v) -> o.setHSpeed((Float) v));
 
             addArgument(ArgumentType.BOOLEAN, "Relative",
-                    MovementSetHSpeed::isRelative,
+                    SetHSpeed::isRelative,
                     (o, v) -> o.setRelative((Boolean) v));
         }
     }

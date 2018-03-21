@@ -1,7 +1,7 @@
 package com.naagame.player;
 
-import com.naagame.core.action.debug.DebugLog;
-import com.naagame.core.action.debug.DebugLogProps;
+import com.naagame.core.action.debug.Log;
+import com.naagame.core.action.debug.LogProps;
 import com.naagame.core.action.debug.LibDebug;
 import com.naagame.core.resources.NgmEntity;
 import com.shc.silenceengine.math.Quaternion;
@@ -9,20 +9,20 @@ import com.shc.silenceengine.math.Vector2;
 import com.shc.silenceengine.utils.MathUtils;
 
 class LibDebugImpl {
-    private static DebugLog debugLog = new DebugLog();
-    private static DebugLogProps debugLogProps = new DebugLogProps();
+    private static final Log log = new Log();
+    private static final LogProps logProps = new LogProps();
 
     static void log(NgmEntity.Event.Action action, EntityInstance self) {
-        LibDebug.LOG.decode(action.getArgs(), debugLog);
-        NaaGamePlayer.logger.info(debugLog.getMessage());
+        LibDebug.LOG.decode(action.getArgs(), log);
+        NaaGamePlayer.logger.info(log.getMessage());
     }
 
     static void logProps(NgmEntity.Event.Action action, EntityInstance self) {
-        LibDebug.LOG_PROPS.decode(action.getArgs(), debugLogProps);
+        LibDebug.LOG_PROPS.decode(action.getArgs(), logProps);
 
         EntityInstance instance = null;
 
-        switch (debugLogProps.getTarget()) {
+        switch (logProps.getTarget()) {
             case SELF:  instance = self;       break;
             case OTHER: instance = self.other; break;
         }
