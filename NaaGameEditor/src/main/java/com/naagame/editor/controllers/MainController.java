@@ -58,16 +58,16 @@ public class MainController extends Controller implements Initializable {
 
         resourceTree.setRoot(root);
 
-        for (int i = 1; i < 11; i++) {
-            NgmProject.textures.add(new NgmTexture("Texture" + i));
-            NgmProject.sprites.add(new NgmSprite("Sprite" + i));
-            NgmProject.backgrounds.add(new NgmBackground("Background" + i));
-            NgmProject.sounds.add(new NgmSound("Sound" + i));
-            NgmProject.entities.add(new NgmEntity("Entity" + i));
-            NgmProject.scenes.add(new NgmScene("Scene" + i));
-
-            resourceNum += 6;
-        }
+//        for (int i = 1; i < 11; i++) {
+//            NgmProject.textures.add(new NgmTexture("Texture" + i));
+//            NgmProject.sprites.add(new NgmSprite("Sprite" + i));
+//            NgmProject.backgrounds.add(new NgmBackground("Background" + i));
+//            NgmProject.sounds.add(new NgmSound("Sound" + i));
+//            NgmProject.entities.add(new NgmEntity("Entity" + i));
+//            NgmProject.scenes.add(new NgmScene("Scene" + i));
+//
+//            resourceNum += 6;
+//        }
 
         refreshTreeUI();
 

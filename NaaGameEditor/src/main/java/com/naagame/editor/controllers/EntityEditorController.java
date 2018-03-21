@@ -185,13 +185,16 @@ public class EntityEditorController extends Controller implements Initializable 
             return;
         }
 
-        sprite = NgmProject.find(NgmProject.sprites, sprite.getName());
+        NgmSprite newSprite = NgmProject.find(NgmProject.sprites, sprite.getName());
 
-        if (sprite == null) {
+        if (newSprite == null) {
             spriteSelector.getSelectionModel().clearSelection();
         } else {
-            spriteSelector.getSelectionModel().select(sprite.getName());
+            spriteSelector.getSelectionModel().select(newSprite.getName());
         }
+
+        changed = newSprite == sprite;
+        sprite = newSprite;
 
         eventsList.getItems().removeIf(
                 event -> (event.getType() == NgmEntity.Event.Type.COLLISION ||
@@ -240,6 +243,11 @@ public class EntityEditorController extends Controller implements Initializable 
     @Override
     protected void commitChanges() {
         entity.setSprite(sprite);
+
+        if (currentEvent != null) {
+            currentEvent.getActions().clear();
+            currentEvent.getActions().addAll(actionsList.getItems());
+        }
 
         entity.getEvents().clear();
         entity.getEvents().addAll(eventsList.getItems().stream()
