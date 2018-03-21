@@ -185,16 +185,13 @@ public class EntityEditorController extends Controller implements Initializable 
             return;
         }
 
-        NgmSprite newSprite = NgmProject.find(NgmProject.sprites, sprite.getName());
+        sprite = NgmProject.find(NgmProject.sprites, sprite.getName());
 
-        if (newSprite == null) {
+        if (sprite == null) {
             spriteSelector.getSelectionModel().clearSelection();
         } else {
-            spriteSelector.getSelectionModel().select(newSprite.getName());
+            spriteSelector.getSelectionModel().select(sprite.getName());
         }
-
-        changed = newSprite == sprite;
-        sprite = newSprite;
 
         eventsList.getItems().removeIf(
                 event -> (event.getType() == NgmEntity.Event.Type.COLLISION ||
@@ -261,8 +258,9 @@ public class EntityEditorController extends Controller implements Initializable 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         spriteSelector.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
             if (n != null) {
-                sprite = NgmProject.find(NgmProject.sprites, n);
-                changed = true;
+                NgmSprite newSprite = NgmProject.find(NgmProject.sprites, n);
+                changed = newSprite != sprite;
+                sprite = newSprite;
             }
         });
 

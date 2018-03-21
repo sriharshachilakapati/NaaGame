@@ -83,18 +83,15 @@ public class BackgroundEditorController extends Controller implements Initializa
             return;
         }
 
-        NgmTexture newTexture = NgmProject.find(NgmProject.textures, texture.getName());
+        texture = NgmProject.find(NgmProject.textures, texture.getName());
 
-        if (newTexture == null) {
+        if (texture == null) {
             textureSelector.getSelectionModel().clearSelection();
             imageViewer.setImage(null);
         } else {
-            textureSelector.getSelectionModel().select(newTexture.getName());
-            imageViewer.setImage(ImageCache.getImage(newTexture.getSource()));
+            textureSelector.getSelectionModel().select(texture.getName());
+            imageViewer.setImage(ImageCache.getImage(texture.getSource()));
         }
-
-        changed = newTexture == texture;
-        texture = newTexture;
     }
 
     @Override
@@ -106,9 +103,10 @@ public class BackgroundEditorController extends Controller implements Initializa
             if (n == null) {
                 imageViewer.setImage(null);
             } else {
-                texture = NgmProject.find(NgmProject.textures, n);
-                imageViewer.setImage(ImageCache.getImage(texture.getSource()));
-                changed = true;
+                NgmTexture newTexture = NgmProject.find(NgmProject.textures, n);
+                imageViewer.setImage(ImageCache.getImage(newTexture.getSource()));
+                changed = texture != newTexture;
+                texture = newTexture;
             }
         });
 
