@@ -5,7 +5,6 @@ import com.naagame.core.action.ActionArgument;
 import com.naagame.core.action.ActionDefinition;
 import com.naagame.core.action.ActionTarget;
 import com.naagame.core.action.ArgumentType;
-import com.naagame.core.resources.IResource;
 import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmScene;
 import com.naagame.core.resources.NgmSound;

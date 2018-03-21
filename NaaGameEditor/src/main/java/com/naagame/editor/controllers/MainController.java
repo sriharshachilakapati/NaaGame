@@ -6,6 +6,7 @@ import com.naagame.core.resources.*;
 import com.naagame.editor.Main;
 import com.naagame.editor.io.ProjectWriter;
 import com.naagame.editor.util.PathResolver;
+import com.naagame.editor.util.ProjectUtils;
 import com.naagame.editor.util.RetentionFileChooser;
 import com.shc.easyjson.ParseException;
 import javafx.application.Platform;
@@ -113,7 +114,7 @@ public class MainController extends Controller implements Initializable {
                 resources.remove(resource);
                 item.getParent().getChildren().remove(item);
 
-                NgmProject.pruneDeadReferences();
+                ProjectUtils.pruneDeadReferences();
             }
 
             resourcesChanged();

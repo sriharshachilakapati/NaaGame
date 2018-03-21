@@ -10,6 +10,7 @@ import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmSprite;
 import com.naagame.editor.util.ActionEditor;
 import com.naagame.editor.util.EntityActionListCell;
+import com.naagame.editor.util.ProjectUtils;
 import com.shc.easyjson.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -201,32 +202,8 @@ public class EntityEditorController extends Controller implements Initializable 
 
         for (NgmEntity.Event event : eventsList.getItems()) {
             event.getActions().removeIf(action -> {
-                if (action.getCode().equals(LibControl.CREATE_INSTANCE.getCode())) {
-                    CreateInstance object = LibControl.CREATE_INSTANCE.decode(action.getArgs(),
-                            LibControl.CREATE_INSTANCE.getSupplier().get());
-
-                    return NgmProject.find(NgmProject.entities, object.getEntity().getName()) == null;
-
-                } else if (action.getCode().equals(LibControl.GOTO_SCENE.getCode())) {
-                    GotoScene object = LibControl.GOTO_SCENE.decode(action.getArgs(),
-                            LibControl.GOTO_SCENE.getSupplier().get());
-
-                    return NgmProject.find(NgmProject.scenes, object.getScene().getName()) == null;
-
-                } else if (action.getCode().equals(LibControl.PLAY_SOUND.getCode())) {
-                    PlaySound object = LibControl.PLAY_SOUND.decode(action.getArgs(),
-                            LibControl.PLAY_SOUND.getSupplier().get());
-
-                    return NgmProject.find(NgmProject.sounds, object.getSound().getName()) == null;
-
-                } else if (action.getCode().equals(LibControl.STOP_SOUND.getCode())) {
-                    StopSound object = LibControl.STOP_SOUND.decode(action.getArgs(),
-                            LibControl.STOP_SOUND.getSupplier().get());
-
-                    return NgmProject.find(NgmProject.sounds, object.getSound().getName()) == null;
-                }
-
-                return false;
+                ActionDefinition<?> definition = ProjectUtils.findDefinition(action.getCode());
+                return ProjectUtils.hasDeadReference(definition, action);
             });
         }
     }

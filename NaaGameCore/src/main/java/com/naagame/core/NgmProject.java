@@ -22,35 +22,4 @@ public final class NgmProject {
     private NgmProject() {
     }
 
-    public static void pruneDeadReferences() {
-        // Remove all frames in sprites whose texture is deleted
-        sprites.forEach(sprite -> sprite.getFrames().removeAll(sprite.getFrames()
-                .stream().filter(frame -> !textures.contains(frame.getTexture()))
-                .collect(Collectors.toList())));
-
-        // Reset all texture fields in background to null if texture is deleted
-        for (NgmBackground background : backgrounds) {
-            if (background.getTexture() != null) {
-                background.setTexture(find(textures, background.getTexture().getName()));
-            }
-        }
-
-        // Reset the sprite field of entity to null if sprite is deleted
-        for (NgmEntity entity : entities) {
-            if (entity.getSprite() != null) {
-                entity.setSprite(find(sprites, entity.getSprite().getName()));
-            }
-        }
-
-        // Remove all instances in scene that points to deleted entities / backgrounds
-        scenes.forEach(scene -> {
-            scene.getEntities().removeAll(scene.getEntities().stream()
-                    .filter(instance -> !entities.contains(instance.getObject()))
-                    .collect(Collectors.toList()));
-
-            scene.getBackgrounds().removeAll(scene.getBackgrounds().stream()
-                    .filter(instance -> !backgrounds.contains(instance.getObject()))
-                    .collect(Collectors.toList()));
-        });
-    }
 }

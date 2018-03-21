@@ -1,9 +1,5 @@
 package com.naagame.editor.util;
 
-import com.naagame.core.action.ActionDefinition;
-import com.naagame.core.action.control.LibControl;
-import com.naagame.core.action.debug.LibDebug;
-import com.naagame.core.action.movement.LibMovement;
 import com.naagame.core.resources.NgmEntity;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -12,12 +8,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.*;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class EntityActionListCell extends ListCell<NgmEntity.Event.Action> {
 
@@ -105,7 +98,7 @@ public class EntityActionListCell extends ListCell<NgmEntity.Event.Action> {
             if (mouseEvent.getClickCount() == 2) {
                 NgmEntity.Event.Action action = getItem();
 
-                if (ActionEditor.edit(findDefinition(action.getCode()), action)) {
+                if (ActionEditor.edit(ProjectUtils.findDefinition(action.getCode()), action)) {
                     updateItem(action, false);
                     callback.run();
                 }
@@ -120,26 +113,6 @@ public class EntityActionListCell extends ListCell<NgmEntity.Event.Action> {
         });
 
         setContextMenu(menu);
-    }
-
-    private ActionDefinition<?> findDefinition(String code) {
-        final Function<Field[], List<ActionDefinition<?>>> getDefinitions = fields -> Arrays.stream(fields).map(f -> {
-            try {
-                return (ActionDefinition<?>) f.get(null);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }).collect(Collectors.toList());
-
-        List<ActionDefinition<?>> actionDefinitions = new ArrayList<>();
-
-        actionDefinitions.addAll(getDefinitions.apply(LibDebug.class.getDeclaredFields()));
-        actionDefinitions.addAll(getDefinitions.apply(LibMovement.class.getDeclaredFields()));
-        actionDefinitions.addAll(getDefinitions.apply(LibControl.class.getDeclaredFields()));
-
-        return actionDefinitions.stream().filter(ad -> ad.getCode().equals(code)).findFirst().orElse(null);
     }
 
     @Override
