@@ -38,9 +38,9 @@
             <Label text="Texture" />
             <ChoiceBox fx:id="textureSelector" prefHeight="26.0" prefWidth="150.0" />
             <Label text="Horizontal Speed" />
-            <Slider fx:id="hSpeedSlider" blockIncrement="1.0" majorTickUnit="20.0" max="20.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+            <Slider fx:id="hSpeedSlider" blockIncrement="1.0" majorTickUnit="20.0" max="20.0" min="-20.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
             <Label text="Vertical Speed" />
-            <Slider fx:id="vSpeedSlider" blockIncrement="1.0" layoutX="10.0" layoutY="36.0" majorTickUnit="20.0" max="20.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+            <Slider fx:id="vSpeedSlider" blockIncrement="1.0" layoutX="10.0" layoutY="36.0" majorTickUnit="20.0" max="20.0" min="-20.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
          </children>
       </VBox>
    </left>

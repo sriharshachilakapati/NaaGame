@@ -4,22 +4,19 @@ import com.naagame.core.NgmProject;
 import com.naagame.core.resources.NgmBackground;
 import com.naagame.core.resources.NgmEntity;
 import com.naagame.core.resources.NgmScene;
-import com.naagame.core.resources.NgmTexture;
 import com.shc.silenceengine.collision.broadphase.Grid;
 import com.shc.silenceengine.collision.colliders.CollisionSystem2D;
 import com.shc.silenceengine.core.GameState;
 import com.shc.silenceengine.core.SilenceEngine;
-import com.shc.silenceengine.graphics.DynamicRenderer;
-import com.shc.silenceengine.graphics.IGraphicsDevice;
 import com.shc.silenceengine.graphics.SceneRenderSystem;
 import com.shc.silenceengine.graphics.cameras.OrthoCam;
 import com.shc.silenceengine.graphics.opengl.GLContext;
-import com.shc.silenceengine.graphics.opengl.Primitive;
 import com.shc.silenceengine.graphics.opengl.Texture;
 import com.shc.silenceengine.math.geom2d.Polygon;
 import com.shc.silenceengine.math.geom2d.Rectangle;
 import com.shc.silenceengine.scene.Scene;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +33,8 @@ public class SceneState extends GameState {
     private OrthoCam camera;
     private CollisionSystem2D collider;
     private OrthoCam bgCam;
+
+    private List<BackgroundInstance> backgroundInstances;
 
     SceneState(String scene) {
         instance = this;
@@ -58,6 +57,7 @@ public class SceneState extends GameState {
     public void onEnter() {
         camera = new OrthoCam();
         bgCam = new OrthoCam();
+        backgroundInstances = new ArrayList<>();
 
         scene = new Scene();
         scene.registerRenderSystem(new SceneRenderSystem());
@@ -88,11 +88,23 @@ public class SceneState extends GameState {
                 collider.register(Resources.collisionTags.get(selfType), Resources.collisionTags.get(collType));
             }
         }
+
+        for (NgmScene.Instance<NgmBackground> bgInstance : ngmScene.getBackgrounds()) {
+            NgmBackground background = bgInstance.getObject();
+
+            if (background == null || background.getTexture() == null) {
+                continue;
+            }
+
+            backgroundInstances.add(new BackgroundInstance(bgInstance));
+        }
     }
 
     @Override
     public void update(float delta) {
         scene.update(delta);
+        backgroundInstances.forEach(BackgroundInstance::update);
+
         SilenceEngine.display.setTitle("NaaGamePlayer | SilenceEngine " + SilenceEngine.getVersionString() +
                 "| Score: " + score + " | Lives: " + lives);
     }
@@ -100,44 +112,11 @@ public class SceneState extends GameState {
     @Override
     public void render(float delta) {
         bgCam.apply();
-
-        for (NgmScene.Instance<NgmBackground> bgInstance : ngmScene.getBackgrounds()) {
-            NgmBackground ngmBackground = bgInstance.getObject();
-
-            if (ngmBackground == null) {
-                continue;
-            }
-
-            NgmTexture bgTexture = ngmBackground.getTexture();
-
-            if (bgTexture == null) {
-                continue;
-            }
-
-            renderBackground(Resources.textures.get(bgTexture.getName()));
-        }
-
+        backgroundInstances.forEach(BackgroundInstance::render);
         Texture.EMPTY.bind();
+
         camera.apply();
         scene.render(delta);
-    }
-
-    private void renderBackground(Texture texture) {
-        DynamicRenderer renderer = IGraphicsDevice.Renderers.dynamic;
-
-        texture.bind();
-        renderer.begin(Primitive.TRIANGLE_FAN);
-        {
-            renderer.vertex(0, 0);
-            renderer.texCoord(0, 0);
-            renderer.vertex(1, 0);
-            renderer.texCoord(1, 0);
-            renderer.vertex(1, 1);
-            renderer.texCoord(1, 1);
-            renderer.vertex(0, 1);
-            renderer.texCoord(0, 1);
-        }
-        renderer.end();
     }
 
     @Override

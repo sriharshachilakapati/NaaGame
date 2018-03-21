@@ -1,7 +1,7 @@
 {
     "backgrounds": [
             {
-                "hSpeed": 0,
+                "hSpeed": 4,
                 "name": "background",
                 "texture": "background",
                 "vSpeed": 0
@@ -219,7 +219,7 @@
         "backgrounds": [
           {
             "background": "background",
-            "posX": 0,
+            "posX": 100,
             "posY": 0
           }
         ],
@@ -278,7 +278,7 @@
             },
             {
                 "name": "background",
-                "source": "colour:0.800000;0.701961;1.000000;1.000000;512;480;"
+                "source": "resources/9c2da561c924438887ccd1aac609081dafdea4ad.jpg"
             }
         ]
 }
