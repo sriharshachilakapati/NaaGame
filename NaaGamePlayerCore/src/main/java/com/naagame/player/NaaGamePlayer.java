@@ -21,7 +21,7 @@ public class NaaGamePlayer extends Game {
         SilenceEngine.display.centerOnScreen();
 
         SilenceEngine.io.getFileReader()
-                .readTextFile(FilePath.getResourceFile("breakout.ngm"))
+                .readTextFile(FilePath.getResourceFile("game.ngm"))
                 .then(this::projectLoaded);
     }
 
