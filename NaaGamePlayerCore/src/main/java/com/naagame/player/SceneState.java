@@ -106,7 +106,7 @@ public class SceneState extends GameState {
         backgroundInstances.forEach(BackgroundInstance::update);
 
         SilenceEngine.display.setTitle("NaaGamePlayer | SilenceEngine " + SilenceEngine.getVersionString() +
-                "| Score: " + score + " | Lives: " + lives);
+                " | Score: " + score + " | Lives: " + lives);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class SceneState extends GameState {
 
     @Override
     public void resized() {
-        camera.initProjection(SilenceEngine.display.getWidth(), SilenceEngine.display.getHeight());
+        camera.initProjection(ngmScene.getWidth(), ngmScene.getHeight());
         bgCam.initProjection(1, 1);
         GLContext.viewport(0, 0, SilenceEngine.display.getWidth(), SilenceEngine.display.getHeight());
     }
