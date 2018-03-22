@@ -31,20 +31,20 @@ public class LoadingState extends ResourceLoadingState {
         Map<String, Long> textureIds = new HashMap<>();
         Map<String, Long> soundIds = new HashMap<>();
 
-        loader.define(Texture.class, FilePath.getResourceFile("engine_resources/logo.png"));
+        loader.define(Texture.class, NaaGamePlayer.filePathProvider.apply("engine_resources/logo.png"));
 
         NgmProject.textures.forEach(texture -> {
             final String source = texture.getSource();
 
             if (!source.equals("") && !source.startsWith("colour:")) {
-                long id = loader.define(Texture.class, FilePath.getResourceFile(source));
+                long id = loader.define(Texture.class, NaaGamePlayer.filePathProvider.apply(source));
                 textureIds.put(texture.getName(), id);
             }
         });
 
         NgmProject.sounds.forEach(sound -> {
             if (!sound.getSource().equals("")) {
-                long id = loader.define(Sound.class, FilePath.getResourceFile(sound.getSource()));
+                long id = loader.define(Sound.class, NaaGamePlayer.filePathProvider.apply(sound.getSource()));
                 soundIds.put(sound.getName(), id);
             }
         });
@@ -115,10 +115,7 @@ public class LoadingState extends ResourceLoadingState {
                 }
             }
 
-            NaaGamePlayer.instance.setGameState(new SceneState(NgmProject.scenes.stream()
-                    .findFirst()
-                    .orElseThrow(RuntimeException::new)
-                    .getName()));
+            NaaGamePlayer.instance.setGameState(new SceneState("Main"));
         });
     }
 }

@@ -8,9 +8,23 @@ import com.shc.silenceengine.input.Keyboard;
 import com.shc.silenceengine.io.FilePath;
 import com.shc.silenceengine.logging.Logger;
 
+import java.util.function.Function;
+
 public class NaaGamePlayer extends Game {
     public static Logger logger;
     public static Game instance;
+
+    public static Function<String, FilePath> filePathProvider;
+
+    private String fileName;
+
+    public NaaGamePlayer(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public NaaGamePlayer() {
+        this("game.ngm");
+    }
 
     @Override
     public void init() {
@@ -21,7 +35,7 @@ public class NaaGamePlayer extends Game {
         SilenceEngine.display.centerOnScreen();
 
         SilenceEngine.io.getFileReader()
-                .readTextFile(FilePath.getResourceFile("game.ngm"))
+                .readTextFile(filePathProvider.apply(fileName))
                 .then(this::projectLoaded);
     }
 
