@@ -73,7 +73,7 @@
     </MenuBar>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
-          <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="New">
+          <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onNewProjectClicked" text="New">
                <graphic>
                   <FontAwesomeIconView glyphName="FILE_ALT" text="" />
                </graphic></Button>

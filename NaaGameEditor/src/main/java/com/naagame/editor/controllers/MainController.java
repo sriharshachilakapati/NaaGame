@@ -389,6 +389,7 @@ public class MainController extends Controller implements Initializable {
         }
 
         try {
+            ProjectUtils.pruneDeadReferences();
             ProjectWriter.writeToFile(path);
         } catch (IOException e) {
             e.printStackTrace();
@@ -408,10 +409,31 @@ public class MainController extends Controller implements Initializable {
             ProjectReader.loadFromJSON(json);
             refreshTreeUI();
 
+            tabPane.getTabs().clear();
+            tabMap.clear();
+
             PathResolver.setProjectDir(path.getParent());
+            ProjectUtils.pruneDeadReferences();
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void onNewProjectClicked() {
+        PathResolver.setProjectDir(null);
+
+        NgmProject.textures.clear();
+        NgmProject.sprites.clear();
+        NgmProject.backgrounds.clear();
+        NgmProject.sounds.clear();
+        NgmProject.entities.clear();
+        NgmProject.scenes.clear();
+
+        tabMap.clear();
+        tabPane.getTabs().clear();
+
+        refreshTreeUI();
     }
 
     @Override
