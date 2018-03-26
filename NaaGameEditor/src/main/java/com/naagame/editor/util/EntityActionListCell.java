@@ -112,6 +112,8 @@ public class EntityActionListCell extends ListCell<NgmEntity.Event.Action> {
             callback.run();
         });
 
+        menu.getItems().add(delete);
+
         setContextMenu(menu);
     }
 

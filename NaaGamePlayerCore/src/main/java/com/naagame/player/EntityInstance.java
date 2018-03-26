@@ -34,7 +34,7 @@ class EntityInstance extends Entity {
 
     CollisionComponent2D collisionComponent;
 
-    private String name;
+    String name;
 
     private Behaviour behaviour;
 
@@ -94,7 +94,7 @@ class EntityInstance extends Entity {
         }
     }
 
-    private static class Behaviour extends Component {
+    static class Behaviour extends Component {
 
         private EntityInstance self;
 
@@ -123,6 +123,7 @@ class EntityInstance extends Entity {
             actionExecutors.put(LibMovement.SET_VSPEED.getCode(), LibMovementImpl::setVSpeed);
             actionExecutors.put(LibMovement.SET_POSITION.getCode(), LibMovementImpl::setPosition);
             actionExecutors.put(LibMovement.BOUNCE.getCode(), LibMovementImpl::bounce);
+            actionExecutors.put(LibMovement.SET_POSITION_RELATIVE_TO.getCode(), LibMovementImpl::setPositionRelativeTo);
 
             actionExecutors.put(LibControl.CREATE_INSTANCE.getCode(), LibControlImpl::createInstance);
             actionExecutors.put(LibControl.DESTROY_INSTANCE.getCode(), LibControlImpl::destroyInstance);

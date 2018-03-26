@@ -5,12 +5,15 @@ import com.naagame.core.resources.NgmEntity;
 import com.shc.silenceengine.math.Vector3;
 import com.shc.silenceengine.math.geom2d.Rectangle;
 
+import java.util.ArrayList;
+
 class LibMovementImpl {
     private static final SetSpeed setSpeed = new SetSpeed();
     private static final SetHSpeed setHSpeed = new SetHSpeed();
     private static final SetVSpeed setVSpeed = new SetVSpeed();
     private static final SetPosition setPosition = new SetPosition();
     private static final Bounce bounce = new Bounce();
+    private static final SetPositionRelativeTo setPositionRelativeTo = new SetPositionRelativeTo();
 
     static void setSpeed(NgmEntity.Event.Action action, EntityInstance self) {
         LibMovement.SET_SPEED.decode(action.getArgs(), setSpeed);
@@ -116,5 +119,34 @@ class LibMovementImpl {
         if (ih >= iw) {
             a.speed.x = (aPos.x < bPos.x ? -1 : 1) * Math.abs(a.speed.x);
         }
+    }
+
+    static void setPositionRelativeTo(NgmEntity.Event.Action action, EntityInstance self) {
+        LibMovement.SET_POSITION_RELATIVE_TO.decode(action.getArgs(), setPositionRelativeTo);
+
+        EntityInstance instance = null;
+
+        switch (setPositionRelativeTo.getTarget()) {
+            case SELF:  instance = self;       break;
+            case OTHER: instance = self.other; break;
+        }
+
+        float posX = setPositionRelativeTo.getX();
+        float posY = setPositionRelativeTo.getY();
+
+        EntityInstance other = (EntityInstance) SceneState.instance.scene
+                .findAllWithComponent(EntityInstance.Behaviour.class, new ArrayList<>())
+                .stream()
+                .filter(entity -> ((EntityInstance) entity).name.equals(setPositionRelativeTo.getEntity().getName()))
+                .findFirst().orElse(null);
+
+        if (other != null) {
+            Vector3 position = other.transformComponent.getPosition();
+
+            posX += position.x;
+            posY += position.y;
+        }
+
+        instance.transformComponent.setPosition(posX, posY);
     }
 }

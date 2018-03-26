@@ -27,6 +27,7 @@ public class NaaGamePlayerLauncher
             LwjglRuntime.start(new NaaGamePlayer(path));
         } else {
             LwjglRuntime.start(new NaaGamePlayer());
+
         }
     }
 }

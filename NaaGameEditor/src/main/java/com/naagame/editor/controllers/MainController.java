@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -434,6 +435,38 @@ public class MainController extends Controller implements Initializable {
         tabPane.getTabs().clear();
 
         refreshTreeUI();
+    }
+
+    @FXML
+    public void onPlayButtonClicked() {
+        try {
+            Path tempDir = Files.createTempDirectory("NaaGame");
+            Path projectFile = tempDir.resolve("temp.ngm");
+
+            ProjectWriter.writeToFile(projectFile);
+
+            ProcessBuilder processBuilder = new ProcessBuilder();
+
+            Path playerPath;
+
+            if (Files.exists(Paths.get("NaaGamePlayer.jar"))) {
+                playerPath = Paths.get("NaaGamePlayer.jar").toAbsolutePath();
+            } else {
+                playerPath = Paths.get("NaaGamePlayerDesktop/build/libs/NaaGamePlayerDesktop.jar").toAbsolutePath();
+            }
+
+            String[] commands = {
+                    "java",
+                    "-jar",
+                    playerPath.toString(),
+                    projectFile.toString()
+            };
+
+            Process playerProcess = processBuilder.command(commands).start();
+            playerProcess.waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

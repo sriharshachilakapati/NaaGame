@@ -86,7 +86,7 @@
                   <FontAwesomeIconView glyphName="SAVE" />
                </graphic></Button>
             <Separator orientation="VERTICAL" />
-            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Play">
+            <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onPlayButtonClicked" text="Play">
                <graphic>
                   <FontAwesomeIconView glyphName="PLAY" />
                </graphic></Button>

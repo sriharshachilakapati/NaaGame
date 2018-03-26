@@ -37,7 +37,7 @@
                         {
                             "actions": [
                                     {
-                                        "args": "self;-4.0;false;",
+                                        "args": "self;-5.0;false;",
                                         "code": "movement_set_hspeed"
                                     }
                                 ],
@@ -47,7 +47,7 @@
                         {
                             "actions": [
                                     {
-                                        "args": "self;4.0;false;",
+                                        "args": "self;5.0;false;",
                                         "code": "movement_set_hspeed"
                                     }
                                 ],
@@ -84,16 +84,6 @@
                                         "code": "movement_bounce"
                                     }
                                 ],
-                            "args": "wall",
-                            "type": "collision"
-                        },
-                        {
-                            "actions": [
-                                    {
-                                        "args": "self;",
-                                        "code": "movement_bounce"
-                                    }
-                                ],
                             "args": "player",
                             "type": "collision"
                         },
@@ -121,10 +111,18 @@
                                         "args": "-1;true;",
                                         "code": "control_set_lives"
                                     },
-                              {
-                                "args": "self;336;368;false;",
-                                "code": "movement_set_position"
-                              }
+                                    {
+                                        "args": "self;player;0.0;-64.0;",
+                                        "code": "movement_set_position_relative_to"
+                                    },
+                                    {
+                                        "args": "unlaunched_ball;0.0;0.0;true;",
+                                        "code": "control_create_instance"
+                                    },
+                                    {
+                                        "args": "self;",
+                                        "code": "control_destroy_instance"
+                                    }
                                 ],
                             "args": "",
                             "type": "out_of_bounds"
@@ -139,13 +137,33 @@
                                         "args": "0;false;",
                                         "code": "control_set_score"
                                     },
-                              {
-                                "args": "Main;",
-                                "code": "control_goto_scene"
-                              }
+                                    {
+                                        "args": "GameOver;",
+                                        "code": "control_goto_scene"
+                                    }
                                 ],
                             "args": "",
                             "type": "no_more_lives"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "YouWin;",
+                                        "code": "control_goto_scene"
+                                    }
+                                ],
+                            "args": "brick",
+                            "type": "none_exists"
+                        },
+                        {
+                            "actions": [
+                                    {
+                                        "args": "self;",
+                                        "code": "movement_bounce"
+                                    }
+                                ],
+                            "args": "wall",
+                            "type": "collision"
                         }
                     ],
                 "name": "ball",
@@ -180,7 +198,7 @@
                         {
                             "actions": [
                                     {
-                                        "args": "self;-4.0;false;",
+                                        "args": "self;-5.0;false;",
                                         "code": "movement_set_hspeed"
                                     }
                                 ],
@@ -190,7 +208,7 @@
                         {
                             "actions": [
                                     {
-                                        "args": "self;4.0;false;",
+                                        "args": "self;5.0;false;",
                                         "code": "movement_set_hspeed"
                                     }
                                 ],
@@ -207,6 +225,20 @@
                     ],
                 "name": "wall",
                 "sprite": "wall"
+            },
+            {
+                "events": [
+                        
+                    ],
+                "name": "youWin",
+                "sprite": "youWin"
+            },
+            {
+                "events": [
+                        
+                    ],
+                "name": "gameOver",
+                "sprite": "gameOver"
             }
         ],
     "scenes": [
@@ -573,6 +605,44 @@
                 "height": 480,
                 "name": "Main",
                 "width": 640
+            },
+            {
+                "backgrounds": [
+                        {
+                            "background": "background",
+                            "posX": 0,
+                            "posY": 0
+                        }
+                    ],
+                "entities": [
+                        {
+                            "entity": "youWin",
+                            "posX": 400,
+                            "posY": 272
+                        }
+                    ],
+                "height": 600,
+                "name": "YouWin",
+                "width": 800
+            },
+            {
+                "backgrounds": [
+                        {
+                            "background": "background",
+                            "posX": 0,
+                            "posY": 0
+                        }
+                    ],
+                "entities": [
+                        {
+                            "entity": "gameOver",
+                            "posX": 400,
+                            "posY": 304
+                        }
+                    ],
+                "height": 600,
+                "name": "GameOver",
+                "width": 800
             }
         ],
     "sounds": [
@@ -614,6 +684,24 @@
                         }
                     ],
                 "name": "wall"
+            },
+            {
+                "frames": [
+                        {
+                            "duration": 250,
+                            "texture": "youWin"
+                        }
+                    ],
+                "name": "youWin"
+            },
+            {
+                "frames": [
+                        {
+                            "duration": 250,
+                            "texture": "gameOver"
+                        }
+                    ],
+                "name": "gameOver"
             }
         ],
     "textures": [
@@ -636,6 +724,14 @@
             {
                 "name": "wall",
                 "source": "colour:0.501961;0.200000;0.301961;1.000000;32;32;"
+            },
+            {
+                "name": "gameOver",
+                "source": "resources/961bb2639c02d5aee77cb46a2de5e2777c0f0f6b.png"
+            },
+            {
+                "name": "youWin",
+                "source": "resources/580591616ff46c7e7a6f3455446cb8311d3785da.png"
             }
         ]
 }
